@@ -1,0 +1,15 @@
+Failure criteria definitions
+
+Types
+=====
+
+0 ... no criteria is defined
+1 ... concrete cracking (EC): no cracks are allowed
+
+
+Parameters
+==========
+
+Concrete cracking (1):
+0 ... limit compression stress
+1 ... limit tension stress
