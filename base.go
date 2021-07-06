@@ -460,110 +460,110 @@ var write_only int32
 
 // free_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:133
 func free_input_data() {
-// 	if len(m_E1) != 0 {
-// 		// frees input data
-// 		femDblFree(m_E1)
-// 	}
-// 	if len(m_E2) != 0 {
-// 		femDblFree(m_E2)
-// 	}
-// 	if len(m_G) != 0 {
-// 		femDblFree(m_G)
-// 	}
-// 	if len(m_nu1) != 0 {
-// 		femDblFree(m_nu1)
-// 	}
-// 	if len(m_nu2) != 0 {
-// 		femDblFree(m_nu2)
-// 	}
-// 	if len(m_q) != 0 {
-// 		femDblFree(m_q)
-// 	}
-// 	if len(m_vp) != 0 {
-// 		femDblFree(m_vp)
-// 	}
-// 	if len(m_t) != 0 {
-// 		femDblFree(m_t)
-// 	}
-// 	if len(n_x) != 0 {
-// 		femDblFree(n_x)
-// 	}
-// 	if len(n_y) != 0 {
-// 		femDblFree(n_y)
-// 	}
-// 	if len(e_n1) != 0 {
-// 		femIntFree(e_n1)
-// 	}
-// 	if len(e_n2) != 0 {
-// 		femIntFree(e_n2)
-// 	}
-// 	if len(e_mat) != 0 {
-// 		femIntFree(e_mat)
-// 	}
-// 	if len(e_t) != 0 {
-// 		femDblFree(e_t)
-// 	}
-// 	if len(d_n) != 0 {
-// 		femIntFree(d_n)
-// 	}
-// 	if len(d_dir) != 0 {
-// 		femIntFree(d_dir)
-// 	}
-// 	if len(d_val) != 0 {
-// 		femDblFree(d_val)
-// 	}
-// 	if n_f > 0 {
-// 		if len(f_n) != 0 {
-// 			femIntFree(f_n)
-// 		}
-// 		if len(f_dir) != 0 {
-// 			femIntFree(f_dir)
-// 		}
-// 		if len(f_val) != 0 {
-// 			femDblFree(f_val)
-// 		}
-// 	}
-// 	if n_r_inp > 0 {
-// 		if len(rand_type) != 0 {
-// 			femIntFree(rand_type)
-// 		}
-// 		if len(rand_pos) != 0 {
-// 			femIntFree(rand_pos)
-// 		}
-// 		if len(rand_indx) != 0 {
-// 			femIntFree(rand_indx)
-// 		}
-// 	}
-// 	if n_r_opt > 0 {
-// 		if len(opt_type) != 0 {
-// 			femIntFree(opt_type)
-// 		}
-// 		if len(opt_pos) != 0 {
-// 			femIntFree(opt_pos)
-// 		}
-// 		if len(opt_indx) != 0 {
-// 			femIntFree(opt_indx)
-// 		}
-// 		if len(opt_data) != 0 {
-// 			femDblFree(opt_data)
-// 		}
-// 	}
-// 	if n_en > 0 {
-// 		if len(en_num) != 0 {
-// 			femIntFree(en_num)
-// 		}
-// 		if len(en_frm) != 0 {
-// 			femIntFree(en_frm)
-// 		}
-// 		if len(en_pos) != 0 {
-// 			femIntFree(en_pos)
-// 		}
-// 	}
-// 	if n_fail > 0 {
-// 		if len(fail_data) != 0 {
-// 			femDblFree(fail_data)
-// 		}
-// 	}
+	// 	if len(m_E1) != 0 {
+	// 		// frees input data
+	// 		femDblFree(m_E1)
+	// 	}
+	// 	if len(m_E2) != 0 {
+	// 		femDblFree(m_E2)
+	// 	}
+	// 	if len(m_G) != 0 {
+	// 		femDblFree(m_G)
+	// 	}
+	// 	if len(m_nu1) != 0 {
+	// 		femDblFree(m_nu1)
+	// 	}
+	// 	if len(m_nu2) != 0 {
+	// 		femDblFree(m_nu2)
+	// 	}
+	// 	if len(m_q) != 0 {
+	// 		femDblFree(m_q)
+	// 	}
+	// 	if len(m_vp) != 0 {
+	// 		femDblFree(m_vp)
+	// 	}
+	// 	if len(m_t) != 0 {
+	// 		femDblFree(m_t)
+	// 	}
+	// 	if len(n_x) != 0 {
+	// 		femDblFree(n_x)
+	// 	}
+	// 	if len(n_y) != 0 {
+	// 		femDblFree(n_y)
+	// 	}
+	// 	if len(e_n1) != 0 {
+	// 		femIntFree(e_n1)
+	// 	}
+	// 	if len(e_n2) != 0 {
+	// 		femIntFree(e_n2)
+	// 	}
+	// 	if len(e_mat) != 0 {
+	// 		femIntFree(e_mat)
+	// 	}
+	// 	if len(e_t) != 0 {
+	// 		femDblFree(e_t)
+	// 	}
+	// 	if len(d_n) != 0 {
+	// 		femIntFree(d_n)
+	// 	}
+	// 	if len(d_dir) != 0 {
+	// 		femIntFree(d_dir)
+	// 	}
+	// 	if len(d_val) != 0 {
+	// 		femDblFree(d_val)
+	// 	}
+	// 	if n_f > 0 {
+	// 		if len(f_n) != 0 {
+	// 			femIntFree(f_n)
+	// 		}
+	// 		if len(f_dir) != 0 {
+	// 			femIntFree(f_dir)
+	// 		}
+	// 		if len(f_val) != 0 {
+	// 			femDblFree(f_val)
+	// 		}
+	// 	}
+	// 	if n_r_inp > 0 {
+	// 		if len(rand_type) != 0 {
+	// 			femIntFree(rand_type)
+	// 		}
+	// 		if len(rand_pos) != 0 {
+	// 			femIntFree(rand_pos)
+	// 		}
+	// 		if len(rand_indx) != 0 {
+	// 			femIntFree(rand_indx)
+	// 		}
+	// 	}
+	// 	if n_r_opt > 0 {
+	// 		if len(opt_type) != 0 {
+	// 			femIntFree(opt_type)
+	// 		}
+	// 		if len(opt_pos) != 0 {
+	// 			femIntFree(opt_pos)
+	// 		}
+	// 		if len(opt_indx) != 0 {
+	// 			femIntFree(opt_indx)
+	// 		}
+	// 		if len(opt_data) != 0 {
+	// 			femDblFree(opt_data)
+	// 		}
+	// 	}
+	// 	if n_en > 0 {
+	// 		if len(en_num) != 0 {
+	// 			femIntFree(en_num)
+	// 		}
+	// 		if len(en_frm) != 0 {
+	// 			femIntFree(en_frm)
+	// 		}
+	// 		if len(en_pos) != 0 {
+	// 			femIntFree(en_pos)
+	// 		}
+	// 	}
+	// 	if n_fail > 0 {
+	// 		if len(fail_data) != 0 {
+	// 			femDblFree(fail_data)
+	// 		}
+	// 	}
 	n_m = 0
 	n_n = 0
 	n_e = 0
@@ -1209,17 +1209,17 @@ func alloc_solver_data() int32 {
 	if femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&u))[:], 0, n_n*3, n_n*3) != 0 {
 		goto memFree
 	}
-// 	femIntFree(alloc_field)
-// 	femIntFree(n_field)
+	// 	femIntFree(alloc_field)
+	// 	femIntFree(n_field)
 	return 0
 memFree:
 	;
-// 	if len(alloc_field) != 0 {
-// 		femIntFree(alloc_field)
-// 	}
-// 	if len(n_field) != 0 {
-// 		femIntFree(n_field)
-// 	}
+	// 	if len(alloc_field) != 0 {
+	// 		femIntFree(alloc_field)
+	// 	}
+	// 	if len(n_field) != 0 {
+	// 		femIntFree(n_field)
+	// 	}
 	free_solver_data()
 	fmt.Fprintf(msgout, ("Out of memory!"))
 	return -4
@@ -1312,7 +1312,7 @@ func get_matrix() int32 {
 	femMatSetZero((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
 	femVecSetZero((*[1000000]tVector)(unsafe.Pointer(&u))[:])
 	femVecSetZero((*[1000000]tVector)(unsafe.Pointer(&F))[:])
-	fmt.Println(":::: n_e", n_e, " e_n1 == ", e_n1)
+	// fmt.Println(":::: n_e", n_e, " e_n1 == ", e_n1)
 	for i = 0; i < n_e; i++ {
 		if (func() float64 {
 			t = m_t[e_mat[i]]
@@ -1364,7 +1364,7 @@ func get_matrix() int32 {
 		}())) > 1e-07 {
 			// gravitation
 			F2 = -0.5 * q * t * L
-			fmt.Println("i = ", i, e_n1, e_n2, F)
+			// fmt.Println("i = ", i, e_n1, e_n2, F)
 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n1[i], F2, 1)
 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n2[i], F2, 1)
 		}
@@ -2096,10 +2096,10 @@ func femMatFree(mat []tMatrix) {
 	mat[0].rows = 0
 	mat[0].cols = 0
 	mat[0].len_ = 0
-// 	femIntFree(mat[0].pos)
-// 	femDblFree(mat[0].data)
-// 	femIntFree(mat[0].frompos)
-// 	femIntFree(mat[0].defpos)
+	// 	femIntFree(mat[0].pos)
+	// 	femDblFree(mat[0].data)
+	// 	femIntFree(mat[0].frompos)
+	// 	femIntFree(mat[0].defpos)
 }
 
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
@@ -2608,8 +2608,8 @@ func femVecFree(mat []tVector) {
 	mat[0].type_ = 0
 	mat[0].rows = 0
 	mat[0].len_ = 0
-// 	femIntFree(mat[0].pos)
-// 	femDblFree(mat[0].data)
+	// 	femIntFree(mat[0].pos)
+	// 	femDblFree(mat[0].data)
 }
 
 // femVecAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:718
@@ -2678,11 +2678,13 @@ func femVecPutAdd(vec []tVector, pos int32, val float64, mode int32) int32 {
 	case 0:
 		if mode == 0 {
 			// put
-			vec[0].data[pos-1] = val
+			// vec[0].data[pos-1] = val
+			vec[0].data[pos] = val
 		} else {
 			// add
-			fmt.Println(">", pos, vec[0].type_, ":::", mode, vec[0].data)
-			vec[0].data[pos-1] += val
+			// fmt.Println(">", pos, vec[0].type_, ":::", mode, vec[0].data)
+			// vec[0].data[pos-1] += val
+			vec[0].data[pos] += val
 		}
 	case 1:
 		// unimplemented
