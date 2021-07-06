@@ -7,11 +7,14 @@
 
 package main
 
-import "os"
-import "fmt"
-import "math"
-import "unsafe"
-import "github.com/Konstantin8105/c4go/noarch"
+import (
+	"fmt"
+	"math"
+	"os"
+	"unsafe"
+
+	"github.com/Konstantin8105/c4go/noarch"
+)
 
 // msgout - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:29
 //
@@ -639,392 +642,421 @@ func read_input_data(fw *noarch.File) int32 {
 	// reads data from stream
 	// * @param fw stream for reading
 	//
-	var i int32
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_m)) <= 0 {
-		goto memFree
-	}
-	if n_m < 1 {
-		noarch.Fprintf(msgout, []byte("Invalid number of materials!\n\x00"))
-		goto memFree
-	}
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_n)) <= 0 {
-		goto memFree
-	}
-	if n_n < 2 {
-		noarch.Fprintf(msgout, []byte("Invalid number of nodes!\n\x00"))
-		goto memFree
-	}
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_e)) <= 0 {
-		goto memFree
-	}
-	if n_e < 2 {
-		noarch.Fprintf(msgout, []byte("Invalid number of elements!\n\x00"))
-		goto memFree
-	}
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_d)) <= 0 {
-		goto memFree
-	}
-	if n_d < 3 {
-		noarch.Fprintf(msgout, []byte("Invalid number of supports!\n\x00"))
-		goto memFree
-	}
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_f)) < 0 {
-		goto memFree
-	}
-	if n_f < 0 {
-		noarch.Fprintf(msgout, []byte("Invalid number of forces!\n\x00"))
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_E1 = femDblAlloc(n_m)
-		return m_E1
-	}())) == 0 {
-		// data allocations
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_E2 = femDblAlloc(n_m)
-		return m_E2
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_G = femDblAlloc(n_m)
-		return m_G
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_nu1 = femDblAlloc(n_m)
-		return m_nu1
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_nu2 = femDblAlloc(n_m)
-		return m_nu2
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_q = femDblAlloc(n_m)
-		return m_q
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_vp = femDblAlloc(n_m)
-		return m_vp
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		m_t = femDblAlloc(n_m)
-		return m_t
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		n_x = femDblAlloc(n_n)
-		return n_x
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		n_y = femDblAlloc(n_n)
-		return n_y
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		e_n1 = femIntAlloc(n_e)
-		return e_n1
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		e_n2 = femIntAlloc(n_e)
-		return e_n2
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		e_mat = femIntAlloc(n_e)
-		return e_mat
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		e_t = femDblAlloc(n_e)
-		return e_t
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		d_n = femIntAlloc(n_d)
-		return d_n
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		d_dir = femIntAlloc(n_d)
-		return d_dir
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		d_val = femDblAlloc(n_d)
-		return d_val
-	}())) == 0 {
-		goto memFree
-	}
-	if n_f > 0 {
-		if len((func() []int32 {
-			f_n = femIntAlloc(n_f)
-			return f_n
-		}())) == 0 {
-			goto memFree
-		}
-		if len((func() []int32 {
-			f_dir = femIntAlloc(n_f)
-			return f_dir
-		}())) == 0 {
-			goto memFree
-		}
-		if len((func() []float64 {
-			f_val = femDblAlloc(n_f)
-			return f_val
-		}())) == 0 {
-			goto memFree
-		}
-	}
-	if len((func() []int32 {
-		en_num = femIntAlloc(n_n)
-		return en_num
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		en_frm = femIntAlloc(n_n)
-		return en_frm
-	}())) == 0 {
-		goto memFree
-	}
-	{
-		// reading of data:
-		// materials
-		for i = 0; i < n_m; i++ {
-			if noarch.Fscanf(fw, []byte(" %f %f %f %f %f %f %f %f\x00\x00\x00\x00\x00\x00\x00\x00\x00"), m_E1[i:], m_E2[i:], m_G[i:], m_nu1[i:], m_nu2[i:], m_q[i:], m_vp[i:], m_t[i:]) <= 0 {
-				goto memFree
-			}
-			if m_E1[i] == m_E2[i] || m_E2[i] <= 0 {
-				// isotropic
-				m_E2[i] = m_E1[i]
-				m_nu2[i] = m_nu1[i]
-				if m_G[i] <= 0 {
-					m_G[i] = m_E1[i] / (2 * (1 + m_nu1[i]))
-				}
-			} else {
-				if m_E1[i] <= 0 || m_E2[i] <= 0 || m_G[i] <= 0 || m_nu1[i] <= 0 || m_nu2[i] <= 0 {
-					noarch.Fprintf(msgout, []byte("Invalid or incomplete data for material %li\n\x00"), i)
-					goto memFree
-				}
-			}
-		}
-	}
-	{
-		// nodes
-		for i = 0; i < n_n; i++ {
-			if noarch.Fscanf(fw, []byte("%f %f\x00\x00\x00"), n_x[i:], n_y[i:]) <= 0 {
-				goto memFree
-			}
-		}
-	}
-	{
-		// elements
-		for i = 0; i < n_e; i++ {
-			if noarch.Fscanf(fw, []byte("%li %li %li %f\x00\x00"), e_n1[i:], e_n2[i:], e_mat[i:], e_t[i:]) <= 0 {
-				goto memFree
-			}
-			if e_n1[i] < 0 || e_n1[i] >= n_n {
-				noarch.Fprintf(msgout, []byte("Invalid n1 in element %li\n\x00"), i)
-				goto memFree
-			}
-			if e_n2[i] < 0 || e_n2[i] >= n_n {
-				noarch.Fprintf(msgout, []byte("Invalid n2 in element %li\n\x00"), i)
-				goto memFree
-			}
-			if e_n1[i] == e_n2[i] {
-				noarch.Fprintf(msgout, []byte("Invalid nodes in element %li\n\x00"), i)
-				goto memFree
-			}
-			if e_mat[i] < 0 || e_mat[i] >= n_m {
-				noarch.Fprintf(msgout, []byte("Invalid material in element %li\n\x00"), i)
-				goto memFree
-			}
-			if e_t[i] <= 0 {
-				noarch.Fprintf(msgout, []byte("Invalid width in element %li\n\x00"), i)
-				goto memFree
-			}
-		}
-	}
-	{
-		// displacements
-		for i = 0; i < n_d; i++ {
-			if noarch.Fscanf(fw, []byte("%li %li %f\x00\x00"), d_n[i:], d_dir[i:], d_val[i:]) <= 0 {
-				goto memFree
-			}
-			if d_n[i] < 0 || d_n[i] >= n_n {
-				noarch.Fprintf(msgout, []byte("Invalid node in support %li\n\x00"), i)
-				goto memFree
-			}
-			if d_dir[i] < 0 || d_dir[i] >= 6 {
-				noarch.Fprintf(msgout, []byte("Invalid direction in support %li\n\x00"), i)
-				goto memFree
-			}
-			if d_dir[i] > 2 && d_val[i] < 0 {
-				noarch.Fprintf(msgout, []byte("Invalid stiffness in support %li\n\x00"), i)
-				goto memFree
-			}
-		}
-	}
-	{
-		// forces
-		for i = 0; i < n_f; i++ {
-			if noarch.Fscanf(fw, []byte("%li %li %f\x00\x00"), f_n[i:], f_dir[i:], f_val[i:]) <= 0 {
-				goto memFree
-			}
-			if f_n[i] < 0 || f_n[i] >= n_n {
-				noarch.Fprintf(msgout, []byte("Invalid node for force %li\n\x00"), i)
-				goto memFree
-			}
-			if f_dir[i] < 0 || f_dir[i] >= 3 {
-				noarch.Fprintf(msgout, []byte("Invalid direction for force %li\n\x00"), i)
-				goto memFree
-			}
-		}
-	}
-	if noarch.Fscanf(fw, []byte("%f %f %f %li %li\x00\x00\x00\x00"), c4goUnsafeConvert_float64(&w_top), c4goUnsafeConvert_float64(&w_bot), c4goUnsafeConvert_float64(&w_val), c4goUnsafeConvert_int32(&w_min), c4goUnsafeConvert_int32(&w_max)) <= 0 {
-		// water pressure data
-		goto memFree
-	}
-	// check of element nodes
-	check_elem_data()
-	if get_enode_fields() != 0 {
-		goto memFree
-	}
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&fail_type)) <= 0 {
-		// failure condition data:
-		// that's great, no failure is needed
-		fail_type = 0
-		n_fail = 0
-	} else {
-		if fail_type > 0 {
-			if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_fail)) <= 0 {
-				fail_type = 0
-			} else {
-				if len((func() []float64 {
-					fail_data = femDblAlloc(n_fail)
-					return fail_data
-				}())) == 0 {
-					noarch.Fprintf(msgout, []byte("Cannot allocate memory for failure data!\n\x00"))
-					goto memFree
-				}
-				for i = 0; i < n_fail; i++ {
-					if noarch.Fscanf(fw, []byte("%f\x00\x00"), fail_data[i:]) <= 0 {
-						noarch.Fprintf(msgout, []byte("Invalid failure data!\n\x00"))
-						goto memFree
-					}
-				}
-			}
-		}
-	}
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_r_inp)) <= 0 {
-		// random variables:
-		n_r_inp = 0
-		// fprintf(msgout, "No random data found.\n");
-		return 0
-	}
-	if n_r_inp < 1 {
-		return 0
-	}
-	if len((func() []int32 {
-		rand_type = femIntAlloc(n_r_inp)
-		return rand_type
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		rand_pos = femIntAlloc(n_r_inp)
-		return rand_pos
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		rand_indx = femIntAlloc(n_r_inp)
-		return rand_indx
-	}())) == 0 {
-		goto memFree
-	}
-	for i = 0; i < n_r_inp; i++ {
-		if noarch.Fscanf(fw, []byte("%li %li %li\x00"), rand_type[i:], rand_pos[i:], rand_indx[i:]) <= 0 {
-			goto memFree
-		}
-	}
-	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_r_opt)) <= 0 {
-		// optimized variables: -------------------------------------
-		n_r_opt = 0
-		//fprintf(msgout, "No optim. data found.\n");
-		return 0
-	}
-	if n_r_opt < 1 {
-		noarch.Fprintf(msgout, []byte("Invalid number of optim. inputs!\n\x00"))
-		return 0
-	}
-	if len((func() []int32 {
-		opt_type = femIntAlloc(n_r_opt)
-		return opt_type
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		opt_pos = femIntAlloc(n_r_opt)
-		return opt_pos
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []int32 {
-		opt_indx = femIntAlloc(n_r_opt)
-		return opt_indx
-	}())) == 0 {
-		goto memFree
-	}
-	if len((func() []float64 {
-		opt_data = femDblAlloc(n_r_opt)
-		return opt_data
-	}())) == 0 {
-		goto memFree
-	}
-	for i = 0; i < n_r_opt; i++ {
-		if noarch.Fscanf(fw, []byte("%li %li %li\x00"), opt_type[i:], opt_pos[i:], opt_indx[i:]) <= 0 {
-			goto memFree
-		}
-	}
-	for i = 0; i < n_r_opt; i++ {
-		if noarch.Fscanf(fw, []byte("%f\x00\x00"), opt_data[i:]) <= 0 {
-			femDblFree(opt_data)
-			femIntFree(opt_indx)
-			femIntFree(opt_pos)
-			femIntFree(opt_type)
-			n_r_opt = 0
-		}
-	}
+	// 	var i int32
+	n_m = 1
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_m)) <= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if n_m < 1 {
+	// 		noarch.Fprintf(msgout, []byte("Invalid number of materials!\n\x00"))
+	// 		goto memFree
+	// 	}
+	n_n = 3
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_n)) <= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if n_n < 2 {
+	// 		noarch.Fprintf(msgout, []byte("Invalid number of nodes!\n\x00"))
+	// 		goto memFree
+	// 	}
+	n_e = 2
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_e)) <= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if n_e < 2 {
+	// 		noarch.Fprintf(msgout, []byte("Invalid number of elements!\n\x00"))
+	// 		goto memFree
+	// 	}
+	n_d = 3
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_d)) <= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if n_d < 3 {
+	// 		noarch.Fprintf(msgout, []byte("Invalid number of supports!\n\x00"))
+	// 		goto memFree
+	// 	}
+	n_f = 1
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_f)) < 0 {
+	// 		goto memFree
+	// 	}
+	// 	if n_f < 0 {
+	// 		noarch.Fprintf(msgout, []byte("Invalid number of forces!\n\x00"))
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_E1 = femDblAlloc(n_m)
+	// 		return m_E1
+	// 	}())) == 0 {
+	// 		// data allocations
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_E2 = femDblAlloc(n_m)
+	// 		return m_E2
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_G = femDblAlloc(n_m)
+	// 		return m_G
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_nu1 = femDblAlloc(n_m)
+	// 		return m_nu1
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_nu2 = femDblAlloc(n_m)
+	// 		return m_nu2
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_q = femDblAlloc(n_m)
+	// 		return m_q
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_vp = femDblAlloc(n_m)
+	// 		return m_vp
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	m_t = femDblAlloc(n_m)
+	// 		return m_t
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	n_x = femDblAlloc(n_n)
+	// 		return n_x
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	n_y = femDblAlloc(n_n)
+	// 		return n_y
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	e_n1 = femIntAlloc(n_e)
+	// 		return e_n1
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	e_n2 = femIntAlloc(n_e)
+	// 		return e_n2
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	e_mat = femIntAlloc(n_e)
+	// 		return e_mat
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	e_t = femDblAlloc(n_e)
+	// 		return e_t
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	d_n = femIntAlloc(n_d)
+	// 		return d_n
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	d_dir = femIntAlloc(n_d)
+	// 		return d_dir
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	d_val = femDblAlloc(n_d)
+	// 		return d_val
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if n_f > 0 {
+	// 		if len((func() []int32 {
+	f_n = femIntAlloc(n_f)
+	// 			return f_n
+	// 		}())) == 0 {
+	// 			goto memFree
+	// 		}
+	// 		if len((func() []int32 {
+	f_dir = femIntAlloc(n_f)
+	// 			return f_dir
+	// 		}())) == 0 {
+	// 			goto memFree
+	// 		}
+	// 		if len((func() []float64 {
+	f_val = femDblAlloc(n_f)
+	// 			return f_val
+	// 		}())) == 0 {
+	// 			goto memFree
+	// 		}
+	// 	}
+	// 	if len((func() []int32 {
+	en_num = femIntAlloc(n_n)
+	// 		return en_num
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	en_frm = femIntAlloc(n_n)
+	// 		return en_frm
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+
+	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
+
+	// 	{
+	// 		// reading of data:
+	// 		// materials
+	// 		for i = 0; i < n_m; i++ {
+	// 			if noarch.Fscanf(fw, []byte(" %f %f %f %f %f %f %f %f\x00\x00\x00\x00\x00\x00\x00\x00\x00"), m_E1[i:], m_E2[i:], m_G[i:], m_nu1[i:], m_nu2[i:], m_q[i:], m_vp[i:], m_t[i:]) <= 0 {
+	// 				goto memFree
+	// 			}
+	// 			if m_E1[i] == m_E2[i] || m_E2[i] <= 0 {
+	// 				// isotropic
+	// 				m_E2[i] = m_E1[i]
+	// 				m_nu2[i] = m_nu1[i]
+	// 				if m_G[i] <= 0 {
+	// 					m_G[i] = m_E1[i] / (2 * (1 + m_nu1[i]))
+	// 				}
+	// 			} else {
+	// 				if m_E1[i] <= 0 || m_E2[i] <= 0 || m_G[i] <= 0 || m_nu1[i] <= 0 || m_nu2[i] <= 0 {
+	// 					noarch.Fprintf(msgout, []byte("Invalid or incomplete data for material %li\n\x00"), i)
+	// 					goto memFree
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	n_x[0], n_y[0] = 10, 0
+	n_x[1], n_y[1] = 10, 5
+	n_x[2], n_y[2] = 10, 10
+
+	// 	{
+	// 		// nodes
+	// 		for i = 0; i < n_n; i++ {
+	// 			if noarch.Fscanf(fw, []byte("%f %f\x00\x00\x00"), n_x[i:], n_y[i:]) <= 0 {
+	// 				goto memFree
+	// 			}
+	// 		}
+	// 	}
+	e_n1[0], e_n2[0], e_mat[0], e_t[0] = 0, 1, 0, 0.2
+	e_n1[1], e_n2[1], e_mat[1], e_t[1] = 1, 2, 0, 0.2
+
+	// 	{
+	// 		// elements
+	// 		for i = 0; i < n_e; i++ {
+	// 			if noarch.Fscanf(fw, []byte("%li %li %li %f\x00\x00"), e_n1[i:], e_n2[i:], e_mat[i:], e_t[i:]) <= 0 {
+	// 				goto memFree
+	// 			}
+	// 			if e_n1[i] < 0 || e_n1[i] >= n_n {
+	// 				noarch.Fprintf(msgout, []byte("Invalid n1 in element %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 			if e_n2[i] < 0 || e_n2[i] >= n_n {
+	// 				noarch.Fprintf(msgout, []byte("Invalid n2 in element %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 			if e_n1[i] == e_n2[i] {
+	// 				noarch.Fprintf(msgout, []byte("Invalid nodes in element %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 			if e_mat[i] < 0 || e_mat[i] >= n_m {
+	// 				noarch.Fprintf(msgout, []byte("Invalid material in element %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 			if e_t[i] <= 0 {
+	// 				noarch.Fprintf(msgout, []byte("Invalid width in element %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 		}
+	// 	}
+	d_n[0], d_dir[0], d_val[0] = 0, 0, 0
+	d_n[1], d_dir[1], d_val[1] = 0, 1, 0
+	d_n[2], d_dir[2], d_val[2] = 2, 1, 0
+	// 	{
+	// 		// displacements
+	// 		for i = 0; i < n_d; i++ {
+	// 			if noarch.Fscanf(fw, []byte("%li %li %f\x00\x00"), d_n[i:], d_dir[i:], d_val[i:]) <= 0 {
+	// 				goto memFree
+	// 			}
+	// 			if d_n[i] < 0 || d_n[i] >= n_n {
+	// 				noarch.Fprintf(msgout, []byte("Invalid node in support %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 			if d_dir[i] < 0 || d_dir[i] >= 6 {
+	// 				noarch.Fprintf(msgout, []byte("Invalid direction in support %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 			if d_dir[i] > 2 && d_val[i] < 0 {
+	// 				noarch.Fprintf(msgout, []byte("Invalid stiffness in support %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 		}
+	// 	}
+	f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
+
+	// 	{
+	// 		// forces
+	// 		for i = 0; i < n_f; i++ {
+	// 			if noarch.Fscanf(fw, []byte("%li %li %f\x00\x00"), f_n[i:], f_dir[i:], f_val[i:]) <= 0 {
+	// 				goto memFree
+	// 			}
+	// 			if f_n[i] < 0 || f_n[i] >= n_n {
+	// 				noarch.Fprintf(msgout, []byte("Invalid node for force %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 			if f_dir[i] < 0 || f_dir[i] >= 3 {
+	// 				noarch.Fprintf(msgout, []byte("Invalid direction for force %li\n\x00"), i)
+	// 				goto memFree
+	// 			}
+	// 		}
+	// 	}
+	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
+
+	// 	if noarch.Fscanf(fw, []byte("%f %f %f %li %li\x00\x00\x00\x00"), c4goUnsafeConvert_float64(&w_top), c4goUnsafeConvert_float64(&w_bot), c4goUnsafeConvert_float64(&w_val), c4goUnsafeConvert_int32(&w_min), c4goUnsafeConvert_int32(&w_max)) <= 0 {
+	// 		// water pressure data
+	// 		goto memFree
+	// 	}
+	// 	// check of element nodes
+	// 	check_elem_data()
+	// 	if get_enode_fields() != 0 {
+	// 		goto memFree
+	// 	}
+	fail_type = 1
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&fail_type)) <= 0 {
+	// 		// failure condition data:
+	// 		// that's great, no failure is needed
+	// 		fail_type = 0
+	// 		n_fail = 0
+	// 	} else {
+	// 		if fail_type > 0 {
+	n_fail = 2
+	// 			if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_fail)) <= 0 {
+	// 				fail_type = 0
+	// 			} else {
+	// 				if len((func() []float64 {
+	 					fail_data = femDblAlloc(n_fail)
+	// 					return fail_data
+	// 				}())) == 0 {
+	// 					noarch.Fprintf(msgout, []byte("Cannot allocate memory for failure data!\n\x00"))
+	// 					goto memFree
+	// 				}
+	fail_data[0] = 20e6
+	fail_data[1] = 1e6
+	// 				for i = 0; i < n_fail; i++ {
+	// 					if noarch.Fscanf(fw, []byte("%f\x00\x00"), fail_data[i:]) <= 0 {
+	// 						noarch.Fprintf(msgout, []byte("Invalid failure data!\n\x00"))
+	// 						goto memFree
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	n_r_inp = 1
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_r_inp)) <= 0 {
+	// 		// random variables:
+	// 		n_r_inp = 0
+	// 		// fprintf(msgout, "No random data found.\n");
+	// 		return 0
+	// 	}
+	// 	if n_r_inp < 1 {
+	// 		return 0
+	// 	}
+	// 	if len((func() []int32 {
+	rand_type = femIntAlloc(n_r_inp)
+	// 		return rand_type
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	rand_pos = femIntAlloc(n_r_inp)
+	// 		return rand_pos
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	rand_indx = femIntAlloc(n_r_inp)
+	// 		return rand_indx
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
+
+	// 	for i = 0; i < n_r_inp; i++ {
+	// 		if noarch.Fscanf(fw, []byte("%li %li %li\x00"), rand_type[i:], rand_pos[i:], rand_indx[i:]) <= 0 {
+	// 			goto memFree
+	// 		}
+	// 	}
+	// 	if noarch.Fscanf(fw, []byte("%li\x00"), c4goUnsafeConvert_int32(&n_r_opt)) <= 0 {
+	// 		// optimized variables: -------------------------------------
+	n_r_opt = 0
+	// 		//fprintf(msgout, "No optim. data found.\n");
 	return 0
-memFree:
-	;
-	free_input_data()
-	noarch.Fprintf(msgout, []byte("Error when reading input!\n\x00"))
-	return -2
+	// 	}
+	// 	if n_r_opt < 1 {
+	// 		noarch.Fprintf(msgout, []byte("Invalid number of optim. inputs!\n\x00"))
+	// 		return 0
+	// 	}
+	// 	if len((func() []int32 {
+	// 		opt_type = femIntAlloc(n_r_opt)
+	// 		return opt_type
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	// 		opt_pos = femIntAlloc(n_r_opt)
+	// 		return opt_pos
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int32 {
+	// 		opt_indx = femIntAlloc(n_r_opt)
+	// 		return opt_indx
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []float64 {
+	// 		opt_data = femDblAlloc(n_r_opt)
+	// 		return opt_data
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
+	// 	for i = 0; i < n_r_opt; i++ {
+	// 		if noarch.Fscanf(fw, []byte("%li %li %li\x00"), opt_type[i:], opt_pos[i:], opt_indx[i:]) <= 0 {
+	// 			goto memFree
+	// 		}
+	// 	}
+	// 	for i = 0; i < n_r_opt; i++ {
+	// 		if noarch.Fscanf(fw, []byte("%f\x00\x00"), opt_data[i:]) <= 0 {
+	// 			femDblFree(opt_data)
+	// 			femIntFree(opt_indx)
+	// 			femIntFree(opt_pos)
+	// 			femIntFree(opt_type)
+	// 			n_r_opt = 0
+	// 		}
+	// 	}
+	// 	return 0
+	// memFree:
+	// 	;
+	// 	free_input_data()
+	// 	noarch.Fprintf(msgout, []byte("Error when reading input!\n\x00"))
+	// 	return -2
 }
 
 // write_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:541
@@ -2525,6 +2557,7 @@ func femMatSetZeroCol(a []tMatrix, Col int32) {
 	var ifrom int32
 	var ito int32
 	var ipos int32
+	_ = ipos
 	if a[0].type_ == 1 {
 		ifrom = a[0].pos[a[0].frompos[Col-1]] - 1
 		ito = a[0].pos[a[0].frompos[Col-1]+a[0].defpos[Col-1]-1] - 1
@@ -4212,6 +4245,7 @@ func femEqsPCGwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int32
 	// Alternative version of the Conjugate Gradient Method ()
 	var rv int32
 	var converged int32
+	_ = converged
 	var nui float64
 	var dei float64
 	var lambda float64
@@ -4487,6 +4521,7 @@ func femMatEigenJacobi(a []tMatrix, d []tVector, v []tMatrix, nrot []int32) int3
 	var n int32
 	var sm float64
 	var tresh float64
+	_ = tresh
 	var g float64
 	var h float64
 	var t float64
