@@ -53,26 +53,26 @@ func femIntAlloc(length int) (c4goDefaultReturn []int) {
 	// * @param length length of field
 	// * @returns field (or NULL)
 	//
-// 	var field []int
-// 	var i int
-// 	if length < 1 {
-// 		return nil
-// 	}
-// 	if len((func() []int {
-// 		field = (*[1000000]int)(unsafe.Pointer(uintptr(func() int64 {
-// 			c4go_temp_name := make([]byte, uint(length)*uint(1))
-// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
-// 		}())))[:]
-// 		return field
-// 	}())) == 0 {
-// 		return nil
-// 	} else {
-// 		for i = 0; i < length; i++ {
-// 			field[i] = 0
-// 		}
-// 		return field
-// 	}
-// 	return
+	// 	var field []int
+	// 	var i int
+	// 	if length < 1 {
+	// 		return nil
+	// 	}
+	// 	if len((func() []int {
+	// 		field = (*[1000000]int)(unsafe.Pointer(uintptr(func() int64 {
+	// 			c4go_temp_name := make([]byte, uint(length)*uint(1))
+	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
+	// 		}())))[:]
+	// 		return field
+	// 	}())) == 0 {
+	// 		return nil
+	// 	} else {
+	// 		for i = 0; i < length; i++ {
+	// 			field[i] = 0
+	// 		}
+	// 		return field
+	// 	}
+	// 	return
 }
 
 // femIntFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:59
@@ -89,32 +89,32 @@ func femIntFree(field []int) int {
 // femDblAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:71
 func femDblAlloc(length int) (c4goDefaultReturn []float64) {
 	return make([]float64, length)
-// 	// allocates and returns 1D double field  (NULL if failed)
-// 	// * @param length length of field
-// 	// * @returns field (or NULL)
-// 	//
-// 	// 	var field []float64
-// 	 	var i int
-// 	// 	if length < 1 {
-// 	// 		return nil
-// 	// 	}
-// 	// 	if len((func() []float64 {
-// 	// 		field = (*[1000000]float64)(unsafe.Pointer(uintptr(func() int64 {
-// 	// 			c4go_temp_name := make([]byte, uint(length)*uint(1))
-// 	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
-// 	// 		}())))[:]
-// 	// 		return field
-// 	// 	}())) == 0 {
-// 	// 		return nil
-// 	// 	} else {
-// 	field := make([]float64, length, length)
-// 
-// 	for i = 0; i < length; i++ {
-// 		field[i] = 0
-// 	}
-// 	return field
-// 	// 	}
-// 	//	return
+	// 	// allocates and returns 1D double field  (NULL if failed)
+	// 	// * @param length length of field
+	// 	// * @returns field (or NULL)
+	// 	//
+	// 	// 	var field []float64
+	// 	 	var i int
+	// 	// 	if length < 1 {
+	// 	// 		return nil
+	// 	// 	}
+	// 	// 	if len((func() []float64 {
+	// 	// 		field = (*[1000000]float64)(unsafe.Pointer(uintptr(func() int64 {
+	// 	// 			c4go_temp_name := make([]byte, uint(length)*uint(1))
+	// 	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
+	// 	// 		}())))[:]
+	// 	// 		return field
+	// 	// 	}())) == 0 {
+	// 	// 		return nil
+	// 	// 	} else {
+	// 	field := make([]float64, length, length)
+	//
+	// 	for i = 0; i < length; i++ {
+	// 		field[i] = 0
+	// 	}
+	// 	return field
+	// 	// 	}
+	// 	//	return
 }
 
 // femDblFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:93
@@ -830,6 +830,8 @@ func get_D_matrix(i int, t float64, D []tMatrix) {
 	E1 = m_E1[e_mat[i]]
 	E2 = m_E2[e_mat[i]]
 	G = m_G[e_mat[i]]
+// 	fmt.Println(	"G = ", G)
+// 	fmt.Println(	"t = ", t)
 	nu1 = m_nu1[e_mat[i]]
 	nu2 = m_nu2[e_mat[i]]
 	mult = t / (1 - nu1*nu2)
@@ -837,11 +839,11 @@ func get_D_matrix(i int, t float64, D []tMatrix) {
 	femMatPutAdd(D, 1, 2, nu2*mult, 0)
 	femMatPutAdd(D, 2, 1, nu2*mult, 0)
 	femMatPutAdd(D, 2, 2, E2*mult, 0)
-	femMatPutAdd(D, 3, 3, E1*t*t/12*mult, 0)
-	femMatPutAdd(D, 4, 4, E2*t*t/12*mult, 0)
-	femMatPutAdd(D, 3, 4, nu2*(E1*t*t)/12*mult, 0)
-	femMatPutAdd(D, 4, 3, nu2*(E1*t*t)/12*mult, 0)
-	femMatPutAdd(D, 5, 5, 5/6*G/t, 0)
+	femMatPutAdd(D, 3, 3, E1*t*t/12.*mult, 0)
+	femMatPutAdd(D, 4, 4, E2*t*t/12.*mult, 0)
+	femMatPutAdd(D, 3, 4, nu2*(E1*t*t)/12.*mult, 0)
+	femMatPutAdd(D, 4, 3, nu2*(E1*t*t)/12.*mult, 0)
+	femMatPutAdd(D, 5, 5, 5.0/6.0*G/t, 0)
 }
 
 // get_B_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:704
@@ -865,22 +867,22 @@ func get_B_matrix(i int, B []tMatrix, Lc []float64, Rc []float64) {
 	S = -1 * dx / L
 	C = -1 * dy / L
 	// B matrix:
-	femMatPutAdd(B, 1, 1, -1*C/L, 0)
-	femMatPutAdd(B, 1, 2, -1*S/L, 0)
-	femMatPutAdd(B, 1, 4, 1*C/L, 0)
-	femMatPutAdd(B, 1, 5, 1*S/L, 0)
-	femMatPutAdd(B, 2, 2, 1/(2*R), 0)
-	femMatPutAdd(B, 2, 5, 1/(2*R), 0)
-	femMatPutAdd(B, 3, 3, -1/L, 0)
-	femMatPutAdd(B, 3, 6, 1/L, 0)
-	femMatPutAdd(B, 4, 3, S/(2*R), 0)
-	femMatPutAdd(B, 4, 6, S/(2*R), 0)
-	femMatPutAdd(B, 5, 1, -1*S/L, 0)
-	femMatPutAdd(B, 5, 2, 1*C/L, 0)
-	femMatPutAdd(B, 5, 3, 1/2, 0)
-	femMatPutAdd(B, 5, 4, 1*S/L, 0)
-	femMatPutAdd(B, 5, 5, -1*C/L, 0)
-	femMatPutAdd(B, 5, 6, 1/2, 0)
+	femMatPutAdd(B, 1, 1, -1.*C/L, 0)
+	femMatPutAdd(B, 1, 2, -1.*S/L, 0)
+	femMatPutAdd(B, 1, 4, 1.*C/L, 0)
+	femMatPutAdd(B, 1, 5, 1.*S/L, 0)
+	femMatPutAdd(B, 2, 2, 1./(2*R), 0)
+	femMatPutAdd(B, 2, 5, 1./(2.*R), 0)
+	femMatPutAdd(B, 3, 3, -1./L, 0)
+	femMatPutAdd(B, 3, 6, 1./L, 0)
+	femMatPutAdd(B, 4, 3, S/(2.*R), 0)
+	femMatPutAdd(B, 4, 6, S/(2.*R), 0)
+	femMatPutAdd(B, 5, 1, -1.*S/L, 0)
+	femMatPutAdd(B, 5, 2, 1.*C/L, 0)
+	femMatPutAdd(B, 5, 3, 1./2., 0)
+	femMatPutAdd(B, 5, 4, 1.*S/L, 0)
+	femMatPutAdd(B, 5, 5, -1.*C/L, 0)
+	femMatPutAdd(B, 5, 6, 1./2., 0)
 	Lc[0] = L
 	Rc[0] = R
 }
@@ -917,10 +919,13 @@ func get_matrix() int {
 		femMatSetZero((*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
 		// material stiffness matrix D:
 		get_D_matrix(i, t, (*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
+	 // femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&D))[:],[]byte("D"))
 		// B matrix
 		get_B_matrix(i, (*[1000000]tMatrix)(unsafe.Pointer(&B))[:], c4goUnsafeConvert_float64(&L), c4goUnsafeConvert_float64(&R))
+	 femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&B))[:],[]byte("B"))
 		// transpose of B
 		femMatTran((*[1000000]tMatrix)(unsafe.Pointer(&B))[:], (*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
+	 femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:],[]byte("Bt"))
 		// matrix multiplications (Bt*D*B):
 		// => BtD
 		femMatMatMult((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:], (*[1000000]tMatrix)(unsafe.Pointer(&D))[:], (*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
@@ -928,6 +933,10 @@ func get_matrix() int {
 		femMatMatMult((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:], (*[1000000]tMatrix)(unsafe.Pointer(&B))[:], (*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
 		// element stifness matrix Ke:
 		femValMatMultSelf(R*L, (*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
+
+
+	femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:],[]byte("Ke"))
+
 		{
 			// localisation to "K":
 			for j = 1; j <= 6; j++ {
@@ -956,6 +965,21 @@ func get_matrix() int {
 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n2[i]+1, F2, 1)
 		}
 	}
+// 	_ = F2
+ 	F.data = []float64{
+ 		0.000000e+00,
+ 		0.000000e+00,
+ 		-2.500000e+04,
+ 		0.000000e+00,
+ 		0.000000e+00,
+ 		-1.250000e+04,
+ 		0.000000e+00,
+ 		0.000000e+00,
+ 		0.000000e+00,
+ 	}
+
+	fmt.Printf("K = %#v\n",	K)
+	femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&K))[:],[]byte("K"))
 	return 0
 }
 
@@ -1766,20 +1790,20 @@ func monte_init_lib_stuff(param []byte) int {
 	if len(param) == 0 {
 		return -1
 	}
-// 	if noarch.Strlen(param) < int(1) {
-// 		return -1
-// 	}
+	// 	if noarch.Strlen(param) < int(1) {
+	// 		return -1
+	// 	}
 	if (func() *noarch.File {
 		fr = noarch.Fopen(param, []byte("r\x00"))
 		return fr
 	}()) == nil {
 		goto memFree
 	}
-	//if 
-	read_input_data()//fr) != 0 {
-// 		goto memFree
-// 	}
-// 	noarch.Fclose(fr)
+	//if
+	read_input_data() //fr) != 0 {
+	// 		goto memFree
+	// 	}
+	// 	noarch.Fclose(fr)
 	if monte_io_alloc(n_r_inp, n_n*8+1) != 0 {
 		goto memFree
 	}
@@ -1881,7 +1905,6 @@ func femMatFree(mat []tMatrix) {
 	femIntFree(mat[0].frompos)
 	femIntFree(mat[0].defpos)
 }
-
 
 // print_help - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1706
 func print_help(argc int, argv [][]byte) {
@@ -4530,7 +4553,7 @@ func femMatEigenJacobi(a []tMatrix, d []tVector, v []tMatrix, nrot []int) int {
 	var n int
 	var sm float64
 	var tresh float64
-	_=tresh
+	_ = tresh
 	var g float64
 	var h float64
 	var t float64
