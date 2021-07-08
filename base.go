@@ -175,11 +175,11 @@ type tMatrix = _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell
 // from in "pos" and "data" - sparse only sizeof(frompos) = rows
 // number in "pos" and "data" - sparse only
 type _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_60 struct {
-	type_ int
-	rows  int
-	len_  int
-	pos   []int
-	data  []float64
+	// 	type_ int
+	rows int
+	len_ int
+	pos  []int
+	data []float64
 }
 
 // tVector - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.h:60
@@ -2532,7 +2532,7 @@ func femMatSetZeroCol(a []tMatrix, Col int) {
 // femVecNull - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:699
 func femVecNull(mat []tVector) {
 	// VECTOR ***
-	mat[0].type_ = 0
+	// 	mat[0].type_ = 0
 	mat[0].rows = 0
 	mat[0].len_ = 0
 	mat[0].pos = nil
@@ -2551,48 +2551,48 @@ func femVecNull(mat []tVector) {
 // femVecAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:718
 func femVecAlloc(mat []tVector, type_ int, rows int, items int) int {
 	femVecNull(mat)
-	if type_ >= 0 && type_ <= 1 {
-		mat[0].type_ = type_
-		switch type_ {
-		case 0:
-			mat[0].rows = rows
-			mat[0].len_ = rows
-			if len((func() []float64 {
-				mat[0].data = femDblAlloc(mat[0].len_)
-				return mat[0].data
-			}())) == 0 {
-				goto memFree
-			}
-			mat[0].pos = nil
-		case 1:
-			// VEC_SPAR cannot be used ;-)
-			noarch.Exit(-3)
-			mat[0].rows = rows
-			if items > 0 {
-				mat[0].len_ = items
-				if len((func() []float64 {
-					mat[0].data = femDblAlloc(mat[0].len_)
-					return mat[0].data
-				}())) == 0 {
-					goto memFree
-				}
-				if len((func() []int {
-					mat[0].pos = femIntAlloc(mat[0].len_)
-					return mat[0].pos
-				}())) == 0 {
-					goto memFree
-				}
-			} else {
-				noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Number of sparse vector items MUST BE nonzero\x00"))
-				goto memFree
-			}
-			break
-		}
-		return 0
-	} else {
-		noarch.Fprintf(msgout, []byte("[E] %s: %d!\n\x00"), []byte("Matrix type unsupported\x00"), type_)
-		return -3
+	// 	if type_ >= 0 && type_ <= 1 {
+	// 		mat[0].type_ = type_
+	// 		switch type_ {
+	// 		case 0:
+	mat[0].rows = rows
+	mat[0].len_ = rows
+	if len((func() []float64 {
+		mat[0].data = femDblAlloc(mat[0].len_)
+		return mat[0].data
+	}())) == 0 {
+		goto memFree
 	}
+	mat[0].pos = nil
+	// 		case 1:
+	// 			// VEC_SPAR cannot be used ;-)
+	// 			noarch.Exit(-3)
+	// 			mat[0].rows = rows
+	// 			if items > 0 {
+	// 				mat[0].len_ = items
+	// 				if len((func() []float64 {
+	// 					mat[0].data = femDblAlloc(mat[0].len_)
+	// 					return mat[0].data
+	// 				}())) == 0 {
+	// 					goto memFree
+	// 				}
+	// 				if len((func() []int {
+	// 					mat[0].pos = femIntAlloc(mat[0].len_)
+	// 					return mat[0].pos
+	// 				}())) == 0 {
+	// 					goto memFree
+	// 				}
+	// 			} else {
+	// 				noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Number of sparse vector items MUST BE nonzero\x00"))
+	// 				goto memFree
+	// 			}
+	// 			break
+	// 		}
+	return 0
+	// 	} else {
+	// 		noarch.Fprintf(msgout, []byte("[E] %s: %d!\n\x00"), []byte("Matrix type unsupported\x00"), type_)
+	// 		return -3
+	// 	}
 memFree:
 	;
 	//femVecFree(mat)
@@ -2612,23 +2612,23 @@ func femVecPutAdd(vec []tVector, pos int, val float64, mode int) int {
 		noarch.Fprintf(msgout, []byte("[E] %s: %d > %d!\n\x00"), []byte("Index outside vector (Add/Put)\x00"), pos, vec[0].rows)
 		return -11
 	}
-	switch vec[0].type_ {
-	case 0:
-		if mode == 0 {
-			// put
-			vec[0].data[pos-1] = val
-		} else {
-			// add
-			vec[0].data[pos-1] += val
-		}
-	case 1:
-		// unimplemented
-		noarch.Exit(-3)
-	default:
-		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid vector type (Add/Put)\x00"))
-		return -5
-		break
+	// 	switch vec[0].type_ {
+	// 	case 0:
+	if mode == 0 {
+		// put
+		vec[0].data[pos-1] = val
+	} else {
+		// add
+		vec[0].data[pos-1] += val
 	}
+	// 	case 1:
+	// 		// unimplemented
+	// 		noarch.Exit(-3)
+	// 	default:
+	// 		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid vector type (Add/Put)\x00"))
+	// 		return -5
+	// 		break
+	// 	}
 	return 0
 }
 
@@ -2643,17 +2643,17 @@ func femVecGet(vec []tVector, pos int) float64 {
 		noarch.Fprintf(msgout, []byte("[E] %s: %d/%d!\n\x00"), []byte("Index outside vector (Get)\x00"), pos, vec[0].rows)
 		return float64(0)
 	}
-	switch vec[0].type_ {
-	case 0:
-		return vec[0].data[pos-1]
-	case 1:
-		// unimplemented
-		noarch.Exit(0)
-	default:
-		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid vector type (Get)\x00"))
-		return float64(0)
-		break
-	}
+	// 	switch vec[0].type_ {
+	// 	case 0:
+	return vec[0].data[pos-1]
+	// 	case 1:
+	// 		// unimplemented
+	// 		noarch.Exit(0)
+	// 	default:
+	// 		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid vector type (Get)\x00"))
+	// 		return float64(0)
+	// 		break
+	// 	}
 	return float64(0)
 }
 
@@ -2764,15 +2764,15 @@ func femVecVecMultBig(a []tVector, b []tVector) float64 {
 		return float64(0)
 	}
 	mult = 0
-	if a[0].type_ == 0 && b[0].type_ == 0 {
-		for i = 0; i < a[0].rows; i++ {
-			mult += a[0].data[i] * b[0].data[i]
-		}
-	} else {
-		for i = 1; i <= a[0].rows; i++ {
-			mult += femVecGet(a, i) * femVecGet(b, i)
-		}
+	// 	if a[0].type_ == 0 && b[0].type_ == 0 {
+	for i = 0; i < a[0].rows; i++ {
+		mult += a[0].data[i] * b[0].data[i]
 	}
+	// 	} else {
+	// 		for i = 1; i <= a[0].rows; i++ {
+	// 			mult += femVecGet(a, i) * femVecGet(b, i)
+	// 		}
+	// 	}
 	return mult
 }
 
@@ -2983,9 +2983,9 @@ func femMatVecMultBig(a []tMatrix, b []tVector, c []tVector) int {
 	if a[0].cols != b[0].rows || c[0].rows != a[0].rows {
 		return -9
 	}
-	if c[0].type_ != 0 {
-		return -3
-	}
+	// 	if c[0].type_ != 0 {
+	// 		return -3
+	// 	}
 	// 	if a[0].type_ == 0 && b[0].type_ == 0 {
 	for i = 0; i < a[0].rows; i++ {
 		val = 0
@@ -3034,9 +3034,9 @@ func femMatVecMult(a []tMatrix, b []tVector, c []tVector) int {
 	if a[0].cols != b[0].rows || c[0].rows != a[0].rows {
 		return -9
 	}
-	if c[0].type_ != 0 {
-		return -3
-	}
+	// 	if c[0].type_ != 0 {
+	// 		return -3
+	// 	}
 	// 	if a[0].type_ == 0 && b[0].type_ == 0 {
 	for i = 0; i < a[0].rows; i++ {
 		val = 0
@@ -3328,18 +3328,19 @@ func femVecNormBig(a []tVector) float64 {
 	//
 	var Norm float64
 	var val float64
+	_ = val
 	var i int
 	Norm = 0
-	if a[0].type_ == 0 {
-		for i = 0; i < a[0].rows; i++ {
-			Norm += a[0].data[i] * a[0].data[i]
-		}
-	} else {
-		for i = 1; i <= a[0].rows; i++ {
-			val = femVecGet(a, i)
-			Norm += val * val
-		}
+	// 	if a[0].type_ == 0 {
+	for i = 0; i < a[0].rows; i++ {
+		Norm += a[0].data[i] * a[0].data[i]
 	}
+	// 	} else {
+	// 		for i = 1; i <= a[0].rows; i++ {
+	// 			val = femVecGet(a, i)
+	// 			Norm += val * val
+	// 		}
+	// 	}
 	return math.Sqrt(Norm)
 }
 
