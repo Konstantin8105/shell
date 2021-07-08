@@ -704,17 +704,17 @@ func write_input_data(fw *noarch.File) int {
 // free_solver_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:582
 func free_solver_data() {
 	// Frees data used by solver
-	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
-	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
-	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&B))[:])
-	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
-	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
-	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&DB))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&ue))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&Fe))[:])
-	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&u))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&F))[:])
+	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
+	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
+	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&B))[:])
+	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
+	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
+	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&DB))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&ue))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&Fe))[:])
+	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&u))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&F))[:])
 }
 
 // alloc_solver_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:600
@@ -1893,17 +1893,17 @@ func femMatNull(mat []tMatrix) {
 	mat[0].defpos = nil
 }
 
-// femMatFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:45
-func femMatFree(mat []tMatrix) {
-	mat[0].type_ = 0
-	mat[0].rows = 0
-	mat[0].cols = 0
-	mat[0].len_ = 0
-	//femIntFree(mat[0].pos)
-	//femDblFree(mat[0].data)
-	//femIntFree(mat[0].frompos)
-	//femIntFree(mat[0].defpos)
-}
+// //femMatFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:45
+// func //femMatFree(mat []tMatrix) {
+// 	mat[0].type_ = 0
+// 	mat[0].rows = 0
+// 	mat[0].cols = 0
+// 	mat[0].len_ = 0
+// 	//femIntFree(mat[0].pos)
+// 	//femDblFree(mat[0].data)
+// 	//femIntFree(mat[0].frompos)
+// 	//femIntFree(mat[0].defpos)
+// }
 
 // print_help - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1706
 func print_help(argc int, argv [][]byte) {
@@ -2089,7 +2089,7 @@ func femMatAlloc(mat []tMatrix, type_ int, rows int, cols int, bandwidth int, ro
 	}
 memFree:
 	;
-	femMatFree(mat)
+	//femMatFree(mat)
 	return -4
 }
 
@@ -2431,7 +2431,7 @@ func femMatPrn(mat []tMatrix, name []byte) {
 // 	return rv
 // memFree:
 // 	;
-// 	femMatFree(mat)
+// 	//femMatFree(mat)
 // 	return rv
 // }
 
@@ -2530,14 +2530,14 @@ func femVecNull(mat []tVector) {
 	mat[0].data = nil
 }
 
-// femVecFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:708
-func femVecFree(mat []tVector) {
-	mat[0].type_ = 0
-	mat[0].rows = 0
-	mat[0].len_ = 0
-	//femIntFree(mat[0].pos)
-	//femDblFree(mat[0].data)
-}
+// //femVecFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:708
+// func //femVecFree(mat []tVector) {
+// 	mat[0].type_ = 0
+// 	mat[0].rows = 0
+// 	mat[0].len_ = 0
+// 	//femIntFree(mat[0].pos)
+// 	//femDblFree(mat[0].data)
+// }
 
 // femVecAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:718
 func femVecAlloc(mat []tVector, type_ int, rows int, items int) int {
@@ -2586,7 +2586,7 @@ func femVecAlloc(mat []tVector, type_ int, rows int, items int) int {
 	}
 memFree:
 	;
-	femVecFree(mat)
+	//femVecFree(mat)
 	return -4
 }
 
@@ -3434,7 +3434,7 @@ func femVecNormBig(a []tVector) float64 {
 // 			femMatPutAdd(a, i+1, j, femMatGet(a, j, i+1), 0)
 // 		}
 // 	}
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&f1))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&f1))[:])
 // 	return 0
 // }
 
@@ -3531,7 +3531,7 @@ func femVecNormBig(a []tVector) float64 {
 // 	}
 // memFree:
 // 	;
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&vv))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&vv))[:])
 // 	return rv
 // }
 
@@ -3651,9 +3651,9 @@ func femVecNormBig(a []tVector) float64 {
 // 	}
 // memFree:
 // 	;
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&col))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&index))[:])
-// 	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&b))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&col))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&index))[:])
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&b))[:])
 // 	return rv
 // }
 
@@ -3977,11 +3977,11 @@ func femEqsCGwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int) i
 memFree:
 	;
 	// freeing memory:
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-	femVecFree((*[1000000]tVector)(unsafe.Pointer(&q))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&q))[:])
 	return rv
 }
 
@@ -4200,16 +4200,16 @@ memFree:
 // memFree:
 // 	;
 // 	// freeing of memory:
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&rr))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&pp))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&s))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&ss))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&t))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&v))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&res))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&rr))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&pp))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&s))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&ss))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&t))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&v))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&res))[:])
 // 	return 0
 // }
 
@@ -4259,7 +4259,7 @@ memFree:
 // 	}
 // memFree:
 // 	;
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&indx))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&indx))[:])
 // 	return rv
 // }
 
@@ -4394,11 +4394,11 @@ memFree:
 // 	femVecPrn(x, []byte("X\x00"))
 // memFree:
 // 	;
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&d))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&ap))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&d))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&ap))[:])
 // 	return rv
 // }
 
@@ -4462,7 +4462,7 @@ memFree:
 // 	;
 // 	if have_C == 0 {
 // 		// freeing of memory:
-// 		femVecFree(C)
+// 		//femVecFree(C)
 // 	}
 // 	return rv
 // }
@@ -4523,7 +4523,7 @@ memFree:
 // memFree:
 // 	;
 // 	// freeing of memory:
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&C))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&C))[:])
 // 	return rv
 // }
 
@@ -4587,8 +4587,8 @@ memFree:
 // 		if sm <= 1e-07 {
 // 			// sum <= 0 so we are finished
 // 			//printf("iterations: %d\n", *nrot);
-// 			femVecFree((*[1000000]tVector)(unsafe.Pointer(&b))[:])
-// 			femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
+// 			//femVecFree((*[1000000]tVector)(unsafe.Pointer(&b))[:])
+// 			//femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
 // 			return 0
 // 		}
 // 		if i < 4 {
@@ -4855,12 +4855,12 @@ memFree:
 // memFree:
 // 	;
 // 	// freeing memory:
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&zz))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&q))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&zz))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&q))[:])
 // 	return rv
 // }
 
