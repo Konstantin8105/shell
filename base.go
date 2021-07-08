@@ -1488,7 +1488,7 @@ func fail_test_concrete() int {
 		fmt.Fprintf(os.Stdout, string("[%d] alpha: %e, beta: %e, lambda: %e cos3f: %e\n c1: %e, c2: %e => fc: %e\n\x00"), i, alpha, beta, lambda, cos3f, c1, c2, fc)
 		if fc > 1 {
 			// failed
-			fmt.Fprintf(os.Stdout, string("Element %d FAILED\n\x00"), i)
+			fmt.Fprintf(os.Stdout, string("Element %d FAILED : %.2f procent\n\x00"), i, fc*100)
 			return 1
 		}
 	}
