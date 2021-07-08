@@ -647,7 +647,7 @@ func write_input_data(fw *noarch.File) int {
 	// Writes input data to stream ------------------
 	var i int
 	// sizes
-	noarch.Fprintf(fw, []byte("%li %li %li %li %li\n\x00"), n_m, n_n, n_e, n_d, n_f)
+	noarch.Fprintf(fw, []byte("%d %d %d %d %d\n\x00"), n_m, n_n, n_e, n_d, n_f)
 	{
 		// materials
 		for i = 0; i < n_m; i++ {
@@ -663,27 +663,27 @@ func write_input_data(fw *noarch.File) int {
 	{
 		// elements
 		for i = 0; i < n_e; i++ {
-			noarch.Fprintf(fw, []byte("%li %li %li %e\n\x00"), e_n1[i], e_n2[i], e_mat[i], e_t[i])
+			noarch.Fprintf(fw, []byte("%d %d %d %e\n\x00"), e_n1[i], e_n2[i], e_mat[i], e_t[i])
 		}
 	}
 	{
 		// displacements
 		for i = 0; i < n_d; i++ {
-			noarch.Fprintf(fw, []byte("%li %li %e\n\x00"), d_n[i], d_dir[i], d_val[i])
+			noarch.Fprintf(fw, []byte("%d %d %e\n\x00"), d_n[i], d_dir[i], d_val[i])
 		}
 	}
 	{
 		// supports
 		for i = 0; i < n_f; i++ {
-			noarch.Fprintf(fw, []byte("%li %li %e\n\x00"), f_n[i], f_dir[i], f_val[i])
+			noarch.Fprintf(fw, []byte("%d %d %e\n\x00"), f_n[i], f_dir[i], f_val[i])
 		}
 	}
 	// water pressure data
-	noarch.Fprintf(fw, []byte("%e %e %e %li %li\n\x00"), w_top, w_bot, w_val, w_min, w_max)
+	noarch.Fprintf(fw, []byte("%e %e %e %d %d\n\x00"), w_top, w_bot, w_val, w_min, w_max)
 	// failure condition data:
-	noarch.Fprintf(fw, []byte("%li\n\x00"), fail_type)
+	noarch.Fprintf(fw, []byte("%d\n\x00"), fail_type)
 	if fail_type > 0 {
-		noarch.Fprintf(fw, []byte("%li\n\x00"), n_fail)
+		noarch.Fprintf(fw, []byte("%d\n\x00"), n_fail)
 		for i = 0; i < n_fail; i++ {
 			noarch.Fprintf(fw, []byte("%e \x00"), fail_data[i])
 		}
@@ -943,8 +943,8 @@ func get_matrix() int {
 		}())) > 1e-07 {
 			// gravitation
 			F2 = -0.5 * q * t * L
-			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n1[i], F2, 1)
-			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n2[i], F2, 1)
+			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n1[i]+1, F2, 1)
+			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n2[i]+1, F2, 1)
 		}
 	}
 	return 0
@@ -1178,17 +1178,17 @@ func print_result(fw *noarch.File) int {
 func generate_rand_out_file(fw *noarch.File) {
 	// generates output variable list for Monte input file
 	var i int
-	noarch.Fprintf(fw, []byte("%li\n\x00"), n_n*8+1)
+	noarch.Fprintf(fw, []byte("%d\n\x00"), n_n*8+1)
 	noarch.Fprintf(fw, []byte("FAIL 3 2\n\x00"))
 	for i = 0; i < n_n; i++ {
-		noarch.Fprintf(fw, []byte("UY%li 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("UX%li 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("RT%li 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("NX%li 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("NY%li 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("MX%li 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("MY%li 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("QQ%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("UY%d 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("UX%d 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("RT%d 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("NX%d 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("NY%d 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("MX%d 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("MY%d 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("QQ%d 2\n\x00"), i)
 	}
 	// no correlations at all
 	noarch.Fprintf(fw, []byte("0\n\x00"))
@@ -1274,46 +1274,46 @@ func generate_rand_input_file(fw *noarch.File) {
 	// * @return status
 	//
 	var i int
-	noarch.Fprintf(fw, []byte("%li\n\x00"), n_r_inp)
+	noarch.Fprintf(fw, []byte("%d\n\x00"), n_r_inp)
 	for i = 0; i < n_r_inp; i++ {
 		switch rand_type[i] {
 		case 0:
 			switch rand_indx[i] {
 			case 0:
 				// material
-				noarch.Fprintf(fw, []byte("MAT%li_E1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E1[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("MAT%d_E1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E1[rand_pos[i]])
 			case 1:
-				noarch.Fprintf(fw, []byte("MAT%li_E2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E2[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("MAT%d_E2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E2[rand_pos[i]])
 			case 2:
-				noarch.Fprintf(fw, []byte("MAT%li_G %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_G[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("MAT%d_G %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_G[rand_pos[i]])
 			case 3:
-				noarch.Fprintf(fw, []byte("MAT%li_NU1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu1[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("MAT%d_NU1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu1[rand_pos[i]])
 			case 4:
-				noarch.Fprintf(fw, []byte("MAT%li_NU2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu2[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("MAT%d_NU2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu2[rand_pos[i]])
 			case 5:
-				noarch.Fprintf(fw, []byte("MAT%li_VF %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_vp[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("MAT%d_VF %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_vp[rand_pos[i]])
 			case 6:
-				noarch.Fprintf(fw, []byte("MAT%li_T %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_t[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("MAT%d_T %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_t[rand_pos[i]])
 				break
 			}
 		case 1:
 			switch rand_indx[i] {
 			case 0:
 				// node
-				noarch.Fprintf(fw, []byte("N%li_X %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_x[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("N%d_X %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_x[rand_pos[i]])
 			case 1:
-				noarch.Fprintf(fw, []byte("N%li_Y %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_y[rand_pos[i]])
+				noarch.Fprintf(fw, []byte("N%d_Y %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_y[rand_pos[i]])
 				break
 			}
 		case 2:
 			// element width
-			noarch.Fprintf(fw, []byte("E%li_WIDTH %e 1 normal-1-02.dis\n\x00"), rand_pos[i], e_t[rand_pos[i]])
+			noarch.Fprintf(fw, []byte("E%d_WIDTH %e 1 normal-1-02.dis\n\x00"), rand_pos[i], e_t[rand_pos[i]])
 		case 3:
 			// displacement
-			noarch.Fprintf(fw, []byte("D%li_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_d_type(rand_indx[i]), d_val[rand_pos[i]])
+			noarch.Fprintf(fw, []byte("D%d_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_d_type(rand_indx[i]), d_val[rand_pos[i]])
 		case 4:
 			// force
-			noarch.Fprintf(fw, []byte("F%li_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_f_type(rand_indx[i]), f_val[rand_pos[i]])
+			noarch.Fprintf(fw, []byte("F%d_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_f_type(rand_indx[i]), f_val[rand_pos[i]])
 		case 5:
 			switch rand_indx[i] {
 			case 0:
@@ -1327,9 +1327,9 @@ func generate_rand_input_file(fw *noarch.File) {
 			}
 		case 6:
 			// failure critical
-			noarch.Fprintf(fw, []byte("FC_%s_%li %e 1 normal-1-02.dis\n\x00"), generate_fc_type(rand_indx[i]), rand_indx[i], fail_data[rand_indx[i]])
+			noarch.Fprintf(fw, []byte("FC_%s_%d %e 1 normal-1-02.dis\n\x00"), generate_fc_type(rand_indx[i]), rand_indx[i], fail_data[rand_indx[i]])
 		default:
-			noarch.Fprintf(msgout, []byte("Unused input random variable %li!\n\x00"), i)
+			noarch.Fprintf(msgout, []byte("Unused input random variable %d!\n\x00"), i)
 			break
 		}
 	}
@@ -1513,7 +1513,7 @@ func optim_replace_data(ifld []float64) int {
 				fail_data[opt_indx[i]] = ifld[i]
 			}
 		default:
-			noarch.Fprintf(msgout, []byte("Unused input optim variable %li!\n\x00"), i)
+			noarch.Fprintf(msgout, []byte("Unused input optim variable %d!\n\x00"), i)
 			break
 		}
 	}
@@ -1902,7 +1902,7 @@ func femSparseMatPrnF(fname []byte, mat []tMatrix) int {
 	}()) == nil {
 		return -2
 	}
-	noarch.Fprintf(fw, []byte("%li %li\n\x00"), mat[0].rows, mat[0].cols)
+	noarch.Fprintf(fw, []byte("%d %d\n\x00"), mat[0].rows, mat[0].cols)
 	for i = 0; i < mat[0].rows; i++ {
 		sum = 0
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+mat[0].defpos[i]; j++ {
@@ -1912,9 +1912,9 @@ func femSparseMatPrnF(fname []byte, mat []tMatrix) int {
 				break
 			}
 		}
-		noarch.Fprintf(fw, []byte("%li %li \x00"), i+1, sum)
+		noarch.Fprintf(fw, []byte("%d %d \x00"), i+1, sum)
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+sum; j++ {
-			noarch.Fprintf(fw, []byte("%li %e \x00"), mat[0].pos[j], mat[0].data[j])
+			noarch.Fprintf(fw, []byte("%d %e \x00"), mat[0].pos[j], mat[0].data[j])
 		}
 		noarch.Fprintf(fw, []byte("\n\x00"))
 	}
@@ -1946,7 +1946,7 @@ func femSparseMarketMatPrnF(fname []byte, mat []tMatrix) int {
 		return -2
 	}
 	noarch.Fprintf(fw, []byte("%%%%MatrixMarket matrix coordinate real general\n\x00"))
-	noarch.Fprintf(fw, []byte("%li %li %li\n\x00"), mat[0].rows, mat[0].cols, mat[0].len_)
+	noarch.Fprintf(fw, []byte("%d %d %d\n\x00"), mat[0].rows, mat[0].cols, mat[0].len_)
 	for i = 0; i < mat[0].rows; i++ {
 		sum = 0
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+mat[0].defpos[i]; j++ {
@@ -1957,7 +1957,7 @@ func femSparseMarketMatPrnF(fname []byte, mat []tMatrix) int {
 			}
 		}
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+sum; j++ {
-			noarch.Fprintf(fw, []byte("%li %li %e\n\x00"), i+1, mat[0].pos[j], mat[0].data[j])
+			noarch.Fprintf(fw, []byte("%d %d %e\n\x00"), i+1, mat[0].pos[j], mat[0].data[j])
 		}
 	}
 	if noarch.Fclose(fw) != 0 {
@@ -1990,7 +1990,7 @@ func femSparseMatReadF(fname []byte, mat []tMatrix) int {
 	}()) == nil {
 		return -2
 	}
-	noarch.Fscanf(fw, []byte("%li %li\n\x00"), (*[1000000]int)(unsafe.Pointer(&mat[0].rows))[:], (*[1000000]int)(unsafe.Pointer(&mat[0].cols))[:])
+	noarch.Fscanf(fw, []byte("%d %d\n\x00"), (*[1000000]int)(unsafe.Pointer(&mat[0].rows))[:], (*[1000000]int)(unsafe.Pointer(&mat[0].cols))[:])
 	if mat[0].rows <= 0 || mat[0].cols <= 0 {
 		return -2
 	}
@@ -2026,7 +2026,7 @@ func femSparseMatReadF(fname []byte, mat []tMatrix) int {
 	mat[0].type_ = 1
 	sum = 0
 	for i = 0; i < mat[0].rows; i++ {
-		noarch.Fscanf(fw, []byte("%li %li \x00"), c4goUnsafeConvert_int(&tmp), mat[0].defpos[i:])
+		noarch.Fscanf(fw, []byte("%d %d \x00"), c4goUnsafeConvert_int(&tmp), mat[0].defpos[i:])
 		if i > 0 {
 			mat[0].frompos[i] = mat[0].frompos[i-1] + mat[0].defpos[i-1]
 		} else {
@@ -2062,7 +2062,7 @@ func femSparseMatReadF(fname []byte, mat []tMatrix) int {
 				pos0 = nil
 				data0 = nil
 			}
-			noarch.Fscanf(fw, []byte("%li %f \x00\x00"), mat[0].pos[sum:], mat[0].data[sum:])
+			noarch.Fscanf(fw, []byte("%d %f \x00\x00"), mat[0].pos[sum:], mat[0].data[sum:])
 			sum++
 		}
 	}
@@ -2086,7 +2086,7 @@ func femMatOut(a []tMatrix, fw *noarch.File) int {
 	var rv int
 	var i int
 	var j int
-	noarch.Fprintf(fw, []byte(" %li %li\n\x00"), a[0].rows, a[0].cols)
+	noarch.Fprintf(fw, []byte(" %d %d\n\x00"), a[0].rows, a[0].cols)
 	for i = 1; i <= a[0].rows; i++ {
 		for j = 1; j <= a[0].cols; j++ {
 			noarch.Fprintf(fw, []byte(" %e \n\x00"), femMatGet(a, i, j))
@@ -2125,7 +2125,7 @@ func femMatSetZeroRow(a []tMatrix, row int) {
 			a[0].data[i] = 0
 		}
 	} else {
-		//fprintf(msgout,"zero on %li\n",i);
+		//fprintf(msgout,"zero on %d\n",i);
 		for i = 1; i <= a[0].cols; i++ {
 			femMatPutAdd(a, row, i, 0, 0)
 		}
@@ -2322,7 +2322,7 @@ func femVecOut(a []tVector, fw *noarch.File) int {
 	//
 	var rv int
 	var i int
-	noarch.Fprintf(fw, []byte(" %li\n\x00"), a[0].rows)
+	noarch.Fprintf(fw, []byte(" %d\n\x00"), a[0].rows)
 	for i = 1; i <= a[0].rows; i++ {
 		noarch.Fprintf(fw, []byte(" %e \n\x00"), femVecGet(a, i))
 	}
@@ -4138,7 +4138,7 @@ func femMatEigenJacobi(a []tMatrix, d []tVector, v []tMatrix, nrot []int) int {
 		}
 		if sm <= 1e-07 {
 			// sum <= 0 so we are finished
-			//printf("iterations: %li\n", *nrot);
+			//printf("iterations: %d\n", *nrot);
 			femVecFree((*[1000000]tVector)(unsafe.Pointer(&b))[:])
 			femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
 			return 0
