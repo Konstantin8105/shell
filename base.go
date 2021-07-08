@@ -8,9 +8,7 @@
 package main
 
 import (
-	"fmt"
 	"math"
-	"os"
 	"unsafe"
 
 	"github.com/Konstantin8105/c4go/noarch"
@@ -702,20 +700,20 @@ func write_input_data(fw *noarch.File) int {
 }
 
 // free_solver_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:582
-func free_solver_data() {
-	// Frees data used by solver
-	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
-	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
-	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&B))[:])
-	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
-	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
-	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&DB))[:])
-	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&ue))[:])
-	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&Fe))[:])
-	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
-	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&u))[:])
-	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&F))[:])
-}
+// func free_solver_data() {
+// 	// Frees data used by solver
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&B))[:])
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&DB))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&ue))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&Fe))[:])
+// 	//femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&u))[:])
+// 	//femVecFree((*[1000000]tVector)(unsafe.Pointer(&F))[:])
+// }
 
 // alloc_solver_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:600
 func alloc_solver_data() int {
@@ -809,7 +807,7 @@ memFree:
 	// 	if len(n_field) != 0 {
 	// 		//femIntFree(n_field)
 	// 	}
-	free_solver_data()
+// 	free_solver_data()
 	noarch.Fprintf(msgout, []byte("Out of memory!\x00"))
 	return -4
 }
@@ -965,6 +963,7 @@ func get_matrix() int {
 		}
 	}
 	// 	_ = F2
+	// TODO : KI strange calcualation F
 	F.data = []float64{
 		0.000000e+00,
 		0.000000e+00,
@@ -983,141 +982,141 @@ func get_matrix() int {
 }
 
 // generate_water_load_x - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:809
-func generate_water_load_x() int {
-	// generates water pressure load
-	// it goes through elements and decides if they are under the
-	//   * water level (or over the bottom) then it computes horizontal
-	//   * pressure on the element nodes
-	//
-	var i int
-	var y1 float64
-	var y2 float64
-	var dx float64
-	var L float64
-	var val1 float64
-	var val2 float64
-	var from int
-	var to int
-	var down int = 1
-	// don't ignore this node
-	var use_1 int = 1
-	// don't ignore this node
-	var use_2 int = 1
-	var pos1 int
-	var pos2 int
-	// real limits of water position
-	var y_max float64
-	var y_min float64
-	// hydrostatic pressures on element - top, bot
-	var a float64
-	var b float64
-	if math.Abs(w_val) > 100*1e-07 {
-		if w_max-w_min == 0 {
-			// limits for element testing (probably unused):
-			from = 0
-			to = n_e
-		} else {
-			if w_min < 0 || w_min >= n_e {
-				from = 0
-			} else {
-				from = w_min
-			}
-			if w_max < 0 || w_max > n_e {
-				to = n_e
-			} else {
-				to = w_max
-			}
-		}
-		// setting of unreachable limits for water
-		y_min = n_y[e_n1[from]]
-		y_max = y_min
-		for i = from; i < to; i++ {
-			if y_min > n_y[e_n1[i]] {
-				y_min = n_y[e_n1[i]]
-			}
-			if y_min > n_y[e_n2[i]] {
-				y_min = n_y[e_n2[i]]
-			}
-			if y_max < n_y[e_n1[i]] {
-				y_max = n_y[e_n1[i]]
-			}
-			if y_max < n_y[e_n2[i]] {
-				y_max = n_y[e_n2[i]]
-			}
-		}
-		if w_top < y_max {
-			// adjusting limits:
-			y_max = w_top
-		}
-		if w_bot > y_min {
-			y_min = w_bot
-		}
-		for i = from; i < to; i++ {
-			y1 = n_y[e_n1[i]]
-			y2 = n_y[e_n2[i]]
-			if y1 > y_max || y1 < y_min {
-				// geometric features:
-				use_1 = 0
-			}
-			if y2 > y_max || y2 < y_min {
-				use_2 = 0
-			}
-			if use_1 == 0 && use_2 == 0 {
-				continue
-			}
-			if y1 > y2 {
-				down = 2
-				val1 = y1
-				y1 = y2
-				y2 = val1
-			}
-			if y1 < y_min {
-				y1 = y_min
-			}
-			if y2 > y_max {
-				y2 = y_max
-			}
-			dx = math.Abs(n_x[e_n2[i]] - n_x[e_n1[i]])
-			L = math.Sqrt(dx*dx + math.Pow(y2-y1, 2))
-			if math.Pow(y2-y1, 2) < 1e-07 {
-				// nothing to do
-				continue
-			}
-			// TODO: compute limit values
-			b = (y_max - y1) * w_val
-			a = (y_max - y2) * w_val
-			noarch.Fprintf(msgout, []byte("Y: %e %e, a=%e b=%e\n\x00"), y1, y2, a, b)
-			if use_1 == 0 {
-				// set values in nodes:
-				val2 = (a + 0.5*(b-a)) * L
-				val1 = 0
-			} else {
-				if use_2 == 0 {
-					val1 = (a + 0.5*(b-a)) * L
-					val2 = 0
-				} else {
-					val1 = 0.5*a*L + 0.25*(b-a)*L + 0.125*(b-a)*L
-					val2 = 0.5*a*L + 0.125*(b-a)*L
-				}
-			}
-			if down == 1 {
-				// positions of loads
-				// val1 (lower) is at n1
-				pos1 = e_n1[i]*3 + 1
-				pos2 = e_n2[i]*3 + 1
-			} else {
-				// val1 is at n2
-				pos1 = e_n2[i]*3 + 1
-				pos2 = e_n1[i]*3 + 1
-			}
-			// adding of loads:
-			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], pos1, val1, 1)
-			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], pos2, val2, 1)
-			noarch.Fprintf(msgout, []byte("ADDED: e[%d] f%d(%d)<- %e, f%d(%d)<- %e, L=%e dx=%e\n\x00"), i, pos1, e_n1[i], val1, pos2, e_n2[i], val2, L, dx)
-		}
-	}
-	return 0
-}
+// func generate_water_load_x() int {
+// 	// generates water pressure load
+// 	// it goes through elements and decides if they are under the
+// 	//   * water level (or over the bottom) then it computes horizontal
+// 	//   * pressure on the element nodes
+// 	//
+// 	var i int
+// 	var y1 float64
+// 	var y2 float64
+// 	var dx float64
+// 	var L float64
+// 	var val1 float64
+// 	var val2 float64
+// 	var from int
+// 	var to int
+// 	var down int = 1
+// 	// don't ignore this node
+// 	var use_1 int = 1
+// 	// don't ignore this node
+// 	var use_2 int = 1
+// 	var pos1 int
+// 	var pos2 int
+// 	// real limits of water position
+// 	var y_max float64
+// 	var y_min float64
+// 	// hydrostatic pressures on element - top, bot
+// 	var a float64
+// 	var b float64
+// 	if math.Abs(w_val) > 100*1e-07 {
+// 		if w_max-w_min == 0 {
+// 			// limits for element testing (probably unused):
+// 			from = 0
+// 			to = n_e
+// 		} else {
+// 			if w_min < 0 || w_min >= n_e {
+// 				from = 0
+// 			} else {
+// 				from = w_min
+// 			}
+// 			if w_max < 0 || w_max > n_e {
+// 				to = n_e
+// 			} else {
+// 				to = w_max
+// 			}
+// 		}
+// 		// setting of unreachable limits for water
+// 		y_min = n_y[e_n1[from]]
+// 		y_max = y_min
+// 		for i = from; i < to; i++ {
+// 			if y_min > n_y[e_n1[i]] {
+// 				y_min = n_y[e_n1[i]]
+// 			}
+// 			if y_min > n_y[e_n2[i]] {
+// 				y_min = n_y[e_n2[i]]
+// 			}
+// 			if y_max < n_y[e_n1[i]] {
+// 				y_max = n_y[e_n1[i]]
+// 			}
+// 			if y_max < n_y[e_n2[i]] {
+// 				y_max = n_y[e_n2[i]]
+// 			}
+// 		}
+// 		if w_top < y_max {
+// 			// adjusting limits:
+// 			y_max = w_top
+// 		}
+// 		if w_bot > y_min {
+// 			y_min = w_bot
+// 		}
+// 		for i = from; i < to; i++ {
+// 			y1 = n_y[e_n1[i]]
+// 			y2 = n_y[e_n2[i]]
+// 			if y1 > y_max || y1 < y_min {
+// 				// geometric features:
+// 				use_1 = 0
+// 			}
+// 			if y2 > y_max || y2 < y_min {
+// 				use_2 = 0
+// 			}
+// 			if use_1 == 0 && use_2 == 0 {
+// 				continue
+// 			}
+// 			if y1 > y2 {
+// 				down = 2
+// 				val1 = y1
+// 				y1 = y2
+// 				y2 = val1
+// 			}
+// 			if y1 < y_min {
+// 				y1 = y_min
+// 			}
+// 			if y2 > y_max {
+// 				y2 = y_max
+// 			}
+// 			dx = math.Abs(n_x[e_n2[i]] - n_x[e_n1[i]])
+// 			L = math.Sqrt(dx*dx + math.Pow(y2-y1, 2))
+// 			if math.Pow(y2-y1, 2) < 1e-07 {
+// 				// nothing to do
+// 				continue
+// 			}
+// 			// TODO: compute limit values
+// 			b = (y_max - y1) * w_val
+// 			a = (y_max - y2) * w_val
+// 			noarch.Fprintf(msgout, []byte("Y: %e %e, a=%e b=%e\n\x00"), y1, y2, a, b)
+// 			if use_1 == 0 {
+// 				// set values in nodes:
+// 				val2 = (a + 0.5*(b-a)) * L
+// 				val1 = 0
+// 			} else {
+// 				if use_2 == 0 {
+// 					val1 = (a + 0.5*(b-a)) * L
+// 					val2 = 0
+// 				} else {
+// 					val1 = 0.5*a*L + 0.25*(b-a)*L + 0.125*(b-a)*L
+// 					val2 = 0.5*a*L + 0.125*(b-a)*L
+// 				}
+// 			}
+// 			if down == 1 {
+// 				// positions of loads
+// 				// val1 (lower) is at n1
+// 				pos1 = e_n1[i]*3 + 1
+// 				pos2 = e_n2[i]*3 + 1
+// 			} else {
+// 				// val1 is at n2
+// 				pos1 = e_n2[i]*3 + 1
+// 				pos2 = e_n1[i]*3 + 1
+// 			}
+// 			// adding of loads:
+// 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], pos1, val1, 1)
+// 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], pos2, val2, 1)
+// 			noarch.Fprintf(msgout, []byte("ADDED: e[%d] f%d(%d)<- %e, f%d(%d)<- %e, L=%e dx=%e\n\x00"), i, pos1, e_n1[i], val1, pos2, e_n2[i], val2, L, dx)
+// 		}
+// 	}
+// 	return 0
+// }
 
 // get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
 func get_loads_and_supports() int {
@@ -1261,24 +1260,24 @@ func print_result(fw *noarch.File) int {
 }
 
 // generate_rand_out_file - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1092
-func generate_rand_out_file(fw *noarch.File) {
-	// generates output variable list for Monte input file
-	var i int
-	noarch.Fprintf(fw, []byte("%d\n\x00"), n_n*8+1)
-	noarch.Fprintf(fw, []byte("FAIL 3 2\n\x00"))
-	for i = 0; i < n_n; i++ {
-		noarch.Fprintf(fw, []byte("UY%d 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("UX%d 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("RT%d 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("NX%d 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("NY%d 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("MX%d 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("MY%d 2\n\x00"), i)
-		noarch.Fprintf(fw, []byte("QQ%d 2\n\x00"), i)
-	}
-	// no correlations at all
-	noarch.Fprintf(fw, []byte("0\n\x00"))
-}
+// func generate_rand_out_file(fw *noarch.File) {
+// 	// generates output variable list for Monte input file
+// 	var i int
+// 	noarch.Fprintf(fw, []byte("%d\n\x00"), n_n*8+1)
+// 	noarch.Fprintf(fw, []byte("FAIL 3 2\n\x00"))
+// 	for i = 0; i < n_n; i++ {
+// 		noarch.Fprintf(fw, []byte("UY%d 2\n\x00"), i)
+// 		noarch.Fprintf(fw, []byte("UX%d 2\n\x00"), i)
+// 		noarch.Fprintf(fw, []byte("RT%d 2\n\x00"), i)
+// 		noarch.Fprintf(fw, []byte("NX%d 2\n\x00"), i)
+// 		noarch.Fprintf(fw, []byte("NY%d 2\n\x00"), i)
+// 		noarch.Fprintf(fw, []byte("MX%d 2\n\x00"), i)
+// 		noarch.Fprintf(fw, []byte("MY%d 2\n\x00"), i)
+// 		noarch.Fprintf(fw, []byte("QQ%d 2\n\x00"), i)
+// 	}
+// 	// no correlations at all
+// 	noarch.Fprintf(fw, []byte("0\n\x00"))
+// }
 
 // generate_d_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1115
 func generate_d_type(type_ int) []byte {
@@ -1354,72 +1353,72 @@ func generate_fc_type(type_ int) []byte {
 }
 
 // generate_rand_input_file - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1179
-func generate_rand_input_file(fw *noarch.File) {
-	// Writes input data for Monte
-	// * @param fw file stream to write data
-	// * @return status
-	//
-	var i int
-	noarch.Fprintf(fw, []byte("%d\n\x00"), n_r_inp)
-	for i = 0; i < n_r_inp; i++ {
-		switch rand_type[i] {
-		case 0:
-			switch rand_indx[i] {
-			case 0:
-				// material
-				noarch.Fprintf(fw, []byte("MAT%d_E1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E1[rand_pos[i]])
-			case 1:
-				noarch.Fprintf(fw, []byte("MAT%d_E2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E2[rand_pos[i]])
-			case 2:
-				noarch.Fprintf(fw, []byte("MAT%d_G %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_G[rand_pos[i]])
-			case 3:
-				noarch.Fprintf(fw, []byte("MAT%d_NU1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu1[rand_pos[i]])
-			case 4:
-				noarch.Fprintf(fw, []byte("MAT%d_NU2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu2[rand_pos[i]])
-			case 5:
-				noarch.Fprintf(fw, []byte("MAT%d_VF %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_vp[rand_pos[i]])
-			case 6:
-				noarch.Fprintf(fw, []byte("MAT%d_T %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_t[rand_pos[i]])
-				break
-			}
-		case 1:
-			switch rand_indx[i] {
-			case 0:
-				// node
-				noarch.Fprintf(fw, []byte("N%d_X %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_x[rand_pos[i]])
-			case 1:
-				noarch.Fprintf(fw, []byte("N%d_Y %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_y[rand_pos[i]])
-				break
-			}
-		case 2:
-			// element width
-			noarch.Fprintf(fw, []byte("E%d_WIDTH %e 1 normal-1-02.dis\n\x00"), rand_pos[i], e_t[rand_pos[i]])
-		case 3:
-			// displacement
-			noarch.Fprintf(fw, []byte("D%d_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_d_type(rand_indx[i]), d_val[rand_pos[i]])
-		case 4:
-			// force
-			noarch.Fprintf(fw, []byte("F%d_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_f_type(rand_indx[i]), f_val[rand_pos[i]])
-		case 5:
-			switch rand_indx[i] {
-			case 0:
-				// node
-				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_top)
-			case 1:
-				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_bot)
-			case 2:
-				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_val)
-				break
-			}
-		case 6:
-			// failure critical
-			noarch.Fprintf(fw, []byte("FC_%s_%d %e 1 normal-1-02.dis\n\x00"), generate_fc_type(rand_indx[i]), rand_indx[i], fail_data[rand_indx[i]])
-		default:
-			noarch.Fprintf(msgout, []byte("Unused input random variable %d!\n\x00"), i)
-			//	break
-		}
-	}
-}
+// func generate_rand_input_file(fw *noarch.File) {
+// 	// Writes input data for Monte
+// 	// * @param fw file stream to write data
+// 	// * @return status
+// 	//
+// 	var i int
+// 	noarch.Fprintf(fw, []byte("%d\n\x00"), n_r_inp)
+// 	for i = 0; i < n_r_inp; i++ {
+// 		switch rand_type[i] {
+// 		case 0:
+// 			switch rand_indx[i] {
+// 			case 0:
+// 				// material
+// 				noarch.Fprintf(fw, []byte("MAT%d_E1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E1[rand_pos[i]])
+// 			case 1:
+// 				noarch.Fprintf(fw, []byte("MAT%d_E2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E2[rand_pos[i]])
+// 			case 2:
+// 				noarch.Fprintf(fw, []byte("MAT%d_G %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_G[rand_pos[i]])
+// 			case 3:
+// 				noarch.Fprintf(fw, []byte("MAT%d_NU1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu1[rand_pos[i]])
+// 			case 4:
+// 				noarch.Fprintf(fw, []byte("MAT%d_NU2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu2[rand_pos[i]])
+// 			case 5:
+// 				noarch.Fprintf(fw, []byte("MAT%d_VF %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_vp[rand_pos[i]])
+// 			case 6:
+// 				noarch.Fprintf(fw, []byte("MAT%d_T %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_t[rand_pos[i]])
+// 				break
+// 			}
+// 		case 1:
+// 			switch rand_indx[i] {
+// 			case 0:
+// 				// node
+// 				noarch.Fprintf(fw, []byte("N%d_X %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_x[rand_pos[i]])
+// 			case 1:
+// 				noarch.Fprintf(fw, []byte("N%d_Y %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_y[rand_pos[i]])
+// 				break
+// 			}
+// 		case 2:
+// 			// element width
+// 			noarch.Fprintf(fw, []byte("E%d_WIDTH %e 1 normal-1-02.dis\n\x00"), rand_pos[i], e_t[rand_pos[i]])
+// 		case 3:
+// 			// displacement
+// 			noarch.Fprintf(fw, []byte("D%d_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_d_type(rand_indx[i]), d_val[rand_pos[i]])
+// 		case 4:
+// 			// force
+// 			noarch.Fprintf(fw, []byte("F%d_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_f_type(rand_indx[i]), f_val[rand_pos[i]])
+// 		case 5:
+// 			switch rand_indx[i] {
+// 			case 0:
+// 				// node
+// 				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_top)
+// 			case 1:
+// 				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_bot)
+// 			case 2:
+// 				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_val)
+// 				break
+// 			}
+// 		case 6:
+// 			// failure critical
+// 			noarch.Fprintf(fw, []byte("FC_%s_%d %e 1 normal-1-02.dis\n\x00"), generate_fc_type(rand_indx[i]), rand_indx[i], fail_data[rand_indx[i]])
+// 		default:
+// 			noarch.Fprintf(msgout, []byte("Unused input random variable %d!\n\x00"), i)
+// 			//	break
+// 		}
+// 	}
+// }
 
 // fail_test_concrete - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1283
 func fail_test_concrete() int {
@@ -1541,74 +1540,74 @@ func compute_price() float64 {
 }
 
 // optim_replace_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1399
-func optim_replace_data(ifld []float64) int {
-	// replace f.e. input  data with their optimized counterparts
-	var i int
-	if len(ifld) == 0 || n_r_opt < 1 {
-		return 0
-	}
-	for i = 0; i < n_r_opt; i++ {
-		switch opt_type[i] {
-		case 0:
-			switch opt_indx[i] {
-			case 0:
-				// material
-				m_E1[opt_pos[i]] = ifld[i]
-			case 1:
-				m_E2[opt_pos[i]] = ifld[i]
-			case 2:
-				m_G[opt_pos[i]] = ifld[i]
-			case 3:
-				m_nu1[opt_pos[i]] = ifld[i]
-			case 4:
-				m_nu2[opt_pos[i]] = ifld[i]
-			case 5:
-				m_q[opt_pos[i]] = ifld[i]
-			case 6:
-				m_t[opt_pos[i]] = ifld[i]
-				break
-			}
-		case 1:
-			switch opt_indx[i] {
-			case 0:
-				// node
-				n_x[opt_pos[i]] = ifld[i]
-			case 1:
-				n_y[opt_pos[i]] = ifld[i]
-				break
-			}
-		case 2:
-			// element width
-			e_t[opt_pos[i]] = ifld[i]
-		case 3:
-			// displacement
-			d_val[opt_pos[i]] = ifld[i]
-		case 4:
-			// force
-			f_val[opt_pos[i]] = ifld[i]
-		case 5:
-			switch opt_indx[i] {
-			case 0:
-				// material
-				w_top = ifld[i]
-			case 1:
-				w_bot = ifld[i]
-			case 2:
-				w_val = ifld[i]
-				break
-			}
-		case 6:
-			if opt_indx[i] < n_fail {
-				// failure condition
-				fail_data[opt_indx[i]] = ifld[i]
-			}
-		default:
-			noarch.Fprintf(msgout, []byte("Unused input optim variable %d!\n\x00"), i)
-			break
-		}
-	}
-	return 0
-}
+// func optim_replace_data(ifld []float64) int {
+// 	// replace f.e. input  data with their optimized counterparts
+// 	var i int
+// 	if len(ifld) == 0 || n_r_opt < 1 {
+// 		return 0
+// 	}
+// 	for i = 0; i < n_r_opt; i++ {
+// 		switch opt_type[i] {
+// 		case 0:
+// 			switch opt_indx[i] {
+// 			case 0:
+// 				// material
+// 				m_E1[opt_pos[i]] = ifld[i]
+// 			case 1:
+// 				m_E2[opt_pos[i]] = ifld[i]
+// 			case 2:
+// 				m_G[opt_pos[i]] = ifld[i]
+// 			case 3:
+// 				m_nu1[opt_pos[i]] = ifld[i]
+// 			case 4:
+// 				m_nu2[opt_pos[i]] = ifld[i]
+// 			case 5:
+// 				m_q[opt_pos[i]] = ifld[i]
+// 			case 6:
+// 				m_t[opt_pos[i]] = ifld[i]
+// 				break
+// 			}
+// 		case 1:
+// 			switch opt_indx[i] {
+// 			case 0:
+// 				// node
+// 				n_x[opt_pos[i]] = ifld[i]
+// 			case 1:
+// 				n_y[opt_pos[i]] = ifld[i]
+// 				break
+// 			}
+// 		case 2:
+// 			// element width
+// 			e_t[opt_pos[i]] = ifld[i]
+// 		case 3:
+// 			// displacement
+// 			d_val[opt_pos[i]] = ifld[i]
+// 		case 4:
+// 			// force
+// 			f_val[opt_pos[i]] = ifld[i]
+// 		case 5:
+// 			switch opt_indx[i] {
+// 			case 0:
+// 				// material
+// 				w_top = ifld[i]
+// 			case 1:
+// 				w_bot = ifld[i]
+// 			case 2:
+// 				w_val = ifld[i]
+// 				break
+// 			}
+// 		case 6:
+// 			if opt_indx[i] < n_fail {
+// 				// failure condition
+// 				fail_data[opt_indx[i]] = ifld[i]
+// 			}
+// 		default:
+// 			noarch.Fprintf(msgout, []byte("Unused input optim variable %d!\n\x00"), i)
+// 			break
+// 		}
+// 	}
+// 	return 0
+// }
 
 // monte_replace_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1465
 // func monte_replace_data(ifld []float64) int {
@@ -1906,91 +1905,91 @@ func femMatNull(mat []tMatrix) {
 // }
 
 // print_help - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1706
-func print_help(argc int, argv [][]byte) {
-	// Prints simple help to stdout
-	// * @param argc the same as "argc" from main
-	// * @param argv the same as "argv" from main
-	//
-	fmt.Printf("\neSHELL 1.0: axisymetric shells solver\n")
-	fmt.Printf("(C) 2010 VSB-TU of Ostrava \n")
-	fmt.Printf("(C) 2003-2010 Jiri Brozovsky (uFEM libraries)\n")
-	fmt.Printf("\nThis is free software licensed under GNU GPL 2.0\n")
-	noarch.Printf([]byte("\nUsage: %s [parameters] <input >output\n\x00"), argv[0])
-	fmt.Printf("\nParameters:\n")
-	fmt.Printf("   -s        ... force solution only output\n")
-	fmt.Printf("   -g        ... generate random data only \n")
-	fmt.Printf("   -p        ... compute price function only\n")
-	fmt.Printf("   -w        ... write input data and finish\n")
-	fmt.Printf("   -h        ... print this help\n")
-}
+// func print_help(argc int, argv [][]byte) {
+// 	// Prints simple help to stdout
+// 	// * @param argc the same as "argc" from main
+// 	// * @param argv the same as "argv" from main
+// 	//
+// 	fmt.Printf("\neSHELL 1.0: axisymetric shells solver\n")
+// 	fmt.Printf("(C) 2010 VSB-TU of Ostrava \n")
+// 	fmt.Printf("(C) 2003-2010 Jiri Brozovsky (uFEM libraries)\n")
+// 	fmt.Printf("\nThis is free software licensed under GNU GPL 2.0\n")
+// 	noarch.Printf([]byte("\nUsage: %s [parameters] <input >output\n\x00"), argv[0])
+// 	fmt.Printf("\nParameters:\n")
+// 	fmt.Printf("   -s        ... force solution only output\n")
+// 	fmt.Printf("   -g        ... generate random data only \n")
+// 	fmt.Printf("   -p        ... compute price function only\n")
+// 	fmt.Printf("   -w        ... write input data and finish\n")
+// 	fmt.Printf("   -h        ... print this help\n")
+// }
 
 // cmd_param - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1722
-func cmd_param(argc int, argv [][]byte) int {
-	// Understands command line parameters
-	var i int
-	for i = 1; i < argc; i++ {
-		if noarch.Strcmp(argv[i], []byte("-h\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--help\x00")) == 0 {
-			print_help(argc, argv)
-			noarch.Exit(0)
-		}
-		if noarch.Strcmp(argv[i], []byte("-s\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--solution\x00")) == 0 {
-			solution_only = 1
-			price_only = 0
-			random_only = 0
-		}
-		if noarch.Strcmp(argv[i], []byte("-g\x00")) == 0 || noarch.Strcmp(argv[i], []byte("-r\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--random\x00")) == 0 {
-			solution_only = 0
-			price_only = 0
-			random_only = 1
-		}
-		if noarch.Strcmp(argv[i], []byte("-p\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--price\x00")) == 0 {
-			solution_only = 0
-			price_only = 1
-			random_only = 0
-		}
-		if noarch.Strcmp(argv[i], []byte("-w\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--price\x00")) == 0 {
-			write_only = 1
-		}
-	}
-	return 0
-}
+// func cmd_param(argc int, argv [][]byte) int {
+// 	// Understands command line parameters
+// 	var i int
+// 	for i = 1; i < argc; i++ {
+// 		if noarch.Strcmp(argv[i], []byte("-h\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--help\x00")) == 0 {
+// 			print_help(argc, argv)
+// 			noarch.Exit(0)
+// 		}
+// 		if noarch.Strcmp(argv[i], []byte("-s\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--solution\x00")) == 0 {
+// 			solution_only = 1
+// 			price_only = 0
+// 			random_only = 0
+// 		}
+// 		if noarch.Strcmp(argv[i], []byte("-g\x00")) == 0 || noarch.Strcmp(argv[i], []byte("-r\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--random\x00")) == 0 {
+// 			solution_only = 0
+// 			price_only = 0
+// 			random_only = 1
+// 		}
+// 		if noarch.Strcmp(argv[i], []byte("-p\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--price\x00")) == 0 {
+// 			solution_only = 0
+// 			price_only = 1
+// 			random_only = 0
+// 		}
+// 		if noarch.Strcmp(argv[i], []byte("-w\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--price\x00")) == 0 {
+// 			write_only = 1
+// 		}
+// 	}
+// 	return 0
+// }
 
 // main - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1744
 func main() {
-	argc := int(len(os.Args))
-	argv := [][]byte{}
-	for _, argvSingle := range os.Args {
-		argv = append(argv, []byte(argvSingle))
-	}
-	defer noarch.AtexitRun()
+	// 	argc := int(len(os.Args))
+	// 	argv := [][]byte{}
+	// 	for _, argvSingle := range os.Args {
+	// 		argv = append(argv, []byte(argvSingle))
+	// 	}
+	// 	defer noarch.AtexitRun()
 	// main() routine for standalone program only.
 	var stat int
 	msgout = noarch.Stdout
-	cmd_param(argc, argv)
+	// 	cmd_param(argc, argv)
 	read_input_data() //noarch.Stdin)
 	stat += alloc_solver_data()
-	stat += optim_replace_data(opt_data)
+	// stat += optim_replace_data(opt_data)
 	if write_only == 1 {
 		write_input_data(noarch.Stdout)
 		return
 	}
 	if solution_only == 1 {
 		stat += get_matrix()
-		stat += generate_water_load_x()
+		// stat += generate_water_load_x()
 		stat += get_loads_and_supports()
 		stat = femEqsCGwJ((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], (*[1000000]tVector)(unsafe.Pointer(&F))[:], (*[1000000]tVector)(unsafe.Pointer(&u))[:], 1e-09, 6*3*n_n)
 	}
-	if n_r_inp > 0 && random_only == 1 {
-		if solution_only != 0 {
-			print_result(noarch.Stdout)
-		}
-		generate_rand_input_file(noarch.Stdout)
-		generate_rand_out_file(noarch.Stdout)
-	} else {
+// 	if n_r_inp > 0 && random_only == 1 {
+// 		if solution_only != 0 {
+// 			print_result(noarch.Stdout)
+// 		}
+// 		generate_rand_input_file(noarch.Stdout)
+// 		generate_rand_out_file(noarch.Stdout)
+// 	} else {
 		if solution_only == 1 {
 			print_result(noarch.Stdout)
 		}
-	}
+// 	}
 	if solution_only == 1 {
 		if fail_test() != 0 {
 			noarch.Fprintf(noarch.Stdout, []byte("# Structure FAILED\n\x00"))
