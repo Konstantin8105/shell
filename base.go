@@ -1580,7 +1580,7 @@ func main() {
 	defer noarch.AtexitRun()
 	// main() routine for standalone program only.
 	var stat int
-	msgout = noarch.Stderr
+	msgout = noarch.Stdout
 	cmd_param(argc, argv)
 	read_input_data() //noarch.Stdin)
 	stat += alloc_solver_data()
@@ -1597,7 +1597,7 @@ func main() {
 	}
 	if n_r_inp > 0 && random_only == 1 {
 		if solution_only != 0 {
-			print_result(noarch.Stderr)
+			print_result(noarch.Stdout)
 		}
 		generate_rand_input_file(noarch.Stdout)
 		generate_rand_out_file(noarch.Stdout)
@@ -1608,7 +1608,7 @@ func main() {
 	}
 	if solution_only == 1 {
 		if fail_test() != 0 {
-			noarch.Fprintf(noarch.Stderr, []byte("# Structure FAILED\n\x00"))
+			noarch.Fprintf(noarch.Stdout, []byte("# Structure FAILED\n\x00"))
 		}
 	}
 	if price_only == 1 {
