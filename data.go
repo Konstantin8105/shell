@@ -85,7 +85,7 @@ func read_input_data() {
 
 	f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
 
-	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
+	// 	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
 
 	check_elem_data()
 
