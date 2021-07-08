@@ -42,35 +42,35 @@ import (
 // var os.Stdout *io.File
 
 // femIntAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:37
-func femIntAlloc(length int) (c4goDefaultReturn []int) {
-
-	return make([]int, length) //, length)
-	// 1D fields ----------------------------------------------------------
-	// allocates and returns 1D int field  (NULL if failed)
-	// * @param length length of field
-	// * @returns field (or NULL)
-	//
-	// 	var field []int
-	// 	var i int
-	// 	if length < 1 {
-	// 		return nil
-	// 	}
-	// 	if len((func() []int {
-	// 		field = (*[1000000]int)(unsafe.Pointer(uintptr(func() int64 {
-	// 			c4go_temp_name := make(string, uint(length)*uint(1))
-	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
-	// 		}())))
-	// 		return field
-	// 	}())) == 0 {
-	// 		return nil
-	// 	} else {
-	// 		for i = 0; i < length; i++ {
-	// 			field[i] = 0
-	// 		}
-	// 		return field
-	// 	}
-	// 	return
-}
+// func make([]int,length int) (c4goDefaultReturn []int) {
+// 
+// 	return make([]int, length) //, length)
+// 	// 1D fields ----------------------------------------------------------
+// 	// allocates and returns 1D int field  (NULL if failed)
+// 	// * @param length length of field
+// 	// * @returns field (or NULL)
+// 	//
+// 	// 	var field []int
+// 	// 	var i int
+// 	// 	if length < 1 {
+// 	// 		return nil
+// 	// 	}
+// 	// 	if len((func() []int {
+// 	// 		field = (*[1000000]int)(unsafe.Pointer(uintptr(func() int64 {
+// 	// 			c4go_temp_name := make(string, uint(length)*uint(1))
+// 	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
+// 	// 		}())))
+// 	// 		return field
+// 	// 	}())) == 0 {
+// 	// 		return nil
+// 	// 	} else {
+// 	// 		for i = 0; i < length; i++ {
+// 	// 			field[i] = 0
+// 	// 		}
+// 	// 		return field
+// 	// 	}
+// 	// 	return
+// }
 
 // //femIntFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:59
 // func //femIntFree(field []int) int {
@@ -84,35 +84,35 @@ func femIntAlloc(length int) (c4goDefaultReturn []int) {
 // }
 
 // femDblAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:71
-func femDblAlloc(length int) (c4goDefaultReturn []float64) {
-	return make([]float64, length)
-	// 	// allocates and returns 1D double field  (NULL if failed)
-	// 	// * @param length length of field
-	// 	// * @returns field (or NULL)
-	// 	//
-	// 	// 	var field []float64
-	// 	 	var i int
-	// 	// 	if length < 1 {
-	// 	// 		return nil
-	// 	// 	}
-	// 	// 	if len((func() []float64 {
-	// 	// 		field = (*[1000000]float64)(unsafe.Pointer(uintptr(func() int64 {
-	// 	// 			c4go_temp_name := make(string, uint(length)*uint(1))
-	// 	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
-	// 	// 		}())))
-	// 	// 		return field
-	// 	// 	}())) == 0 {
-	// 	// 		return nil
-	// 	// 	} else {
-	// 	field := make([]float64, length, length)
-	//
-	// 	for i = 0; i < length; i++ {
-	// 		field[i] = 0
-	// 	}
-	// 	return field
-	// 	// 	}
-	// 	//	return
-}
+// func make([]float64,length int) (c4goDefaultReturn []float64) {
+// 	return make([]float64, length)
+// 	// 	// allocates and returns 1D double field  (NULL if failed)
+// 	// 	// * @param length length of field
+// 	// 	// * @returns field (or NULL)
+// 	// 	//
+// 	// 	// 	var field []float64
+// 	// 	 	var i int
+// 	// 	// 	if length < 1 {
+// 	// 	// 		return nil
+// 	// 	// 	}
+// 	// 	// 	if len((func() []float64 {
+// 	// 	// 		field = (*[1000000]float64)(unsafe.Pointer(uintptr(func() int64 {
+// 	// 	// 			c4go_temp_name := make(string, uint(length)*uint(1))
+// 	// 	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
+// 	// 	// 		}())))
+// 	// 	// 		return field
+// 	// 	// 	}())) == 0 {
+// 	// 	// 		return nil
+// 	// 	// 	} else {
+// 	// 	field := make([]float64, length, length)
+// 	//
+// 	// 	for i = 0; i < length; i++ {
+// 	// 		field[i] = 0
+// 	// 	}
+// 	// 	return field
+// 	// 	// 	}
+// 	// 	//	return
+// }
 
 // //femDblFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:93
 // func //femDblFree(field []float64) int {
@@ -620,7 +620,7 @@ func check_elem_data() {
 // 		n_en += en_num[i]
 // 	}
 // 	if len((func() []int {
-// 		en_pos = femIntAlloc(n_en)
+// 		en_pos = make([]int,n_en)
 // 		return en_pos
 // 	}())) == 0 {
 // 		goto memFree
@@ -758,14 +758,14 @@ func alloc_solver_data() int {
 		goto memFree
 	}
 	if len((func() []int {
-		n_field = femIntAlloc(n_n)
+		n_field = make([]int,n_n)
 		return n_field
 	}())) == 0 {
 		// Compute allocation vector
 		goto memFree
 	}
 	if len((func() []int {
-		alloc_field = femIntAlloc(n_n * 3)
+		alloc_field = make([]int,n_n * 3)
 		return alloc_field
 	}())) == 0 {
 		goto memFree
@@ -2032,7 +2032,7 @@ func femMatAlloc(mat *tMatrix, type_ int, rows int, cols int, bandwidth int, row
 	mat.cols = cols
 	mat.len_ = cols * rows
 	if len((func() []float64 {
-		mat.data = femDblAlloc(mat.len_)
+		mat.data = make([]float64,mat.len_)
 		return mat.data
 	}())) == 0 {
 		goto memFree
@@ -2044,13 +2044,13 @@ func femMatAlloc(mat *tMatrix, type_ int, rows int, cols int, bandwidth int, row
 	// 			mat.rows = rows
 	// 			mat.cols = cols
 	// 			if len((func() []int {
-	// 				mat.defpos = femIntAlloc(mat.rows)
+	// 				mat.defpos = make([]int,mat.rows)
 	// 				return mat.defpos
 	// 			}())) == 0 {
 	// 				goto memFree
 	// 			}
 	// 			if len((func() []int {
-	// 				mat.frompos = femIntAlloc(mat.rows)
+	// 				mat.frompos = make([]int,mat.rows)
 	// 				return mat.frompos
 	// 			}())) == 0 {
 	// 				goto memFree
@@ -2058,13 +2058,13 @@ func femMatAlloc(mat *tMatrix, type_ int, rows int, cols int, bandwidth int, row
 	// 			if bandwidth > 0 && len(rowdesc) == 0 {
 	// 				mat.len_ = rows * bandwidth
 	// 				if len((func() []float64 {
-	// 					mat.data = femDblAlloc(mat.len_)
+	// 					mat.data = make([]float64,mat.len_)
 	// 					return mat.data
 	// 				}())) == 0 {
 	// 					goto memFree
 	// 				}
 	// 				if len((func() []int {
-	// 					mat.pos = femIntAlloc(mat.len_)
+	// 					mat.pos = make([]int,mat.len_)
 	// 					return mat.pos
 	// 				}())) == 0 {
 	// 					goto memFree
@@ -2081,13 +2081,13 @@ func femMatAlloc(mat *tMatrix, type_ int, rows int, cols int, bandwidth int, row
 	// 				}
 	// 				mat.len_ = sum
 	// 				if len((func() []float64 {
-	// 					mat.data = femDblAlloc(mat.len_)
+	// 					mat.data = make([]float64,mat.len_)
 	// 					return mat.data
 	// 				}())) == 0 {
 	// 					goto memFree
 	// 				}
 	// 				if len((func() []int {
-	// 					mat.pos = femIntAlloc(sum)
+	// 					mat.pos = make([]int,sum)
 	// 					return mat.pos
 	// 				}())) == 0 {
 	// 					goto memFree
@@ -2369,14 +2369,14 @@ func femMatPutAdd(mat *tMatrix, row int, col int, val float64, mode int) (c4goDe
 // 		return -2
 // 	}
 // 	if len((func() []int {
-// 		mat.frompos = femIntAlloc(mat.rows)
+// 		mat.frompos = make([]int,mat.rows)
 // 		return mat.frompos
 // 	}())) == 0 {
 // 		rv = -4
 // 		goto memFree
 // 	}
 // 	if len((func() []int {
-// 		mat.defpos = femIntAlloc(mat.rows)
+// 		mat.defpos = make([]int,mat.rows)
 // 		return mat.defpos
 // 	}())) == 0 {
 // 		rv = -4
@@ -2384,14 +2384,14 @@ func femMatPutAdd(mat *tMatrix, row int, col int, val float64, mode int) (c4goDe
 // 	}
 // 	size = mat.rows * 300
 // 	if len((func() []int {
-// 		mat.pos = femIntAlloc(size)
+// 		mat.pos = make([]int,size)
 // 		return mat.pos
 // 	}())) == 0 {
 // 		rv = -4
 // 		goto memFree
 // 	}
 // 	if len((func() []float64 {
-// 		mat.data = femDblAlloc(size)
+// 		mat.data = make([]float64,size)
 // 		return mat.data
 // 	}())) == 0 {
 // 		rv = -4
@@ -2412,14 +2412,14 @@ func femMatPutAdd(mat *tMatrix, row int, col int, val float64, mode int) (c4goDe
 // 				// enlarge "data" and "pos"
 // 				ensize = size + 2*size*(i/mat.rows)
 // 				if len((func() []int {
-// 					pos0 = femIntAlloc(ensize)
+// 					pos0 = make([]int,ensize)
 // 					return pos0
 // 				}())) == 0 {
 // 					rv = -4
 // 					goto memFree
 // 				}
 // 				if len((func() []float64 {
-// 					data0 = femDblAlloc(ensize)
+// 					data0 = make([]float64,ensize)
 // 					return data0
 // 				}())) == 0 {
 // 					rv = -4
@@ -2569,7 +2569,7 @@ func femVecAlloc(mat *tVector, type_ int, rows int, items int) int {
 	mat.rows = rows
 	mat.len_ = rows
 	if len((func() []float64 {
-		mat.data = femDblAlloc(mat.len_)
+		mat.data = make([]float64,mat.len_)
 		return mat.data
 	}())) == 0 {
 		goto memFree
@@ -2582,13 +2582,13 @@ func femVecAlloc(mat *tVector, type_ int, rows int, items int) int {
 	// 			if items > 0 {
 	// 				mat.len_ = items
 	// 				if len((func() []float64 {
-	// 					mat.data = femDblAlloc(mat.len_)
+	// 					mat.data = make([]float64,mat.len_)
 	// 					return mat.data
 	// 				}())) == 0 {
 	// 					goto memFree
 	// 				}
 	// 				if len((func() []int {
-	// 					mat.pos = femIntAlloc(mat.len_)
+	// 					mat.pos = make([]int,mat.len_)
 	// 					return mat.pos
 	// 				}())) == 0 {
 	// 					goto memFree

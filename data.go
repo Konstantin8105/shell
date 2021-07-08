@@ -13,49 +13,49 @@ func read_input_data() {
 
 	n_f = 1
 
-	m_E1 = femDblAlloc(n_m)
+	m_E1 = make([]float64, n_m)
 
-	m_E2 = femDblAlloc(n_m)
+	m_E2 = make([]float64, n_m)
 
-	m_G = femDblAlloc(n_m)
+	m_G = make([]float64, n_m)
 
-	m_nu1 = femDblAlloc(n_m)
+	m_nu1 = make([]float64, n_m)
 
-	m_nu2 = femDblAlloc(n_m)
+	m_nu2 = make([]float64, n_m)
 
-	m_q = femDblAlloc(n_m)
+	m_q = make([]float64, n_m)
 
-	m_vp = femDblAlloc(n_m)
+	m_vp = make([]float64, n_m)
 
-	m_t = femDblAlloc(n_m)
+	m_t = make([]float64, n_m)
 
-	n_x = femDblAlloc(n_n)
+	n_x = make([]float64, n_n)
 
-	n_y = femDblAlloc(n_n)
+	n_y = make([]float64, n_n)
 
-	e_n1 = femIntAlloc(n_e)
+	e_n1 = make([]int, n_e)
 
-	e_n2 = femIntAlloc(n_e)
+	e_n2 = make([]int, n_e)
 
-	e_mat = femIntAlloc(n_e)
+	e_mat = make([]int, n_e)
 
-	e_t = femDblAlloc(n_e)
+	e_t = make([]float64, n_e)
 
-	d_n = femIntAlloc(n_d)
+	d_n = make([]int, n_d)
 
-	d_dir = femIntAlloc(n_d)
+	d_dir = make([]int, n_d)
 
-	d_val = femDblAlloc(n_d)
+	d_val = make([]float64, n_d)
 
-	f_n = femIntAlloc(n_f)
+	f_n = make([]int, n_f)
 
-	f_dir = femIntAlloc(n_f)
+	f_dir = make([]int, n_f)
 
-	f_val = femDblAlloc(n_f)
+	f_val = make([]float64, n_f)
 
-	// en_num = femIntAlloc(n_n)
+	// en_num = make([]int,n_n)
 
-	//en_frm = femIntAlloc(n_n)
+	//en_frm = make([]int,n_n)
 
 	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
 
@@ -93,18 +93,18 @@ func read_input_data() {
 
 	n_fail = 2
 
-	fail_data = femDblAlloc(n_fail)
+	fail_data = make([]float64, n_fail)
 
 	fail_data[0] = 20e6
 	fail_data[1] = 1e6
 
 	n_r_inp = 1
 
-	// 	rand_type = femIntAlloc(n_r_inp)
+	// 	rand_type = make([]int,n_r_inp)
 	//
-	// 	rand_pos = femIntAlloc(n_r_inp)
+	// 	rand_pos = make([]int,n_r_inp)
 	//
-	// 	rand_indx = femIntAlloc(n_r_inp)
+	// 	rand_indx = make([]int,n_r_inp)
 	//
 	// 	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
 
