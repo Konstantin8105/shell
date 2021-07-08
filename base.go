@@ -7,14 +7,11 @@
 
 package main
 
-import (
-	"fmt"
-	"math"
-	"os"
-	"unsafe"
-
-	"github.com/Konstantin8105/c4go/noarch"
-)
+import "os"
+import "fmt"
+import "math"
+import "unsafe"
+import "github.com/Konstantin8105/c4go/noarch"
 
 // msgout - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:29
 //
@@ -42,7 +39,7 @@ import (
 //	FEM Solver - memory handling
 //  $Id: fem_mem.c,v 1.5 2004/07/06 21:03:44 jirka Exp $
 //
-var msgout = os.Stdout // *fmt.File
+var msgout *noarch.File
 
 // femIntAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:37
 func femIntAlloc(length int32) (c4goDefaultReturn []int32) {
@@ -51,39 +48,38 @@ func femIntAlloc(length int32) (c4goDefaultReturn []int32) {
 	// * @param length length of field
 	// * @returns field (or NULL)
 	//
-	// 	var field []int32
-	// 	var i int32
-	// 	if length < 1 {
-	// 		return nil
-	// 	}
-	// 	if len((func() []int32 {
-	// 		field = (*[1000000]int32)(unsafe.Pointer(uintptr(func() int64 {
-	// 			c4go_temp_name := make(, uint32(length)*uint32(1))
-	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
-	// 		}())))[:]
-	// 		return field
-	// 	}())) == 0 {
-	// 		return nil
-	// 	} else {
-	// 		for i = 0; i < length; i++ {
-	// 			field[i] = 0
-	// 		}
-	// 		return field
-	// 	}
-	// 	return
-	return make([]int32, length)
+	var field []int32
+	var i int32
+	if length < 1 {
+		return nil
+	}
+	if len((func() []int32 {
+		field = (*[1000000]int32)(unsafe.Pointer(uintptr(func() int64 {
+			c4go_temp_name := make([]byte, uint32(length)*uint32(1))
+			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
+		}())))[:]
+		return field
+	}())) == 0 {
+		return nil
+	} else {
+		for i = 0; i < length; i++ {
+			field[i] = 0
+		}
+		return field
+	}
+	return
 }
 
 // femIntFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:59
-// func femIntFree(field []int32) int32 {
-// 	_ = field
-// 	// removes memory from int field
-// 	// * @param field  field to be freed
-// 	// * @returns state value
-// 	//
-// 	field = nil
-// 	return 0
-// }
+func femIntFree(field []int32) int32 {
+	_ = field
+	// removes memory from int field
+	// * @param field  field to be freed
+	// * @returns state value
+	//
+	field = nil
+	return 0
+}
 
 // femDblAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:71
 func femDblAlloc(length int32) (c4goDefaultReturn []float64) {
@@ -91,39 +87,38 @@ func femDblAlloc(length int32) (c4goDefaultReturn []float64) {
 	// * @param length length of field
 	// * @returns field (or NULL)
 	//
-	// 	var field []float64
-	// 	var i int32
-	// 	if length < 1 {
-	// 		return nil
-	// 	}
-	// 	if len((func() []float64 {
-	// 		field = (*[1000000]float64)(unsafe.Pointer(uintptr(func() int64 {
-	// 			c4go_temp_name := make(, uint32(length)*uint32(1))
-	// 			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
-	// 		}())))[:]
-	// 		return field
-	// 	}())) == 0 {
-	// 		return nil
-	// 	} else {
-	// 		for i = 0; i < length; i++ {
-	// 			field[i] = 0
-	// 		}
-	// 		return field
-	// 	}
-
-	return make([]float64, length, length)
+	var field []float64
+	var i int32
+	if length < 1 {
+		return nil
+	}
+	if len((func() []float64 {
+		field = (*[1000000]float64)(unsafe.Pointer(uintptr(func() int64 {
+			c4go_temp_name := make([]byte, uint32(length)*uint32(1))
+			return int64(uintptr(unsafe.Pointer(*(**byte)(unsafe.Pointer(&c4go_temp_name)))))
+		}())))[:]
+		return field
+	}())) == 0 {
+		return nil
+	} else {
+		for i = 0; i < length; i++ {
+			field[i] = 0
+		}
+		return field
+	}
+	return
 }
 
 // femDblFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:93
-// func femDblFree(field []float64) int32 {
-// 	_ = field
-// 	// removes memory from dbl field
-// 	// * @param field  field to be freed
-// 	// * @returns state value
-// 	//
-// 	field = nil
-// 	return 0
-// }
+func femDblFree(field []float64) int32 {
+	_ = field
+	// removes memory from dbl field
+	// * @param field  field to be freed
+	// * @returns state value
+	//
+	field = nil
+	return 0
+}
 
 // _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_47 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.h:47
 //
@@ -460,110 +455,110 @@ var write_only int32
 
 // free_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:133
 func free_input_data() {
-	// 	if len(m_E1) != 0 {
-	// 		// frees input data
-	// 		femDblFree(m_E1)
-	// 	}
-	// 	if len(m_E2) != 0 {
-	// 		femDblFree(m_E2)
-	// 	}
-	// 	if len(m_G) != 0 {
-	// 		femDblFree(m_G)
-	// 	}
-	// 	if len(m_nu1) != 0 {
-	// 		femDblFree(m_nu1)
-	// 	}
-	// 	if len(m_nu2) != 0 {
-	// 		femDblFree(m_nu2)
-	// 	}
-	// 	if len(m_q) != 0 {
-	// 		femDblFree(m_q)
-	// 	}
-	// 	if len(m_vp) != 0 {
-	// 		femDblFree(m_vp)
-	// 	}
-	// 	if len(m_t) != 0 {
-	// 		femDblFree(m_t)
-	// 	}
-	// 	if len(n_x) != 0 {
-	// 		femDblFree(n_x)
-	// 	}
-	// 	if len(n_y) != 0 {
-	// 		femDblFree(n_y)
-	// 	}
-	// 	if len(e_n1) != 0 {
-	// 		femIntFree(e_n1)
-	// 	}
-	// 	if len(e_n2) != 0 {
-	// 		femIntFree(e_n2)
-	// 	}
-	// 	if len(e_mat) != 0 {
-	// 		femIntFree(e_mat)
-	// 	}
-	// 	if len(e_t) != 0 {
-	// 		femDblFree(e_t)
-	// 	}
-	// 	if len(d_n) != 0 {
-	// 		femIntFree(d_n)
-	// 	}
-	// 	if len(d_dir) != 0 {
-	// 		femIntFree(d_dir)
-	// 	}
-	// 	if len(d_val) != 0 {
-	// 		femDblFree(d_val)
-	// 	}
-	// 	if n_f > 0 {
-	// 		if len(f_n) != 0 {
-	// 			femIntFree(f_n)
-	// 		}
-	// 		if len(f_dir) != 0 {
-	// 			femIntFree(f_dir)
-	// 		}
-	// 		if len(f_val) != 0 {
-	// 			femDblFree(f_val)
-	// 		}
-	// 	}
-	// 	if n_r_inp > 0 {
-	// 		if len(rand_type) != 0 {
-	// 			femIntFree(rand_type)
-	// 		}
-	// 		if len(rand_pos) != 0 {
-	// 			femIntFree(rand_pos)
-	// 		}
-	// 		if len(rand_indx) != 0 {
-	// 			femIntFree(rand_indx)
-	// 		}
-	// 	}
-	// 	if n_r_opt > 0 {
-	// 		if len(opt_type) != 0 {
-	// 			femIntFree(opt_type)
-	// 		}
-	// 		if len(opt_pos) != 0 {
-	// 			femIntFree(opt_pos)
-	// 		}
-	// 		if len(opt_indx) != 0 {
-	// 			femIntFree(opt_indx)
-	// 		}
-	// 		if len(opt_data) != 0 {
-	// 			femDblFree(opt_data)
-	// 		}
-	// 	}
-	// 	if n_en > 0 {
-	// 		if len(en_num) != 0 {
-	// 			femIntFree(en_num)
-	// 		}
-	// 		if len(en_frm) != 0 {
-	// 			femIntFree(en_frm)
-	// 		}
-	// 		if len(en_pos) != 0 {
-	// 			femIntFree(en_pos)
-	// 		}
-	// 	}
-	// 	if n_fail > 0 {
-	// 		if len(fail_data) != 0 {
-	// 			femDblFree(fail_data)
-	// 		}
-	// 	}
+	if len(m_E1) != 0 {
+		// frees input data
+		femDblFree(m_E1)
+	}
+	if len(m_E2) != 0 {
+		femDblFree(m_E2)
+	}
+	if len(m_G) != 0 {
+		femDblFree(m_G)
+	}
+	if len(m_nu1) != 0 {
+		femDblFree(m_nu1)
+	}
+	if len(m_nu2) != 0 {
+		femDblFree(m_nu2)
+	}
+	if len(m_q) != 0 {
+		femDblFree(m_q)
+	}
+	if len(m_vp) != 0 {
+		femDblFree(m_vp)
+	}
+	if len(m_t) != 0 {
+		femDblFree(m_t)
+	}
+	if len(n_x) != 0 {
+		femDblFree(n_x)
+	}
+	if len(n_y) != 0 {
+		femDblFree(n_y)
+	}
+	if len(e_n1) != 0 {
+		femIntFree(e_n1)
+	}
+	if len(e_n2) != 0 {
+		femIntFree(e_n2)
+	}
+	if len(e_mat) != 0 {
+		femIntFree(e_mat)
+	}
+	if len(e_t) != 0 {
+		femDblFree(e_t)
+	}
+	if len(d_n) != 0 {
+		femIntFree(d_n)
+	}
+	if len(d_dir) != 0 {
+		femIntFree(d_dir)
+	}
+	if len(d_val) != 0 {
+		femDblFree(d_val)
+	}
+	if n_f > 0 {
+		if len(f_n) != 0 {
+			femIntFree(f_n)
+		}
+		if len(f_dir) != 0 {
+			femIntFree(f_dir)
+		}
+		if len(f_val) != 0 {
+			femDblFree(f_val)
+		}
+	}
+	if n_r_inp > 0 {
+		if len(rand_type) != 0 {
+			femIntFree(rand_type)
+		}
+		if len(rand_pos) != 0 {
+			femIntFree(rand_pos)
+		}
+		if len(rand_indx) != 0 {
+			femIntFree(rand_indx)
+		}
+	}
+	if n_r_opt > 0 {
+		if len(opt_type) != 0 {
+			femIntFree(opt_type)
+		}
+		if len(opt_pos) != 0 {
+			femIntFree(opt_pos)
+		}
+		if len(opt_indx) != 0 {
+			femIntFree(opt_indx)
+		}
+		if len(opt_data) != 0 {
+			femDblFree(opt_data)
+		}
+	}
+	if n_en > 0 {
+		if len(en_num) != 0 {
+			femIntFree(en_num)
+		}
+		if len(en_frm) != 0 {
+			femIntFree(en_frm)
+		}
+		if len(en_pos) != 0 {
+			femIntFree(en_pos)
+		}
+	}
+	if n_fail > 0 {
+		if len(fail_data) != 0 {
+			femDblFree(fail_data)
+		}
+	}
 	n_m = 0
 	n_n = 0
 	n_e = 0
@@ -610,12 +605,12 @@ func get_enode_fields() int32 {
 		en_frm[i] = n_en
 		n_en += en_num[i]
 	}
-	// 	if len((func() []int32 {
-	en_pos = femIntAlloc(n_en)
-	// 		return en_pos
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
+	if len((func() []int32 {
+		en_pos = femIntAlloc(n_en)
+		return en_pos
+	}())) == 0 {
+		goto memFree
+	}
 	for i = 0; i < n_en; i++ {
 		en_pos[i] = -1
 	}
@@ -634,480 +629,57 @@ func get_enode_fields() int32 {
 		}
 	}
 	return 0
-	// memFree:
-	// 	;
-	// 	return -4
-}
-
-// read_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:276
-func read_input_data() { //fw *fmt.File) int32 {
-	// reads data from stream
-	// * @param fw stream for reading
-	//
-	var i int32
-	n_m = 1
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_m)) <= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if n_m < 1 {
-	// 		fmt.Fprintf(msgout, ("Invalid number of materials!\n"))
-	// 		goto memFree
-	// 	}
-	n_n = 3
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_n)) <= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if n_n < 2 {
-	// 		fmt.Fprintf(msgout, ("Invalid number of nodes!\n"))
-	// 		goto memFree
-	// 	}
-	n_e = 2
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_e)) <= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if n_e < 2 {
-	// 		fmt.Fprintf(msgout, ("Invalid number of elements!\n"))
-	// 		goto memFree
-	// 	}
-	n_d = 3
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_d)) <= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if n_d < 3 {
-	// 		fmt.Fprintf(msgout, ("Invalid number of supports!\n"))
-	// 		goto memFree
-	// 	}
-	n_f = 1
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_f)) < 0 {
-	// 		goto memFree
-	// 	}
-	// 	if n_f < 0 {
-	// 		fmt.Fprintf(msgout, ("Invalid number of forces!\n"))
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_E1 = femDblAlloc(n_m)
-	// 		return m_E1
-	// 	}())) == 0 {
-	// 		// data allocations
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_E2 = femDblAlloc(n_m)
-	// 		return m_E2
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_G = femDblAlloc(n_m)
-	// 		return m_G
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_nu1 = femDblAlloc(n_m)
-	// 		return m_nu1
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_nu2 = femDblAlloc(n_m)
-	// 		return m_nu2
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_q = femDblAlloc(n_m)
-	// 		return m_q
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_vp = femDblAlloc(n_m)
-	// 		return m_vp
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	m_t = femDblAlloc(n_m)
-	// 		return m_t
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	n_x = femDblAlloc(n_n)
-	// 		return n_x
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	n_y = femDblAlloc(n_n)
-	// 		return n_y
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	e_n1 = femIntAlloc(n_e)
-	// 		return e_n1
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	e_n2 = femIntAlloc(n_e)
-	// 		return e_n2
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	e_mat = femIntAlloc(n_e)
-	// 		return e_mat
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	e_t = femDblAlloc(n_e)
-	// 		return e_t
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	d_n = femIntAlloc(n_d)
-	// 		return d_n
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	d_dir = femIntAlloc(n_d)
-	// 		return d_dir
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	d_val = femDblAlloc(n_d)
-	// 		return d_val
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if n_f > 0 {
-	// 		if len((func() []int32 {
-	f_n = femIntAlloc(n_f)
-	// 			return f_n
-	// 		}())) == 0 {
-	// 			goto memFree
-	// 		}
-	// 		if len((func() []int32 {
-	f_dir = femIntAlloc(n_f)
-	// 			return f_dir
-	// 		}())) == 0 {
-	// 			goto memFree
-	// 		}
-	// 		if len((func() []float64 {
-	f_val = femDblAlloc(n_f)
-	// 			return f_val
-	// 		}())) == 0 {
-	// 			goto memFree
-	// 		}
-	// 	}
-	// 	if len((func() []int32 {
-	en_num = femIntAlloc(n_n)
-	// 		return en_num
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	en_frm = femIntAlloc(n_n)
-	// 		return en_frm
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-
-	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
-
-	// 	{
-	// 		// reading of data:
-	// 		// materials
-	for i = 0; i < n_m; i++ {
-		// 	 			if fmt.Fscanf(fw, (" %f %f %f %f %f %f %f %f"), m_E1[i:], m_E2[i:], m_G[i:], m_nu1[i:], m_nu2[i:], m_q[i:], m_vp[i:], m_t[i:]) <= 0 {
-		// 	 				goto memFree
-		// 	 			}
-		if m_E1[i] == m_E2[i] || m_E2[i] <= 0 {
-			// isotropic
-			m_E2[i] = m_E1[i]
-			m_nu2[i] = m_nu1[i]
-			if m_G[i] <= 0 {
-				m_G[i] = m_E1[i] / (2 * (1 + m_nu1[i]))
-			}
-			// 	 			} else {
-			// 	 				if m_E1[i] <= 0 || m_E2[i] <= 0 || m_G[i] <= 0 || m_nu1[i] <= 0 || m_nu2[i] <= 0 {
-			// 	 					fmt.Fprintf(msgout, ("Invalid or incomplete data for material %v\n"), i)
-			// 	 					goto memFree
-			// 	 				}
-		}
-	}
-	// 	}
-	n_x[0], n_y[0] = 10, 0
-	n_x[1], n_y[1] = 10, 5
-	n_x[2], n_y[2] = 10, 10
-
-	// 	{
-	// 		// nodes
-	// 		for i = 0; i < n_n; i++ {
-	// 			if fmt.Fscanf(fw, ("%f %f"), n_x[i:], n_y[i:]) <= 0 {
-	// 				goto memFree
-	// 			}
-	// 		}
-	// 	}
-	e_n1[0], e_n2[0], e_mat[0], e_t[0] = 0, 1, 0, 0.2
-	e_n1[1], e_n2[1], e_mat[1], e_t[1] = 1, 2, 0, 0.2
-
-	// 	{
-	// 		// elements
-	// 		for i = 0; i < n_e; i++ {
-	// 			if fmt.Fscanf(fw, ("%v %v %v %f"), e_n1[i:], e_n2[i:], e_mat[i:], e_t[i:]) <= 0 {
-	// 				goto memFree
-	// 			}
-	// 			if e_n1[i] < 0 || e_n1[i] >= n_n {
-	// 				fmt.Fprintf(msgout, ("Invalid n1 in element %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 			if e_n2[i] < 0 || e_n2[i] >= n_n {
-	// 				fmt.Fprintf(msgout, ("Invalid n2 in element %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 			if e_n1[i] == e_n2[i] {
-	// 				fmt.Fprintf(msgout, ("Invalid nodes in element %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 			if e_mat[i] < 0 || e_mat[i] >= n_m {
-	// 				fmt.Fprintf(msgout, ("Invalid material in element %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 			if e_t[i] <= 0 {
-	// 				fmt.Fprintf(msgout, ("Invalid width in element %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 		}
-	// 	}
-	d_n[0], d_dir[0], d_val[0] = 0, 0, 0
-	d_n[1], d_dir[1], d_val[1] = 0, 1, 0
-	d_n[2], d_dir[2], d_val[2] = 2, 1, 0
-	// 	{
-	// 		// displacements
-	// 		for i = 0; i < n_d; i++ {
-	// 			if fmt.Fscanf(fw, ("%v %v %f"), d_n[i:], d_dir[i:], d_val[i:]) <= 0 {
-	// 				goto memFree
-	// 			}
-	// 			if d_n[i] < 0 || d_n[i] >= n_n {
-	// 				fmt.Fprintf(msgout, ("Invalid node in support %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 			if d_dir[i] < 0 || d_dir[i] >= 6 {
-	// 				fmt.Fprintf(msgout, ("Invalid direction in support %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 			if d_dir[i] > 2 && d_val[i] < 0 {
-	// 				fmt.Fprintf(msgout, ("Invalid stiffness in support %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 		}
-	// 	}
-	f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
-
-	// 	{
-	// 		// forces
-	// 		for i = 0; i < n_f; i++ {
-	// 			if fmt.Fscanf(fw, ("%v %v %f"), f_n[i:], f_dir[i:], f_val[i:]) <= 0 {
-	// 				goto memFree
-	// 			}
-	// 			if f_n[i] < 0 || f_n[i] >= n_n {
-	// 				fmt.Fprintf(msgout, ("Invalid node for force %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 			if f_dir[i] < 0 || f_dir[i] >= 3 {
-	// 				fmt.Fprintf(msgout, ("Invalid direction for force %v\n"), i)
-	// 				goto memFree
-	// 			}
-	// 		}
-	// 	}
-	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
-
-	// 	if fmt.Fscanf(fw, ("%f %f %f %v %v"), c4goUnsafeConvert_float64(&w_top), c4goUnsafeConvert_float64(&w_bot), c4goUnsafeConvert_float64(&w_val), c4goUnsafeConvert_int32(&w_min), c4goUnsafeConvert_int32(&w_max)) <= 0 {
-	// 		// water pressure data
-	// 		goto memFree
-	// 	}
-	// 	// check of element nodes
-	check_elem_data()
-	// 	if get_enode_fields() != 0 {
-	// 		goto memFree
-	// 	}
-	fail_type = 1
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&fail_type)) <= 0 {
-	// 		// failure condition data:
-	// 		// that's great, no failure is needed
-	// 		fail_type = 0
-	// 		n_fail = 0
-	// 	} else {
-	// 		if fail_type > 0 {
-	n_fail = 2
-	// 			if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_fail)) <= 0 {
-	// 				fail_type = 0
-	// 			} else {
-	// 				if len((func() []float64 {
-	fail_data = femDblAlloc(n_fail)
-	// 					return fail_data
-	// 				}())) == 0 {
-	// 					fmt.Fprintf(msgout, ("Cannot allocate memory for failure data!\n"))
-	// 					goto memFree
-	// 				}
-	fail_data[0] = 20e6
-	fail_data[1] = 1e6
-	// 				for i = 0; i < n_fail; i++ {
-	// 					if fmt.Fscanf(fw, ("%f"), fail_data[i:]) <= 0 {
-	// 						fmt.Fprintf(msgout, ("Invalid failure data!\n"))
-	// 						goto memFree
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	n_r_inp = 1
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_r_inp)) <= 0 {
-	// 		// random variables:
-	// 		n_r_inp = 0
-	// 		// fprintf(msgout, "No random data found.\n");
-	// 		return 0
-	// 	}
-	// 	if n_r_inp < 1 {
-	// 		return 0
-	// 	}
-	// 	if len((func() []int32 {
-	rand_type = femIntAlloc(n_r_inp)
-	// 		return rand_type
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	rand_pos = femIntAlloc(n_r_inp)
-	// 		return rand_pos
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	rand_indx = femIntAlloc(n_r_inp)
-	// 		return rand_indx
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
-
-	// 	for i = 0; i < n_r_inp; i++ {
-	// 		if fmt.Fscanf(fw, ("%v %v %v"), rand_type[i:], rand_pos[i:], rand_indx[i:]) <= 0 {
-	// 			goto memFree
-	// 		}
-	// 	}
-	// 	if fmt.Fscanf(fw, ("%v"), c4goUnsafeConvert_int32(&n_r_opt)) <= 0 {
-	// 		// optimized variables: -------------------------------------
-	n_r_opt = 0
-	// 		//fprintf(msgout, "No optim. data found.\n");
-	//return 0
-	// 	}
-	// 	if n_r_opt < 1 {
-	// 		fmt.Fprintf(msgout, ("Invalid number of optim. inputs!\n"))
-	// 		return 0
-	// 	}
-	// 	if len((func() []int32 {
-	// 		opt_type = femIntAlloc(n_r_opt)
-	// 		return opt_type
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	// 		opt_pos = femIntAlloc(n_r_opt)
-	// 		return opt_pos
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int32 {
-	// 		opt_indx = femIntAlloc(n_r_opt)
-	// 		return opt_indx
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []float64 {
-	// 		opt_data = femDblAlloc(n_r_opt)
-	// 		return opt_data
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// 	for i = 0; i < n_r_opt; i++ {
-	// 		if fmt.Fscanf(fw, ("%v %v %v"), opt_type[i:], opt_pos[i:], opt_indx[i:]) <= 0 {
-	// 			goto memFree
-	// 		}
-	// 	}
-	// 	for i = 0; i < n_r_opt; i++ {
-	// 		if fmt.Fscanf(fw, ("%f"), opt_data[i:]) <= 0 {
-	// 			femDblFree(opt_data)
-	// 			femIntFree(opt_indx)
-	// 			femIntFree(opt_pos)
-	// 			femIntFree(opt_type)
-	// 			n_r_opt = 0
-	// 		}
-	// 	}
-	// 	return 0
-	// memFree:
-	// 	;
-	// 	free_input_data()
-	// 	fmt.Fprintf(msgout, ("Error when reading input!\n"))
-	// 	return -2
+memFree:
+	;
+	return -4
 }
 
 // write_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:541
-func write_input_data() int32 { // fw *fmt.File
-	fw := os.Stdout
+func write_input_data(fw *noarch.File) int32 {
 	// Writes input data to stream ------------------
 	var i int32
 	// sizes
-	fmt.Fprintf(fw, ("%v %v %v %v %v\n"), n_m, n_n, n_e, n_d, n_f)
+	noarch.Fprintf(fw, []byte("%li %li %li %li %li\n\x00"), n_m, n_n, n_e, n_d, n_f)
 	{
 		// materials
 		for i = 0; i < n_m; i++ {
-			fmt.Fprintf(fw, (" %v %v %v %v %v %v %v %v\n"), m_E1[i], m_E2[i], m_G[i], m_nu1[i], m_nu2[i], m_q[i], m_vp[i], m_t[i])
+			noarch.Fprintf(fw, []byte(" %e %e %e %e %e %e %e %e\n\x00"), m_E1[i], m_E2[i], m_G[i], m_nu1[i], m_nu2[i], m_q[i], m_vp[i], m_t[i])
 		}
 	}
 	{
 		// nodes
 		for i = 0; i < n_n; i++ {
-			fmt.Fprintf(fw, ("%v %v\n"), n_x[i], n_y[i])
+			noarch.Fprintf(fw, []byte("%e %e\n\x00"), n_x[i], n_y[i])
 		}
 	}
 	{
 		// elements
 		for i = 0; i < n_e; i++ {
-			fmt.Fprintf(fw, ("%v %v %v %v\n"), e_n1[i], e_n2[i], e_mat[i], e_t[i])
+			noarch.Fprintf(fw, []byte("%li %li %li %e\n\x00"), e_n1[i], e_n2[i], e_mat[i], e_t[i])
 		}
 	}
 	{
 		// displacements
 		for i = 0; i < n_d; i++ {
-			fmt.Fprintf(fw, ("%v %v %v\n"), d_n[i], d_dir[i], d_val[i])
+			noarch.Fprintf(fw, []byte("%li %li %e\n\x00"), d_n[i], d_dir[i], d_val[i])
 		}
 	}
 	{
 		// supports
 		for i = 0; i < n_f; i++ {
-			fmt.Fprintf(fw, ("%v %v %v\n"), f_n[i], f_dir[i], f_val[i])
+			noarch.Fprintf(fw, []byte("%li %li %e\n\x00"), f_n[i], f_dir[i], f_val[i])
 		}
 	}
 	// water pressure data
-	fmt.Fprintf(fw, ("%v %v %v %v %v\n"), w_top, w_bot, w_val, w_min, w_max)
+	noarch.Fprintf(fw, []byte("%e %e %e %li %li\n\x00"), w_top, w_bot, w_val, w_min, w_max)
 	// failure condition data:
-	fmt.Fprintf(fw, ("%v\n"), fail_type)
+	noarch.Fprintf(fw, []byte("%li\n\x00"), fail_type)
 	if fail_type > 0 {
-		fmt.Fprintf(fw, ("%v\n"), n_fail)
+		noarch.Fprintf(fw, []byte("%li\n\x00"), n_fail)
 		for i = 0; i < n_fail; i++ {
-			fmt.Fprintf(fw, ("%v "), fail_data[i])
+			noarch.Fprintf(fw, []byte("%e \x00"), fail_data[i])
 		}
-		fmt.Fprintf(fw, ("\n"))
+		noarch.Fprintf(fw, []byte("\n\x00"))
 	}
 	return 0
 }
@@ -1209,19 +781,19 @@ func alloc_solver_data() int32 {
 	if femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&u))[:], 0, n_n*3, n_n*3) != 0 {
 		goto memFree
 	}
-	// 	femIntFree(alloc_field)
-	// 	femIntFree(n_field)
+	femIntFree(alloc_field)
+	femIntFree(n_field)
 	return 0
 memFree:
 	;
-	// 	if len(alloc_field) != 0 {
-	// 		femIntFree(alloc_field)
-	// 	}
-	// 	if len(n_field) != 0 {
-	// 		femIntFree(n_field)
-	// 	}
+	if len(alloc_field) != 0 {
+		femIntFree(alloc_field)
+	}
+	if len(n_field) != 0 {
+		femIntFree(n_field)
+	}
 	free_solver_data()
-	fmt.Fprintf(msgout, ("Out of memory!"))
+	noarch.Fprintf(msgout, []byte("Out of memory!\x00"))
 	return -4
 }
 
@@ -1312,7 +884,6 @@ func get_matrix() int32 {
 	femMatSetZero((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
 	femVecSetZero((*[1000000]tVector)(unsafe.Pointer(&u))[:])
 	femVecSetZero((*[1000000]tVector)(unsafe.Pointer(&F))[:])
-	// fmt.Println(":::: n_e", n_e, " e_n1 == ", e_n1)
 	for i = 0; i < n_e; i++ {
 		if (func() float64 {
 			t = m_t[e_mat[i]]
@@ -1340,31 +911,30 @@ func get_matrix() int32 {
 		femMatMatMult((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:], (*[1000000]tMatrix)(unsafe.Pointer(&B))[:], (*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
 		// element stifness matrix Ke:
 		femValMatMultSelf(R*L, (*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
-
-		// localisation to "K":
-		for j = 1; j <= 6; j++ {
-			if j < 4 {
-				posj = e_n1[i]*3 + j
-			} else {
-				posj = e_n2[i]*3 + j - 3
-			}
-			for k = 1; k <= 6; k++ {
-				if k < 4 {
-					posk = e_n1[i]*3 + k
+		{
+			// localisation to "K":
+			for j = 1; j <= 6; j++ {
+				if j < 4 {
+					posj = e_n1[i]*3 + j
 				} else {
-					posk = e_n2[i]*3 + k - 3
+					posj = e_n2[i]*3 + j - 3
 				}
-				femMatPutAdd((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], posj, posk, femMatGet((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:], j, k), 1)
+				for k = 1; k <= 6; k++ {
+					if k < 4 {
+						posk = e_n1[i]*3 + k
+					} else {
+						posk = e_n2[i]*3 + k - 3
+					}
+					femMatPutAdd((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], posj, posk, femMatGet((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:], j, k), 1)
+				}
 			}
 		}
-
 		if math.Abs((func() float64 {
 			q = m_q[e_mat[i]]
 			return q
 		}())) > 1e-07 {
 			// gravitation
 			F2 = -0.5 * q * t * L
-			// fmt.Println("i = ", i, e_n1, e_n2, F)
 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n1[i], F2, 1)
 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&F))[:], 3*e_n2[i], F2, 1)
 		}
@@ -1592,171 +1162,169 @@ func get_int_forces(el int32, N1 []float64, N2 []float64, M1 []float64, M2 []flo
 }
 
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
-// func print_result(fw *fmt.File) int32 {
-// 	return 0
-// }
+func print_result(fw *noarch.File) int32 {
+	return 0
+}
 
 // generate_rand_out_file - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1092
-func generate_rand_out_file() { //fw *fmt.File) {
-	fw := os.Stdout
+func generate_rand_out_file(fw *noarch.File) {
 	// generates output variable list for Monte input file
 	var i int32
-	fmt.Fprintf(fw, ("%v\n"), n_n*8+1)
-	fmt.Fprintf(fw, ("FAIL 3 2\n"))
+	noarch.Fprintf(fw, []byte("%li\n\x00"), n_n*8+1)
+	noarch.Fprintf(fw, []byte("FAIL 3 2\n\x00"))
 	for i = 0; i < n_n; i++ {
-		fmt.Fprintf(fw, ("UY%v 2\n"), i)
-		fmt.Fprintf(fw, ("UX%v 2\n"), i)
-		fmt.Fprintf(fw, ("RT%v 2\n"), i)
-		fmt.Fprintf(fw, ("NX%v 2\n"), i)
-		fmt.Fprintf(fw, ("NY%v 2\n"), i)
-		fmt.Fprintf(fw, ("MX%v 2\n"), i)
-		fmt.Fprintf(fw, ("MY%v 2\n"), i)
-		fmt.Fprintf(fw, ("QQ%v 2\n"), i)
+		noarch.Fprintf(fw, []byte("UY%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("UX%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("RT%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("NX%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("NY%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("MX%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("MY%li 2\n\x00"), i)
+		noarch.Fprintf(fw, []byte("QQ%li 2\n\x00"), i)
 	}
 	// no correlations at all
-	fmt.Fprintf(fw, ("0\n"))
+	noarch.Fprintf(fw, []byte("0\n\x00"))
 }
 
 // generate_d_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1115
-func generate_d_type(type_ int32) string {
+func generate_d_type(type_ int32) []byte {
 	switch type_ {
 	case 0:
 		// generates textual symbol for displacement
-		return ("UY")
+		return []byte("UY\x00")
 	case 1:
-		return ("UX")
+		return []byte("UX\x00")
 	case 2:
-		return ("RT")
+		return []byte("RT\x00")
 	case 3:
-		return ("EY")
+		return []byte("EY\x00")
 	case 4:
-		return ("EX")
+		return []byte("EX\x00")
 	case 5:
-		return ("ER")
+		return []byte("ER\x00")
 		break
 	}
-	return ("XX")
+	return []byte("XX\x00")
 }
 
 // generate_f_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1130
-func generate_f_type(type_ int32) string {
+func generate_f_type(type_ int32) []byte {
 	switch type_ {
 	case 0:
 		// generates textual symbol for force
-		return ("FY")
+		return []byte("FY\x00")
 	case 1:
-		return ("FX")
+		return []byte("FX\x00")
 	case 2:
-		return ("MT")
+		return []byte("MT\x00")
 		break
 	}
-	return ("XX")
+	return []byte("XX\x00")
 }
 
 // generate_w_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1142
-func generate_w_type(type_ int32) string {
+func generate_w_type(type_ int32) []byte {
 	switch type_ {
 	case 0:
 		// generates textual symbol for water load
-		return ("TOP")
+		return []byte("TOP\x00")
 	case 1:
-		return ("BOT")
+		return []byte("BOT\x00")
 	case 2:
-		return ("SIZE")
+		return []byte("SIZE\x00")
 		break
 	}
-	return ("XX")
+	return []byte("XX\x00")
 }
 
 // generate_fc_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1154
-func generate_fc_type(type_ int32) string {
+func generate_fc_type(type_ int32) []byte {
 	switch fail_type {
 	case 1:
 		switch type_ {
 		case 0:
 			// generates textual symbol for failure criteria
 			// concrete cracking limit
-			return ("COMPR")
+			return []byte("COMPR\x00")
 		case 1:
-			return ("TENS")
+			return []byte("TENS\x00")
 		default:
-			return ("UNKNOWN")
+			return []byte("UNKNOWN\x00")
 			break
 		}
 	default:
-		return ("XX")
+		return []byte("XX\x00")
 		break
 	}
-	return ("XX")
+	return []byte("XX\x00")
 }
 
 // generate_rand_input_file - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1179
-func generate_rand_input_file() { //fw *fmt.File) {
+func generate_rand_input_file(fw *noarch.File) {
+	// Writes input data for Monte
+	// * @param fw file stream to write data
+	// * @return status
 	//
-	// 	// Writes input data for Monte
-	// 	// * @param fw file stream to write data
-	// 	// * @return status
-	// 	//
-	// 	var i int32
-	// 	fmt.Fprintf(fw, ("%v\n"), n_r_inp)
-	// 	for i = 0; i < n_r_inp; i++ {
-	// 		switch rand_type[i] {
-	// 		case 0:
-	// 			switch rand_indx[i] {
-	// 			case 0:
-	// 				// material
-	// 				fmt.Fprintf(fw, ("MAT%v_E1 %v 1 normal-1-02.dis\n"), rand_pos[i], m_E1[rand_pos[i]])
-	// 			case 1:
-	// 				fmt.Fprintf(fw, ("MAT%v_E2 %v 1 normal-1-02.dis\n"), rand_pos[i], m_E2[rand_pos[i]])
-	// 			case 2:
-	// 				fmt.Fprintf(fw, ("MAT%v_G %v 1 normal-1-02.dis\n"), rand_pos[i], m_G[rand_pos[i]])
-	// 			case 3:
-	// 				fmt.Fprintf(fw, ("MAT%v_NU1 %v 1 normal-1-02.dis\n"), rand_pos[i], m_nu1[rand_pos[i]])
-	// 			case 4:
-	// 				fmt.Fprintf(fw, ("MAT%v_NU2 %v 1 normal-1-02.dis\n"), rand_pos[i], m_nu2[rand_pos[i]])
-	// 			case 5:
-	// 				fmt.Fprintf(fw, ("MAT%v_VF %v 1 normal-1-02.dis\n"), rand_pos[i], m_vp[rand_pos[i]])
-	// 			case 6:
-	// 				fmt.Fprintf(fw, ("MAT%v_T %v 1 normal-1-02.dis\n"), rand_pos[i], m_t[rand_pos[i]])
-	// 				break
-	// 			}
-	// 		case 1:
-	// 			switch rand_indx[i] {
-	// 			case 0:
-	// 				// node
-	// 				fmt.Fprintf(fw, ("N%v_X %v 1 normal-1-02.dis\n"), rand_pos[i], n_x[rand_pos[i]])
-	// 			case 1:
-	// 				fmt.Fprintf(fw, ("N%v_Y %v 1 normal-1-02.dis\n"), rand_pos[i], n_y[rand_pos[i]])
-	// 				break
-	// 			}
-	// 		case 2:
-	// 			// element width
-	// 			fmt.Fprintf(fw, ("E%v_WIDTH %v 1 normal-1-02.dis\n"), rand_pos[i], e_t[rand_pos[i]])
-	// 		case 3:
-	// 			// displacement
-	// 			fmt.Fprintf(fw, ("D%v_%s_SIZE %v 1 normal-1-02.dis\n"), rand_pos[i], generate_d_type(rand_indx[i]), d_val[rand_pos[i]])
-	// 		case 4:
-	// 			// force
-	// 			fmt.Fprintf(fw, ("F%v_%s_SIZE %v 1 normal-1-02.dis\n"), rand_pos[i], generate_f_type(rand_indx[i]), f_val[rand_pos[i]])
-	// 		case 5:
-	// 			switch rand_indx[i] {
-	// 			case 0:
-	// 				// node
-	// 				fmt.Fprintf(fw, ("W_%s %v 1 normal-1-02.dis\n"), generate_w_type(rand_indx[i]), w_top)
-	// 			case 1:
-	// 				fmt.Fprintf(fw, ("W_%s %v 1 normal-1-02.dis\n"), generate_w_type(rand_indx[i]), w_bot)
-	// 			case 2:
-	// 				fmt.Fprintf(fw, ("W_%s %v 1 normal-1-02.dis\n"), generate_w_type(rand_indx[i]), w_val)
-	// 				break
-	// 			}
-	// 		case 6:
-	// 			// failure critical
-	// 			fmt.Fprintf(fw, ("FC_%s_%v %v 1 normal-1-02.dis\n"), generate_fc_type(rand_indx[i]), rand_indx[i], fail_data[rand_indx[i]])
-	// 		default:
-	// 			fmt.Fprintf(msgout, ("Unused input random variable %v!\n"), i)
-	// 			break
-	// 		}
-	// 	}
+	var i int32
+	noarch.Fprintf(fw, []byte("%li\n\x00"), n_r_inp)
+	for i = 0; i < n_r_inp; i++ {
+		switch rand_type[i] {
+		case 0:
+			switch rand_indx[i] {
+			case 0:
+				// material
+				noarch.Fprintf(fw, []byte("MAT%li_E1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E1[rand_pos[i]])
+			case 1:
+				noarch.Fprintf(fw, []byte("MAT%li_E2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_E2[rand_pos[i]])
+			case 2:
+				noarch.Fprintf(fw, []byte("MAT%li_G %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_G[rand_pos[i]])
+			case 3:
+				noarch.Fprintf(fw, []byte("MAT%li_NU1 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu1[rand_pos[i]])
+			case 4:
+				noarch.Fprintf(fw, []byte("MAT%li_NU2 %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_nu2[rand_pos[i]])
+			case 5:
+				noarch.Fprintf(fw, []byte("MAT%li_VF %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_vp[rand_pos[i]])
+			case 6:
+				noarch.Fprintf(fw, []byte("MAT%li_T %e 1 normal-1-02.dis\n\x00"), rand_pos[i], m_t[rand_pos[i]])
+				break
+			}
+		case 1:
+			switch rand_indx[i] {
+			case 0:
+				// node
+				noarch.Fprintf(fw, []byte("N%li_X %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_x[rand_pos[i]])
+			case 1:
+				noarch.Fprintf(fw, []byte("N%li_Y %e 1 normal-1-02.dis\n\x00"), rand_pos[i], n_y[rand_pos[i]])
+				break
+			}
+		case 2:
+			// element width
+			noarch.Fprintf(fw, []byte("E%li_WIDTH %e 1 normal-1-02.dis\n\x00"), rand_pos[i], e_t[rand_pos[i]])
+		case 3:
+			// displacement
+			noarch.Fprintf(fw, []byte("D%li_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_d_type(rand_indx[i]), d_val[rand_pos[i]])
+		case 4:
+			// force
+			noarch.Fprintf(fw, []byte("F%li_%s_SIZE %e 1 normal-1-02.dis\n\x00"), rand_pos[i], generate_f_type(rand_indx[i]), f_val[rand_pos[i]])
+		case 5:
+			switch rand_indx[i] {
+			case 0:
+				// node
+				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_top)
+			case 1:
+				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_bot)
+			case 2:
+				noarch.Fprintf(fw, []byte("W_%s %e 1 normal-1-02.dis\n\x00"), generate_w_type(rand_indx[i]), w_val)
+				break
+			}
+		case 6:
+			// failure critical
+			noarch.Fprintf(fw, []byte("FC_%s_%li %e 1 normal-1-02.dis\n\x00"), generate_fc_type(rand_indx[i]), rand_indx[i], fail_data[rand_indx[i]])
+		default:
+			noarch.Fprintf(msgout, []byte("Unused input random variable %li!\n\x00"), i)
+			break
+		}
+	}
 }
 
 // fail_test_concrete - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1283
@@ -1937,7 +1505,7 @@ func optim_replace_data(ifld []float64) int32 {
 				fail_data[opt_indx[i]] = ifld[i]
 			}
 		default:
-			fmt.Fprintf(msgout, ("Unused input optim variable %v!\n"), i)
+			noarch.Fprintf(msgout, []byte("Unused input optim variable %li!\n\x00"), i)
 			break
 		}
 	}
@@ -1945,109 +1513,103 @@ func optim_replace_data(ifld []float64) int32 {
 }
 
 // print_help - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1706
-// func print_help(argc int32, argv []) {
-// 	// Prints simple help to stdout
-// 	// * @param argc the same as "argc" from main
-// 	// * @param argv the same as "argv" from main
-// 	//
-// 	fmt.Printf("\neSHELL 1.0: axisymetric shells solver\n")
-// 	fmt.Printf("(C) 2010 VSB-TU of Ostrava \n")
-// 	fmt.Printf("(C) 2003-2010 Jiri Brozovsky (uFEM libraries)\n")
-// 	fmt.Printf("\nThis is free software licensed under GNU GPL 2.0\n")
-// 	noarch.Printf(("\nUsage: %s [parameters] <input >output\n"), argv[0])
-// 	fmt.Printf("\nParameters:\n")
-// 	fmt.Printf("   -s        ... force solution only output\n")
-// 	fmt.Printf("   -g        ... generate random data only \n")
-// 	fmt.Printf("   -p        ... compute price function only\n")
-// 	fmt.Printf("   -w        ... write input data and finish\n")
-// 	fmt.Printf("   -h        ... print this help\n")
-// }
+func print_help(argc int32, argv [][]byte) {
+	// Prints simple help to stdout
+	// * @param argc the same as "argc" from main
+	// * @param argv the same as "argv" from main
+	//
+	fmt.Printf("\neSHELL 1.0: axisymetric shells solver\n")
+	fmt.Printf("(C) 2010 VSB-TU of Ostrava \n")
+	fmt.Printf("(C) 2003-2010 Jiri Brozovsky (uFEM libraries)\n")
+	fmt.Printf("\nThis is free software licensed under GNU GPL 2.0\n")
+	noarch.Printf([]byte("\nUsage: %s [parameters] <input >output\n\x00"), argv[0])
+	fmt.Printf("\nParameters:\n")
+	fmt.Printf("   -s        ... force solution only output\n")
+	fmt.Printf("   -g        ... generate random data only \n")
+	fmt.Printf("   -p        ... compute price function only\n")
+	fmt.Printf("   -w        ... write input data and finish\n")
+	fmt.Printf("   -h        ... print this help\n")
+}
 
 // cmd_param - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1722
-func cmd_param() { //argc int32, argv []) int32 {
-
-	solution_only = 1
-	price_only = 1
-	write_only = 1
-
+func cmd_param(argc int32, argv [][]byte) int32 {
 	// Understands command line parameters
-	// 	var i int32
-	// 	for i = 1; i < argc; i++ {
-	// 		if noarch.Strcmp(argv[i], ("-h")) == 0 || noarch.Strcmp(argv[i], ("--help")) == 0 {
-	// 			print_help(argc, argv)
-	// 			noarch.Exit(0)
-	// 		}
-	// 		if noarch.Strcmp(argv[i], ("-s")) == 0 || noarch.Strcmp(argv[i], ("--solution")) == 0 {
-	// 			solution_only = 1
-	// 			price_only = 0
-	// 			random_only = 0
-	// 		}
-	// 		if noarch.Strcmp(argv[i], ("-g")) == 0 || noarch.Strcmp(argv[i], ("-r")) == 0 || noarch.Strcmp(argv[i], ("--random")) == 0 {
-	// 			solution_only = 0
-	// 			price_only = 0
-	// 			random_only = 1
-	// 		}
-	// 		if noarch.Strcmp(argv[i], ("-p")) == 0 || noarch.Strcmp(argv[i], ("--price")) == 0 {
-	// 			solution_only = 0
-	// 			price_only = 1
-	// 			random_only = 0
-	// 		}
-	// 		if noarch.Strcmp(argv[i], ("-w")) == 0 || noarch.Strcmp(argv[i], ("--price")) == 0 {
-	// 			write_only = 1
-	// 		}
-	// 	}
-	// return 0
+	var i int32
+	for i = 1; i < argc; i++ {
+		if noarch.Strcmp(argv[i], []byte("-h\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--help\x00")) == 0 {
+			print_help(argc, argv)
+			noarch.Exit(0)
+		}
+		if noarch.Strcmp(argv[i], []byte("-s\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--solution\x00")) == 0 {
+			solution_only = 1
+			price_only = 0
+			random_only = 0
+		}
+		if noarch.Strcmp(argv[i], []byte("-g\x00")) == 0 || noarch.Strcmp(argv[i], []byte("-r\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--random\x00")) == 0 {
+			solution_only = 0
+			price_only = 0
+			random_only = 1
+		}
+		if noarch.Strcmp(argv[i], []byte("-p\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--price\x00")) == 0 {
+			solution_only = 0
+			price_only = 1
+			random_only = 0
+		}
+		if noarch.Strcmp(argv[i], []byte("-w\x00")) == 0 || noarch.Strcmp(argv[i], []byte("--price\x00")) == 0 {
+			write_only = 1
+		}
+	}
+	return 0
 }
 
 // main - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1744
 func main() {
-	// 	argc := int32(len(os.Args))
-	// 	argv := []{}
-	// 	for _, argvSingle := range os.Args {
-	// 		argv = append(argv, (argvSingle))
-	// 	}
-	// 	defer noarch.AtexitRun()
+	argc := int32(len(os.Args))
+	argv := [][]byte{}
+	for _, argvSingle := range os.Args {
+		argv = append(argv, []byte(argvSingle))
+	}
+	defer noarch.AtexitRun()
 	// main() routine for standalone program only.
 	var stat int32
-	//msgout = noarch.Stderr
-	cmd_param() //argc, argv)
-	//stat +=
-	read_input_data() //noarch.Stdin)
+	msgout = noarch.Stderr
+	cmd_param(argc, argv)
+	read_input_data()//noarch.Stdin)
 	stat += alloc_solver_data()
 	stat += optim_replace_data(opt_data)
-	//if write_only == 1 {
-	write_input_data() //noarch.Stdout)
-	//	return
-	//}
-	//if solution_only == 1 {
-	stat += get_matrix()
-	stat += generate_water_load_x()
-	stat += get_loads_and_supports()
-	stat = femEqsCGwJ((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], (*[1000000]tVector)(unsafe.Pointer(&F))[:], (*[1000000]tVector)(unsafe.Pointer(&u))[:], 1e-09, 6*3*n_n)
-	//	}
-	// if n_r_inp > 0 && random_only == 1 {
-	//	if solution_only != 0 {
-	//print_result(noarch.Stderr)
-	//	}
-	//	generate_rand_input_file(noarch.Stdout)
-	//	generate_rand_out_file(noarch.Stdout)
-	//} else {
-	//	if solution_only == 1 {
-	//print_result(noarch.Stdout)
-	//	}
-	//	}
-	// 	if solution_only == 1 {
-	// 		if fail_test() != 0 {
-	// 			fmt.Fprintf(noarch.Stderr, ("# Structure FAILED\n"))
-	// 		}
-	// 	}
-	// 	if price_only == 1 {
-	// 		if solution_only == 1 {
-	// 			fmt.Fprintf(msgout, ("# Price is %f\n"), compute_price())
-	// 		} else {
-	fmt.Fprintf(os.Stdout, ("%v\n"), compute_price())
-	// 		}
-	// 	}
+	if write_only == 1 {
+		write_input_data(noarch.Stdout)
+		return
+	}
+	if solution_only == 1 {
+		stat += get_matrix()
+		stat += generate_water_load_x()
+		stat += get_loads_and_supports()
+		stat = femEqsCGwJ((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], (*[1000000]tVector)(unsafe.Pointer(&F))[:], (*[1000000]tVector)(unsafe.Pointer(&u))[:], 1e-09, 6*3*n_n)
+	}
+	if n_r_inp > 0 && random_only == 1 {
+		if solution_only != 0 {
+			print_result(noarch.Stderr)
+		}
+		generate_rand_input_file(noarch.Stdout)
+		generate_rand_out_file(noarch.Stdout)
+	} else {
+		if solution_only == 1 {
+			print_result(noarch.Stdout)
+		}
+	}
+	if solution_only == 1 {
+		if fail_test() != 0 {
+			noarch.Fprintf(noarch.Stderr, []byte("# Structure FAILED\n\x00"))
+		}
+	}
+	if price_only == 1 {
+		if solution_only == 1 {
+			noarch.Fprintf(msgout, []byte("# Price is %f\n\x00\x00"), compute_price())
+		} else {
+			noarch.Fprintf(noarch.Stdout, []byte("%e\n\x00"), compute_price())
+		}
+	}
 	return
 }
 
@@ -2096,10 +1658,10 @@ func femMatFree(mat []tMatrix) {
 	mat[0].rows = 0
 	mat[0].cols = 0
 	mat[0].len_ = 0
-	// 	femIntFree(mat[0].pos)
-	// 	femDblFree(mat[0].data)
-	// 	femIntFree(mat[0].frompos)
-	// 	femIntFree(mat[0].defpos)
+	femIntFree(mat[0].pos)
+	femDblFree(mat[0].data)
+	femIntFree(mat[0].frompos)
+	femIntFree(mat[0].defpos)
 }
 
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
@@ -2114,44 +1676,44 @@ func femMatAlloc(mat []tMatrix, type_ int32, rows int32, cols int32, bandwidth i
 			mat[0].rows = rows
 			mat[0].cols = cols
 			mat[0].len_ = cols * rows
-			//if len((func() []float64 {
-			mat[0].data = femDblAlloc(mat[0].len_)
-			//	return mat[0].data
-			//}())) == 0 {
-			//	goto memFree
-			//	}
+			if len((func() []float64 {
+				mat[0].data = femDblAlloc(mat[0].len_)
+				return mat[0].data
+			}())) == 0 {
+				goto memFree
+			}
 			mat[0].pos = nil
 			mat[0].frompos = nil
 			mat[0].defpos = nil
 		case 1:
 			mat[0].rows = rows
 			mat[0].cols = cols
-			//if len((func() []int32 {
-			mat[0].defpos = femIntAlloc(mat[0].rows)
-			//	return mat[0].defpos
-			//}())) == 0 {
-			//	goto memFree
-			//}
-			//if len((func() []int32 {
-			mat[0].frompos = femIntAlloc(mat[0].rows)
-			//	return mat[0].frompos
-			//}())) == 0 {
-			//	goto memFree
-			//}
+			if len((func() []int32 {
+				mat[0].defpos = femIntAlloc(mat[0].rows)
+				return mat[0].defpos
+			}())) == 0 {
+				goto memFree
+			}
+			if len((func() []int32 {
+				mat[0].frompos = femIntAlloc(mat[0].rows)
+				return mat[0].frompos
+			}())) == 0 {
+				goto memFree
+			}
 			if bandwidth > 0 && len(rowdesc) == 0 {
 				mat[0].len_ = rows * bandwidth
-				//if len((func() []float64 {
-				mat[0].data = femDblAlloc(mat[0].len_)
-				//	return mat[0].data
-				//	}())) == 0 {
-				//		goto memFree
-				//	}
-				//	if len((func() []int32 {
-				mat[0].pos = femIntAlloc(mat[0].len_)
-				//		return mat[0].pos
-				//	}())) == 0 {
-				//		goto memFree
-				//	}
+				if len((func() []float64 {
+					mat[0].data = femDblAlloc(mat[0].len_)
+					return mat[0].data
+				}())) == 0 {
+					goto memFree
+				}
+				if len((func() []int32 {
+					mat[0].pos = femIntAlloc(mat[0].len_)
+					return mat[0].pos
+				}())) == 0 {
+					goto memFree
+				}
 				for i = 0; i < rows; i++ {
 					mat[0].frompos[i] = bandwidth * i
 				}
@@ -2163,18 +1725,18 @@ func femMatAlloc(mat []tMatrix, type_ int32, rows int32, cols int32, bandwidth i
 					mat[0].frompos[i] = sum - rowdesc[i]
 				}
 				mat[0].len_ = sum
-				//	if len((func() []float64 {
-				mat[0].data = femDblAlloc(mat[0].len_)
-				//		return mat[0].data
-				//	}())) == 0 {
-				//		goto memFree
-				//	}
-				//	if len((func() []int32 {
-				mat[0].pos = femIntAlloc(sum)
-				//		return mat[0].pos
-				//	}())) == 0 {
-				//		goto memFree
-				//	}
+				if len((func() []float64 {
+					mat[0].data = femDblAlloc(mat[0].len_)
+					return mat[0].data
+				}())) == 0 {
+					goto memFree
+				}
+				if len((func() []int32 {
+					mat[0].pos = femIntAlloc(sum)
+					return mat[0].pos
+				}())) == 0 {
+					goto memFree
+				}
 			}
 			break
 		}
@@ -2182,10 +1744,10 @@ func femMatAlloc(mat []tMatrix, type_ int32, rows int32, cols int32, bandwidth i
 	} else {
 		return -3
 	}
-	// memFree:
-	// 	;
-	// 	femMatFree(mat)
-	// 	return -4
+memFree:
+	;
+	femMatFree(mat)
+	return -4
 }
 
 // femMatGet - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:142
@@ -2276,51 +1838,49 @@ func femMatPutAdd(mat []tMatrix, row int32, col int32, val float64, mode int32) 
 }
 
 // femMatPrn - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:238
-// func femMatPrn(mat []tMatrix, name ) {
-// 	// Prints matrix to stdout, works only in DEVEL mode
-// 	{
-// 	}
-// }
+func femMatPrn(mat []tMatrix, name []byte) {
+	// Prints matrix to stdout, works only in DEVEL mode
+	{
+	}
+}
 
 // femMatPrnF - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:261
-func femMatPrnF(fname, mat []tMatrix) int32 {
+func femMatPrnF(fname []byte, mat []tMatrix) int32 {
 	// Saves matrix to file
 	// * @param fname name of file
 	// * @param mat matrix to be printed
 	// * @return status
 	//
-	// var fw *fmt.File
-	fw := os.Stdout
+	var fw *noarch.File
 	var rv int32
 	var i int32
 	var j int32
-	// 	if (func() *fmt.File {
-	// 		fw = fmt.Fopen(fname, ("w"))
-	// 		return fw
-	// 	}()) == nil {
-	// 		return -2
-	// 	}
+	if (func() *noarch.File {
+		fw = noarch.Fopen(fname, []byte("w\x00"))
+		return fw
+	}()) == nil {
+		return -2
+	}
 	for i = 1; i <= mat[0].rows; i++ {
 		for j = 1; j <= mat[0].cols; j++ {
-			fmt.Fprintf(fw, (" %v "), femMatGet(mat, i, j))
+			noarch.Fprintf(fw, []byte(" %e \x00"), femMatGet(mat, i, j))
 		}
-		fmt.Fprintf(fw, ("\n"))
+		noarch.Fprintf(fw, []byte("\n\x00"))
 	}
-	// 	if fmt.Fclose(fw) != 0 {
-	// 		rv = -2
-	// 	}
+	if noarch.Fclose(fw) != 0 {
+		rv = -2
+	}
 	return rv
 }
 
 // femSparseMatPrnF - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:288
-func femSparseMatPrnF(fname, mat []tMatrix) int32 {
+func femSparseMatPrnF(fname []byte, mat []tMatrix) int32 {
 	// Saves matrix to file IN SPARSE FORM
 	// * @param fname name of file
 	// * @param mat matrix to be printed
 	// * @return status
 	//
-	// var fw *fmt.File
-	fw := os.Stdout
+	var fw *noarch.File
 	var rv int32
 	var i int32
 	var j int32
@@ -2328,13 +1888,13 @@ func femSparseMatPrnF(fname, mat []tMatrix) int32 {
 	if mat[0].type_ != 1 {
 		return -3
 	}
-	// 	if (func() *fmt.File {
-	// 		fw = fmt.Fopen(fname, ("w"))
-	// 		return fw
-	// 	}()) == nil {
-	// 		return -2
-	// 	}
-	fmt.Fprintf(fw, ("%v %v\n"), mat[0].rows, mat[0].cols)
+	if (func() *noarch.File {
+		fw = noarch.Fopen(fname, []byte("w\x00"))
+		return fw
+	}()) == nil {
+		return -2
+	}
+	noarch.Fprintf(fw, []byte("%li %li\n\x00"), mat[0].rows, mat[0].cols)
 	for i = 0; i < mat[0].rows; i++ {
 		sum = 0
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+mat[0].defpos[i]; j++ {
@@ -2344,27 +1904,26 @@ func femSparseMatPrnF(fname, mat []tMatrix) int32 {
 				break
 			}
 		}
-		fmt.Fprintf(fw, ("%v %v "), i+1, sum)
+		noarch.Fprintf(fw, []byte("%li %li \x00"), i+1, sum)
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+sum; j++ {
-			fmt.Fprintf(fw, ("%v %v "), mat[0].pos[j], mat[0].data[j])
+			noarch.Fprintf(fw, []byte("%li %e \x00"), mat[0].pos[j], mat[0].data[j])
 		}
-		fmt.Fprintf(fw, ("\n"))
+		noarch.Fprintf(fw, []byte("\n\x00"))
 	}
-	// 	if fmt.Fclose(fw) != 0 {
-	// 		rv = -2
-	// 	}
+	if noarch.Fclose(fw) != 0 {
+		rv = -2
+	}
 	return rv
 }
 
 // femSparseMarketMatPrnF - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:329
-func femSparseMarketMatPrnF(fname, mat []tMatrix) int32 {
+func femSparseMarketMatPrnF(fname []byte, mat []tMatrix) int32 {
 	// Saves matrix to file IN SPARSE FORM (MatrixMarket file standard)
 	// * @param fname name of file
 	// * @param mat matrix to be printed
 	// * @return status
 	//
-	//var fw *fmt.File
-	fw := os.Stdout
+	var fw *noarch.File
 	var rv int32
 	var i int32
 	var j int32
@@ -2372,14 +1931,14 @@ func femSparseMarketMatPrnF(fname, mat []tMatrix) int32 {
 	if mat[0].type_ != 1 {
 		return -3
 	}
-	// 	if (func() *fmt.File {
-	// 		fw = fmt.Fopen(fname, ("w"))
-	// 		return fw
-	// 	}()) == nil {
-	// 		return -2
-	// 	}
-	fmt.Fprintf(fw, ("%%%%MatrixMarket matrix coordinate real general\n"))
-	fmt.Fprintf(fw, ("%v %v %v\n"), mat[0].rows, mat[0].cols, mat[0].len_)
+	if (func() *noarch.File {
+		fw = noarch.Fopen(fname, []byte("w\x00"))
+		return fw
+	}()) == nil {
+		return -2
+	}
+	noarch.Fprintf(fw, []byte("%%%%MatrixMarket matrix coordinate real general\n\x00"))
+	noarch.Fprintf(fw, []byte("%li %li %li\n\x00"), mat[0].rows, mat[0].cols, mat[0].len_)
 	for i = 0; i < mat[0].rows; i++ {
 		sum = 0
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+mat[0].defpos[i]; j++ {
@@ -2390,24 +1949,23 @@ func femSparseMarketMatPrnF(fname, mat []tMatrix) int32 {
 			}
 		}
 		for j = mat[0].frompos[i]; j < mat[0].frompos[i]+sum; j++ {
-			fmt.Fprintf(fw, ("%v %v %v\n"), i+1, mat[0].pos[j], mat[0].data[j])
+			noarch.Fprintf(fw, []byte("%li %li %e\n\x00"), i+1, mat[0].pos[j], mat[0].data[j])
 		}
 	}
-	// 	if fmt.Fclose(fw) != 0 {
-	// 		rv = -2
-	// 	}
+	if noarch.Fclose(fw) != 0 {
+		rv = -2
+	}
 	return rv
 }
 
 // femSparseMatReadF - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:368
-func femSparseMatReadF(fname, mat []tMatrix) int32 {
+func femSparseMatReadF(fname []byte, mat []tMatrix) int32 {
 	// Reads matrix from file IN SPARSE FORM
 	// * @param fname name of file
 	// * @param mat matrix (must be unallocated)
 	// * @return status
 	//
-	// var fw *fmt.File
-	fw := os.Stdout
+	var fw *noarch.File
 	var rv int32
 	var i int32
 	var j int32
@@ -2418,49 +1976,49 @@ func femSparseMatReadF(fname, mat []tMatrix) int32 {
 	var ensize int32
 	var pos0 []int32
 	var data0 []float64
-	// 	if (func() *fmt.File {
-	// 		fw = fmt.Fopen(fname, ("r"))
-	// 		return fw
-	// 	}()) == nil {
-	// 		return -2
-	// 	}
-	fmt.Fscanf(fw, ("%v %v\n"), (*[1000000]int32)(unsafe.Pointer(&mat[0].rows))[:], (*[1000000]int32)(unsafe.Pointer(&mat[0].cols))[:])
+	if (func() *noarch.File {
+		fw = noarch.Fopen(fname, []byte("r\x00"))
+		return fw
+	}()) == nil {
+		return -2
+	}
+	noarch.Fscanf(fw, []byte("%li %li\n\x00"), (*[1000000]int32)(unsafe.Pointer(&mat[0].rows))[:], (*[1000000]int32)(unsafe.Pointer(&mat[0].cols))[:])
 	if mat[0].rows <= 0 || mat[0].cols <= 0 {
 		return -2
 	}
-	//if len((func() []int32 {
-	mat[0].frompos = femIntAlloc(mat[0].rows)
-	//	return mat[0].frompos
-	//}())) == 0 {
-	//	rv = -4
-	//	goto memFree
-	//}
-	//if len((func() []int32 {
-	mat[0].defpos = femIntAlloc(mat[0].rows)
-	//	return mat[0].defpos
-	//	}())) == 0 {
-	//	rv = -4
-	//	goto memFree
-	//}
+	if len((func() []int32 {
+		mat[0].frompos = femIntAlloc(mat[0].rows)
+		return mat[0].frompos
+	}())) == 0 {
+		rv = -4
+		goto memFree
+	}
+	if len((func() []int32 {
+		mat[0].defpos = femIntAlloc(mat[0].rows)
+		return mat[0].defpos
+	}())) == 0 {
+		rv = -4
+		goto memFree
+	}
 	size = mat[0].rows * 300
-	//	if len((func() []int32 {
-	mat[0].pos = femIntAlloc(size)
-	//		return mat[0].pos
-	//	}())) == 0 {
-	//		rv = -4
-	//		goto memFree
-	//	}
-	//	if len((func() []float64 {
-	mat[0].data = femDblAlloc(size)
-	//		return mat[0].data
-	//	}())) == 0 {
-	//		rv = -4
-	//		goto memFree
-	//	}
+	if len((func() []int32 {
+		mat[0].pos = femIntAlloc(size)
+		return mat[0].pos
+	}())) == 0 {
+		rv = -4
+		goto memFree
+	}
+	if len((func() []float64 {
+		mat[0].data = femDblAlloc(size)
+		return mat[0].data
+	}())) == 0 {
+		rv = -4
+		goto memFree
+	}
 	mat[0].type_ = 1
 	sum = 0
 	for i = 0; i < mat[0].rows; i++ {
-		fmt.Fscanf(fw, ("%v %v "), c4goUnsafeConvert_int32(&tmp), mat[0].defpos[i:])
+		noarch.Fscanf(fw, []byte("%li %li \x00"), c4goUnsafeConvert_int32(&tmp), mat[0].defpos[i:])
 		if i > 0 {
 			mat[0].frompos[i] = mat[0].frompos[i-1] + mat[0].defpos[i-1]
 		} else {
@@ -2471,20 +2029,20 @@ func femSparseMatReadF(fname, mat []tMatrix) int32 {
 			if sum >= size {
 				// enlarge "data" and "pos"
 				ensize = size + 2*size*(i/mat[0].rows)
-				//	if len((func() []int32 {
-				pos0 = femIntAlloc(ensize)
-				//		return pos0
-				//	}())) == 0 {
-				//		rv = -4
-				//		goto memFree
-				//	}
-				//	if len((func() []float64 {
-				data0 = femDblAlloc(ensize)
-				//		return data0
-				//	}())) == 0 {
-				//		rv = -4
-				//		goto memFree
-				//	}
+				if len((func() []int32 {
+					pos0 = femIntAlloc(ensize)
+					return pos0
+				}())) == 0 {
+					rv = -4
+					goto memFree
+				}
+				if len((func() []float64 {
+					data0 = femDblAlloc(ensize)
+					return data0
+				}())) == 0 {
+					rv = -4
+					goto memFree
+				}
 				for k = 0; k < sum; k++ {
 					pos0[k] = mat[0].pos[k]
 					data0[k] = mat[0].data[k]
@@ -2496,35 +2054,34 @@ func femSparseMatReadF(fname, mat []tMatrix) int32 {
 				pos0 = nil
 				data0 = nil
 			}
-			fmt.Fscanf(fw, ("%v %f "), mat[0].pos[sum:], mat[0].data[sum:])
+			noarch.Fscanf(fw, []byte("%li %f \x00\x00"), mat[0].pos[sum:], mat[0].data[sum:])
 			sum++
 		}
 	}
-	// 	if fmt.Fclose(fw) != 0 {
-	// 		rv = -2
-	// 	}
+	if noarch.Fclose(fw) != 0 {
+		rv = -2
+	}
 	return rv
-	// memFree:
-	// 	;
-	// 	femMatFree(mat)
-	// 	return rv
+memFree:
+	;
+	femMatFree(mat)
+	return rv
 }
 
 // femMatOut - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:447
-func femMatOut(a []tMatrix) int32 { //, fw *fmt.File) int32 {
+func femMatOut(a []tMatrix, fw *noarch.File) int32 {
 	// Writes matrix to stream (FILE *)
 	// * @param a matrix
 	// * @param fw stream
 	// * @return stave value
 	//
-	fw := os.Stdout
 	var rv int32
 	var i int32
 	var j int32
-	fmt.Fprintf(fw, (" %v %v\n"), a[0].rows, a[0].cols)
+	noarch.Fprintf(fw, []byte(" %li %li\n\x00"), a[0].rows, a[0].cols)
 	for i = 1; i <= a[0].rows; i++ {
 		for j = 1; j <= a[0].cols; j++ {
-			fmt.Fprintf(fw, (" %v \n"), femMatGet(a, i, j))
+			noarch.Fprintf(fw, []byte(" %e \n\x00"), femMatGet(a, i, j))
 		}
 	}
 	return rv
@@ -2560,7 +2117,7 @@ func femMatSetZeroRow(a []tMatrix, row int32) {
 			a[0].data[i] = 0
 		}
 	} else {
-		//fprintf(msgout,"zero on %v\n",i);
+		//fprintf(msgout,"zero on %li\n",i);
 		for i = 1; i <= a[0].cols; i++ {
 			femMatPutAdd(a, row, i, 0, 0)
 		}
@@ -2575,7 +2132,7 @@ func femMatSetZeroCol(a []tMatrix, Col int32) {
 	var ifrom int32
 	var ito int32
 	var ipos int32
-	_ = ipos
+	_=ipos
 	if a[0].type_ == 1 {
 		ifrom = a[0].pos[a[0].frompos[Col-1]] - 1
 		ito = a[0].pos[a[0].frompos[Col-1]+a[0].defpos[Col-1]-1] - 1
@@ -2608,8 +2165,8 @@ func femVecFree(mat []tVector) {
 	mat[0].type_ = 0
 	mat[0].rows = 0
 	mat[0].len_ = 0
-	// 	femIntFree(mat[0].pos)
-	// 	femDblFree(mat[0].data)
+	femIntFree(mat[0].pos)
+	femDblFree(mat[0].data)
 }
 
 // femVecAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:718
@@ -2621,44 +2178,44 @@ func femVecAlloc(mat []tVector, type_ int32, rows int32, items int32) int32 {
 		case 0:
 			mat[0].rows = rows
 			mat[0].len_ = rows
-			//	if len((func() []float64 {
-			mat[0].data = femDblAlloc(mat[0].len_)
-			//		return mat[0].data
-			//	}())) == 0 {
-			//		goto memFree
-			//	}
+			if len((func() []float64 {
+				mat[0].data = femDblAlloc(mat[0].len_)
+				return mat[0].data
+			}())) == 0 {
+				goto memFree
+			}
 			mat[0].pos = nil
 		case 1:
 			// VEC_SPAR cannot be used ;-)
 			noarch.Exit(-3)
 			mat[0].rows = rows
-			// if items > 0 {
-			mat[0].len_ = items
-			//	if len((func() []float64 {
-			mat[0].data = femDblAlloc(mat[0].len_)
-			//		return mat[0].data
-			//	}())) == 0 {
-			//		goto memFree
-			//	}
-			//	if len((func() []int32 {
-			mat[0].pos = femIntAlloc(mat[0].len_)
-			//		return mat[0].pos
-			//	}())) == 0 {
-			//		goto memFree
-			//	}
-			// 			} else {
-			// 				goto memFree
-			// 			}
+			if items > 0 {
+				mat[0].len_ = items
+				if len((func() []float64 {
+					mat[0].data = femDblAlloc(mat[0].len_)
+					return mat[0].data
+				}())) == 0 {
+					goto memFree
+				}
+				if len((func() []int32 {
+					mat[0].pos = femIntAlloc(mat[0].len_)
+					return mat[0].pos
+				}())) == 0 {
+					goto memFree
+				}
+			} else {
+				goto memFree
+			}
 			break
 		}
 		return 0
 	} else {
 		return -3
 	}
-	// memFree:
-	// 	;
-	// 	femVecFree(mat)
-	// 	return -4
+memFree:
+	;
+	femVecFree(mat)
+	return -4
 }
 
 // femVecPutAdd - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:776
@@ -2673,18 +2230,14 @@ func femVecPutAdd(vec []tVector, pos int32, val float64, mode int32) int32 {
 		//
 		return -11
 	}
-
 	switch vec[0].type_ {
 	case 0:
 		if mode == 0 {
 			// put
-			// vec[0].data[pos-1] = val
-			vec[0].data[pos] = val
+			vec[0].data[pos-1] = val
 		} else {
 			// add
-			// fmt.Println(">", pos, vec[0].type_, ":::", mode, vec[0].data)
-			// vec[0].data[pos-1] += val
-			vec[0].data[pos] += val
+			vec[0].data[pos-1] += val
 		}
 	case 1:
 		// unimplemented
@@ -2720,53 +2273,50 @@ func femVecGet(vec []tVector, pos int32) float64 {
 }
 
 // femVecPrn - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:839
-func femVecPrn(mat []tVector, name string) {
+func femVecPrn(mat []tVector, name []byte) {
 	// Prints vector to stdout, works only in DEVEL mode
 	{
-		fmt.Println(mat, name)
 	}
 }
 
 // femVecPrnF - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:858
-func femVecPrnF(fname, mat []tVector) int32 {
+func femVecPrnF(fname []byte, mat []tVector) int32 {
 	// Saves vector to file
 	// * @param fname name of file
 	// * @param mat vector to be printed
 	// * @return status
 	//
-	// var fw *fmt.File
-	fw := os.Stdout
+	var fw *noarch.File
 	var rv int32
 	var i int32
-	// 	if (func() *fmt.File {
-	// 		fw = fmt.Fopen(fname, ("w"))
-	// 		return fw
-	// 	}()) == nil {
-	// 		return -2
-	// 	}
-	for i = 1; i <= mat[0].rows; i++ {
-		fmt.Fprintf(fw, (" %v "), femVecGet(mat, i))
+	if (func() *noarch.File {
+		fw = noarch.Fopen(fname, []byte("w\x00"))
+		return fw
+	}()) == nil {
+		return -2
 	}
-	fmt.Fprintf(fw, ("\n"))
-	// 	if fmt.Fclose(fw) != 0 {
-	// 		rv = -2
-	// 	}
+	for i = 1; i <= mat[0].rows; i++ {
+		noarch.Fprintf(fw, []byte(" %e \x00"), femVecGet(mat, i))
+	}
+	noarch.Fprintf(fw, []byte("\n\x00"))
+	if noarch.Fclose(fw) != 0 {
+		rv = -2
+	}
 	return rv
 }
 
 // femVecOut - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:883
-func femVecOut(a []tVector) int32 {
+func femVecOut(a []tVector, fw *noarch.File) int32 {
 	// Writes vector to stream (FILE *)
 	// * @ a vector
 	// * @ fw stream
 	// * @return stave value
 	//
-	fw := os.Stdout
 	var rv int32
 	var i int32
-	fmt.Fprintf(fw, (" %v\n"), a[0].rows)
+	noarch.Fprintf(fw, []byte(" %li\n\x00"), a[0].rows)
 	for i = 1; i <= a[0].rows; i++ {
-		fmt.Fprintf(fw, (" %v \n"), femVecGet(a, i))
+		noarch.Fprintf(fw, []byte(" %e \n\x00"), femVecGet(a, i))
 	}
 	return rv
 }
@@ -2790,23 +2340,23 @@ func femVecSetZero(a []tVector) {
 }
 
 // femVecClone - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:971
-// func femVecClone(src []tVector, dest []tVector) int32 {
-// 	// Clones vectors: src to dest both must be VEC_FULL, same size and allocated
-// 	// * @param src original vector
-// 	// * @param dest moditied vector
-// 	//
-// 	var i int32
-// 	if src[0].type_ != 0 || dest[0].type_ != 0 {
-// 		return -5
-// 	}
-// 	if src[0].len_ != dest[0].len_ {
-// 		return -9
-// 	}
-// 	for i = 0; i < src[0].len_; i++ {
-// 		dest[0].data[i] = src[0].data[i]
-// 	}
-// 	return 0
-// }
+func femVecClone(src []tVector, dest []tVector) int32 {
+	// Clones vectors: src to dest both must be VEC_FULL, same size and allocated
+	// * @param src original vector
+	// * @param dest moditied vector
+	//
+	var i int32
+	if src[0].type_ != 0 || dest[0].type_ != 0 {
+		return -5
+	}
+	if src[0].len_ != dest[0].len_ {
+		return -9
+	}
+	for i = 0; i < src[0].len_; i++ {
+		dest[0].data[i] = src[0].data[i]
+	}
+	return 0
+}
 
 // femVecVecMultBig - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1014
 func femVecVecMultBig(a []tVector, b []tVector) float64 {
@@ -3424,11 +2974,9 @@ func femMatInv(a []tMatrix) int32 {
 	var f1 tVector
 	n = a[0].cols
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&f1))[:])
-	//if
-	femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&f1))[:], 0, n, n)
-	//!= 0 {
-	//	return -4
-	//}
+	if femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&f1))[:], 0, n, n) != 0 {
+		return -4
+	}
 	m = n - 1
 	val = femMatGet(a, 1, 1)
 	femMatPutAdd(a, 1, 1, 1/val, 0)
@@ -3490,12 +3038,12 @@ func femLUdecomp(a []tMatrix, index []tVector) int32 {
 	}()) <= 0 {
 		return -9
 	}
-	//if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&vv))[:], 0, n, n)
-	//	return rv
-	//}()) != 0 {
-	//	goto memFree
-	//}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&vv))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
 	for i = 1; i <= n; i++ {
 		big = 0
 		for j = 1; j <= n; j++ {
@@ -3554,9 +3102,9 @@ func femLUdecomp(a []tMatrix, index []tVector) int32 {
 			}
 		}
 	}
-	// memFree:
-	// 	;
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&vv))[:])
+memFree:
+	;
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&vv))[:])
 	return rv
 }
 
@@ -3630,41 +3178,41 @@ func femLUinverse(a []tMatrix) int32 {
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&col))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&index))[:])
 	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&b))[:])
-	//if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&col))[:], 0, n, n)
-	//		return rv
-	//	}()) != 0 {
-	//		goto memFree
-	//	}
-	//	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&index))[:], 0, n, n)
-	//		return rv
-	//	}()) != 0 {
-	//		goto memFree
-	//	}
-	//	if (func() int32 {
-	rv = femMatAlloc((*[1000000]tMatrix)(unsafe.Pointer(&b))[:], 0, n, n, 0, nil)
-	//		return rv
-	//	}()) != 0 {
-	//		goto memFree
-	//	}
-	//	if (func() int32 {
-	rv = femLUdecomp(a, (*[1000000]tVector)(unsafe.Pointer(&index))[:])
-	//		return rv
-	//	}()) != 0 {
-	//		goto memFree
-	//	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&col))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&index))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femMatAlloc((*[1000000]tMatrix)(unsafe.Pointer(&b))[:], 0, n, n, 0, nil)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femLUdecomp(a, (*[1000000]tVector)(unsafe.Pointer(&index))[:])
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
 	for j = 1; j <= n; j++ {
 		for i = 1; i <= n; i++ {
 			femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&col))[:], i, 0, 0)
 		}
 		femVecPutAdd((*[1000000]tVector)(unsafe.Pointer(&col))[:], j, 1, 0)
-		//		if (func() int32 {
-		rv = femLUback(a, (*[1000000]tVector)(unsafe.Pointer(&index))[:], (*[1000000]tVector)(unsafe.Pointer(&col))[:])
-		//			return rv
-		//		}()) != 0 {
-		//			goto memFree
-		//		}
+		if (func() int32 {
+			rv = femLUback(a, (*[1000000]tVector)(unsafe.Pointer(&index))[:], (*[1000000]tVector)(unsafe.Pointer(&col))[:])
+			return rv
+		}()) != 0 {
+			goto memFree
+		}
 		for i = 1; i <= n; i++ {
 			femMatPutAdd((*[1000000]tMatrix)(unsafe.Pointer(&b))[:], i, j, femVecGet((*[1000000]tVector)(unsafe.Pointer(&col))[:], i), 0)
 		}
@@ -3674,11 +3222,11 @@ func femLUinverse(a []tMatrix) int32 {
 			femMatPutAdd(a, i, j, femMatGet((*[1000000]tMatrix)(unsafe.Pointer(&b))[:], i, j), 0)
 		}
 	}
-	// memFree:
-	// 	;
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&col))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&index))[:])
-	// 	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&b))[:])
+memFree:
+	;
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&col))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&index))[:])
+	femMatFree((*[1000000]tMatrix)(unsafe.Pointer(&b))[:])
 	return rv
 }
 
@@ -3895,37 +3443,37 @@ func femEqsCGwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int32)
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&z))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&q))[:])
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		// memory allocation
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&z))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&q))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		// memory allocation
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&z))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&q))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
 	{
 		// Jacobi preconditioner creation:
 		for i = 1; i <= n; i++ {
@@ -4038,7 +3586,6 @@ func femEqsBiCCSwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int
 	var normA float64
 	var normB float64
 	var rv int32
-	_ = rv
 	n = a[0].rows
 	normA = femMatNormBig(a)
 	normX = femVecNormBig(x)
@@ -4054,67 +3601,67 @@ func femEqsBiCCSwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&t))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&v))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&res))[:])
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		// memory allocation
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&rr))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&pp))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&s))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&ss))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&t))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&v))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&res))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		// memory allocation
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&rr))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&pp))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&s))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&ss))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&t))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&v))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&res))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
 	{
 		// Jacobi preconditioner creation:
 		for i = 1; i <= n; i++ {
@@ -4207,16 +3754,16 @@ func femEqsBiCCSwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int
 memFree:
 	;
 	// freeing of memory:
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&rr))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&pp))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&s))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&ss))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&t))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&v))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&res))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&rr))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&pp))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&s))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&ss))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&t))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&v))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&res))[:])
 	return 0
 }
 
@@ -4244,27 +3791,27 @@ func femEqsLU(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int32) i
 		return -9
 	}
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&indx))[:])
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&indx))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femLUdecomp(a, (*[1000000]tVector)(unsafe.Pointer(&indx))[:])
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femLUback(a, (*[1000000]tVector)(unsafe.Pointer(&indx))[:], b)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// memFree:
-	// 	;
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&indx))[:])
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&indx))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femLUdecomp(a, (*[1000000]tVector)(unsafe.Pointer(&indx))[:])
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femLUback(a, (*[1000000]tVector)(unsafe.Pointer(&indx))[:], b)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+memFree:
+	;
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&indx))[:])
 	return rv
 }
 
@@ -4311,37 +3858,37 @@ func femEqsPCGwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int32
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&d))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&ap))[:])
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		// memory allocation
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&d))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&ap))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		// memory allocation
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&d))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&ap))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
 	{
 		// Jacobi preconditioner
 		for i = 1; i <= n; i++ {
@@ -4390,14 +3937,14 @@ func femEqsPCGwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int32
 		}
 	}
 	// end of "for i"
-	femVecPrn(x, ("X"))
+	femVecPrn(x, []byte("X\x00"))
 memFree:
 	;
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&d))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&ap))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&d))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&ap))[:])
 	return rv
 }
 
@@ -4424,10 +3971,9 @@ func femMatCholFact(a []tMatrix, C []tVector) int32 {
 	}
 	if have_C == 0 {
 		femVecNull(C)
-		//	if
-		femVecAlloc(C, 0, n, n) //!= 0 {
-		//		goto memFree
-		//	}
+		if femVecAlloc(C, 0, n, n) != 0 {
+			goto memFree
+		}
 	}
 	for i = 1; i <= n; i++ {
 		for j = i; j <= n; j++ {
@@ -4456,7 +4002,7 @@ func femMatCholFact(a []tMatrix, C []tVector) int32 {
 			}
 		}
 	}
-	femVecPrn(C, ("C"))
+	femVecPrn(C, []byte("C\x00"))
 memFree:
 	;
 	if have_C == 0 {
@@ -4481,11 +4027,9 @@ func femEqsChol(a []tMatrix, b []tVector, x []tVector) int32 {
 	var C tVector
 	n = a[0].rows
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&C))[:])
-	//	if
-	femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&C))[:], 0, n, n)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
+	if femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&C))[:], 0, n, n) != 0 {
+		goto memFree
+	}
 	for i = 1; i <= n; i++ {
 		for j = i; j <= n; j++ {
 			sum = femMatGet(a, i, j)
@@ -4523,7 +4067,7 @@ func femEqsChol(a []tMatrix, b []tVector, x []tVector) int32 {
 memFree:
 	;
 	// freeing of memory:
-	// femVecFree((*[1000000]tVector)(unsafe.Pointer(&C))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&C))[:])
 	return rv
 }
 
@@ -4552,7 +4096,7 @@ func femMatEigenJacobi(a []tMatrix, d []tVector, v []tMatrix, nrot []int32) int3
 	var n int32
 	var sm float64
 	var tresh float64
-	_ = tresh
+	_=tresh
 	var g float64
 	var h float64
 	var t float64
@@ -4586,7 +4130,7 @@ func femMatEigenJacobi(a []tMatrix, d []tVector, v []tMatrix, nrot []int32) int3
 		}
 		if sm <= 1e-07 {
 			// sum <= 0 so we are finished
-			//printf("iterations: %v\n", *nrot);
+			//printf("iterations: %li\n", *nrot);
 			femVecFree((*[1000000]tVector)(unsafe.Pointer(&b))[:])
 			femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
 			return 0
@@ -4706,43 +4250,43 @@ func femEqsCGwSSOR(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&zz))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&q))[:])
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		// memory allocation
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&z))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&zz))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
-	// 	if (func() int32 {
-	rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&q))[:], 0, n, n)
-	// 		return rv
-	// 	}()) != 0 {
-	// 		goto memFree
-	// 	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		// memory allocation
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&r))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&z))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&zz))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
+	if (func() int32 {
+		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&q))[:], 0, n, n)
+		return rv
+	}()) != 0 {
+		goto memFree
+	}
 	{
 		// Jacobi preconditioner creation:
 		for i = 1; i <= n; i++ {
@@ -4845,12 +4389,12 @@ func femEqsCGwSSOR(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int
 memFree:
 	;
 	// freeing memory:
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&zz))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-	// 	femVecFree((*[1000000]tVector)(unsafe.Pointer(&q))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&z))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&zz))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+	femVecFree((*[1000000]tVector)(unsafe.Pointer(&q))[:])
 	return rv
 }
 
@@ -4864,12 +4408,12 @@ func c4goUnsafeConvert_int32(c4go_name *int32) []int32 {
 	return (*[1000000]int32)(unsafe.Pointer(c4go_name))[:]
 }
 
+// end of eshell.c
+// end of fem_math.c
+// end of fem_eqs.c
+// end of fem_mem.c
 // 0 = dense; 1 = sparse (rows)
 // lenght of "pos" and "data" (if used) fields
 // Functions:
 // Use with care:  (!!)
 // end of fem_math.h
-// end of eshell.c
-// end of fem_math.c
-// end of fem_eqs.c
-// end of fem_mem.c

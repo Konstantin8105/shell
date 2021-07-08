@@ -16,9 +16,9 @@ LD=ld -shared
 #LD=/usr/bin/i586-mingw32msvc-gcc -shared -Wl,--out-implib,shell.a -DUSE_WIN32
 
 
-CFLAGS=-Wall -O0 -DRUN_VERBOSE -g -DDEVEL_VERBOSE
+CFLAGS=-Wall -O0 -DRUN_VERBOSE -g -DDEVEL_VERBOSE -DDEVEL -D_USE_WITH_MONTE_
 #CFLAGS=-Wall -O0 -DRUN_VERBOSE -g
-CFLAGS=-Wall -O2 -DRUN_VERBOSE
+#CFLAGS=-Wall -O2 -DRUN_VERBOSE
 
 LIBS=-lm -L/usr/local/lib #-lefence
 OBJECTS=fem_eqs.o fem_math.o fem_mem.o eshell.o
