@@ -155,13 +155,13 @@ func femDblAlloc(length int) (c4goDefaultReturn []float64) {
 //
 type tMatrix struct { //_struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_47 struct {
 	// type_   int
-	rows    int
-	cols    int
-	len_    int
-	pos     []int
-	data    []float64
-	frompos []int
-	defpos  []int
+	rows int
+	cols int
+	len_ int
+	// pos     []int
+	data []float64
+	// 	frompos []int
+	// 	defpos  []int
 }
 
 // tMatrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.h:47
@@ -176,7 +176,7 @@ type tVector struct { // _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c
 	// 	type_ int
 	rows int
 	len_ int
-	pos  []int
+	//pos  []int
 	data []float64
 }
 
@@ -360,15 +360,15 @@ var f_val []float64
 // rand_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:91
 // random input data
 // type of data (see README.RANDOM)
-var rand_type []int
+// var rand_type []int
 
 // rand_pos - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:92
 // index of data
-var rand_pos []int
+// var rand_pos []int
 
 // rand_indx - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:93
 // data index - if applicable
-var rand_indx []int
+// var rand_indx []int
 
 // opt_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:96
 // optim input data
@@ -2020,10 +2020,10 @@ func main() {
 
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
 func femMatAlloc(mat []tMatrix, type_ int, rows int, cols int, bandwidth int, rowdesc []int) int {
-	var sum int
-	_ = sum
-	var i int
-	_ = i
+	// 	var sum int
+	// 	_ = sum
+	// 	var i int
+	// 	_ = i
 	//femMatNull(mat)
 	// 	if type_ >= 0 && type_ <= 1 {
 	// 		mat[0].type_ = type_
@@ -2038,9 +2038,9 @@ func femMatAlloc(mat []tMatrix, type_ int, rows int, cols int, bandwidth int, ro
 	}())) == 0 {
 		goto memFree
 	}
-	mat[0].pos = nil
-	mat[0].frompos = nil
-	mat[0].defpos = nil
+	//mat[0].pos = nil
+	//mat[0].frompos = nil
+	// mat[0].defpos = nil
 	// 		case 1:
 	// 			mat[0].rows = rows
 	// 			mat[0].cols = cols
@@ -2116,8 +2116,8 @@ func femMatGet(mat []tMatrix, row int, col int) float64 {
 	// * @return value
 	//
 	var pos int
-	var i int
-	_ = i
+	// 	var i int
+	// 	_ = i
 	if row < 0 || col < 0 {
 		return float64(0)
 	}
@@ -2157,8 +2157,8 @@ func femMatPutAdd(mat []tMatrix, row int, col int, val float64, mode int) (c4goD
 	// * @return  status
 	//
 	var pos int
-	var i int
-	_ = i
+	// 	var i int
+	// 	_ = i
 	if row < 0 || col < 0 {
 		return -10
 	}
@@ -2513,17 +2513,17 @@ func femMatSetZeroRow(a []tMatrix, row int) {
 // femMatSetZeroCol - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:592
 func femMatSetZeroCol(a []tMatrix, Col int) {
 	// Sets all of matrix contents to 0
-	var i int
-	var j int
-	_ = j
+	// 	var i int
+	// 	var j int
+	// 	_ = j
 
-	_ = i
-	var ifrom int
-	_ = ifrom
-	var ito int
-	_ = ito
-	var ipos int
-	_ = ipos
+	// 	_ = i
+	// 	var ifrom int
+	// 	_ = ifrom
+	// 	var ito int
+	// 	_ = ito
+	// 	var ipos int
+	// 	_ = ipos
 	// 	if a[0].type_ == 1 {
 	// 		ifrom = a[0].pos[a[0].frompos[Col-1]] - 1
 	// 		ito = a[0].pos[a[0].frompos[Col-1]+a[0].defpos[Col-1]-1] - 1
@@ -2535,7 +2535,7 @@ func femMatSetZeroCol(a []tMatrix, Col int) {
 	// 			}
 	// 		}
 	// 	} else {
-	for i = 1; i <= a[0].rows; i++ {
+	for i := 1; i <= a[0].rows; i++ {
 		femMatPutAdd(a, i, Col, 0, 0)
 	}
 	// 	}
@@ -2575,7 +2575,7 @@ func femVecAlloc(mat []tVector, type_ int, rows int, items int) int {
 	}())) == 0 {
 		goto memFree
 	}
-	mat[0].pos = nil
+	// mat[0].pos = nil
 	// 		case 1:
 	// 			// VEC_SPAR cannot be used ;-)
 	// 			noarch.Exit(-3)
@@ -3339,8 +3339,8 @@ func femVecNormBig(a []tVector) float64 {
 	// *  @return norm
 	//
 	var Norm float64
-	var val float64
-	_ = val
+	// 	var val float64
+	// 	_ = val
 	var i int
 	Norm = 0
 	// 	if a[0].type_ == 0 {

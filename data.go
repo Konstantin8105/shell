@@ -100,13 +100,13 @@ func read_input_data() {
 
 	n_r_inp = 1
 
-	rand_type = femIntAlloc(n_r_inp)
-
-	rand_pos = femIntAlloc(n_r_inp)
-
-	rand_indx = femIntAlloc(n_r_inp)
-
-	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
+	// 	rand_type = femIntAlloc(n_r_inp)
+	//
+	// 	rand_pos = femIntAlloc(n_r_inp)
+	//
+	// 	rand_indx = femIntAlloc(n_r_inp)
+	//
+	// 	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
 
 	// n_r_opt = 0
 
