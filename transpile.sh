@@ -1,7 +1,7 @@
 #!/bin/bash
 
 c4go transpile -o base.go   \
-	-clang-flag="-lm"       \
+	-clang-flag="-lm  -DRUN_VERBOSE  -DDEVEL_VERBOSE -DDEVEL -D_USE_WITH_MONTE_" \
 	./c-src/shell/fem_mem.c \
 	./c-src/shell/eshell.h  \
 	./c-src/shell/eshell.c  \
