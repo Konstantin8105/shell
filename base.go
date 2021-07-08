@@ -156,7 +156,7 @@ func femDblAlloc(length int) (c4goDefaultReturn []float64) {
 //	 $Id: fem_math.h,v 1.21 2005/07/11 17:56:16 jirka Exp $
 //
 type _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_47 struct {
-	type_   int
+	// type_   int
 	rows    int
 	cols    int
 	len_    int
@@ -471,122 +471,122 @@ var price_only int = 1
 var write_only int
 
 // free_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:133
-func free_input_data() {
-	// 	if len(m_E1) != 0 {
-	// 		// frees input data
-	// 		//femDblFree(m_E1)
-	// 	}
-	// 	if len(m_E2) != 0 {
-	// 		//femDblFree(m_E2)
-	// 	}
-	// 	if len(m_G) != 0 {
-	// 		//femDblFree(m_G)
-	// 	}
-	// 	if len(m_nu1) != 0 {
-	// 		//femDblFree(m_nu1)
-	// 	}
-	// 	if len(m_nu2) != 0 {
-	// 		//femDblFree(m_nu2)
-	// 	}
-	// 	if len(m_q) != 0 {
-	// 		//femDblFree(m_q)
-	// 	}
-	// 	if len(m_vp) != 0 {
-	// 		//femDblFree(m_vp)
-	// 	}
-	// 	if len(m_t) != 0 {
-	// 		//femDblFree(m_t)
-	// 	}
-	// 	if len(n_x) != 0 {
-	// 		//femDblFree(n_x)
-	// 	}
-	// 	if len(n_y) != 0 {
-	// 		//femDblFree(n_y)
-	// 	}
-	// 	if len(e_n1) != 0 {
-	// 		//femIntFree(e_n1)
-	// 	}
-	// 	if len(e_n2) != 0 {
-	// 		//femIntFree(e_n2)
-	// 	}
-	// 	if len(e_mat) != 0 {
-	// 		//femIntFree(e_mat)
-	// 	}
-	// 	if len(e_t) != 0 {
-	// 		//femDblFree(e_t)
-	// 	}
-	// 	if len(d_n) != 0 {
-	// 		//femIntFree(d_n)
-	// 	}
-	// 	if len(d_dir) != 0 {
-	// 		//femIntFree(d_dir)
-	// 	}
-	// 	if len(d_val) != 0 {
-	// 		//femDblFree(d_val)
-	// 	}
-	// 	if n_f > 0 {
-	// 		if len(f_n) != 0 {
-	// 			//femIntFree(f_n)
-	// 		}
-	// 		if len(f_dir) != 0 {
-	// 			//femIntFree(f_dir)
-	// 		}
-	// 		if len(f_val) != 0 {
-	// 			//femDblFree(f_val)
-	// 		}
-	// 	}
-	// 	if n_r_inp > 0 {
-	// 		if len(rand_type) != 0 {
-	// 			//femIntFree(rand_type)
-	// 		}
-	// 		if len(rand_pos) != 0 {
-	// 			//femIntFree(rand_pos)
-	// 		}
-	// 		if len(rand_indx) != 0 {
-	// 			//femIntFree(rand_indx)
-	// 		}
-	// 	}
-	// 	if n_r_opt > 0 {
-	// 		if len(opt_type) != 0 {
-	// 			//femIntFree(opt_type)
-	// 		}
-	// 		if len(opt_pos) != 0 {
-	// 			//femIntFree(opt_pos)
-	// 		}
-	// 		if len(opt_indx) != 0 {
-	// 			//femIntFree(opt_indx)
-	// 		}
-	// 		if len(opt_data) != 0 {
-	// 			//femDblFree(opt_data)
-	// 		}
-	// 	}
-	// 	if n_en > 0 {
-	// 		if len(en_num) != 0 {
-	// 			//femIntFree(en_num)
-	// 		}
-	// 		if len(en_frm) != 0 {
-	// 			//femIntFree(en_frm)
-	// 		}
-	// 		if len(en_pos) != 0 {
-	// 			//femIntFree(en_pos)
-	// 		}
-	// 	}
-	// 	if n_fail > 0 {
-	// 		if len(fail_data) != 0 {
-	// 			//femDblFree(fail_data)
-	// 		}
-	// 	}
-	n_m = 0
-	n_n = 0
-	n_e = 0
-	n_d = 0
-	n_f = 0
-	n_r_inp = 0
-	n_r_opt = 0
-	n_en = 0
-	fail_type = 0
-	n_fail = 0
-}
+// func free_input_data() {
+// 	// 	if len(m_E1) != 0 {
+// 	// 		// frees input data
+// 	// 		//femDblFree(m_E1)
+// 	// 	}
+// 	// 	if len(m_E2) != 0 {
+// 	// 		//femDblFree(m_E2)
+// 	// 	}
+// 	// 	if len(m_G) != 0 {
+// 	// 		//femDblFree(m_G)
+// 	// 	}
+// 	// 	if len(m_nu1) != 0 {
+// 	// 		//femDblFree(m_nu1)
+// 	// 	}
+// 	// 	if len(m_nu2) != 0 {
+// 	// 		//femDblFree(m_nu2)
+// 	// 	}
+// 	// 	if len(m_q) != 0 {
+// 	// 		//femDblFree(m_q)
+// 	// 	}
+// 	// 	if len(m_vp) != 0 {
+// 	// 		//femDblFree(m_vp)
+// 	// 	}
+// 	// 	if len(m_t) != 0 {
+// 	// 		//femDblFree(m_t)
+// 	// 	}
+// 	// 	if len(n_x) != 0 {
+// 	// 		//femDblFree(n_x)
+// 	// 	}
+// 	// 	if len(n_y) != 0 {
+// 	// 		//femDblFree(n_y)
+// 	// 	}
+// 	// 	if len(e_n1) != 0 {
+// 	// 		//femIntFree(e_n1)
+// 	// 	}
+// 	// 	if len(e_n2) != 0 {
+// 	// 		//femIntFree(e_n2)
+// 	// 	}
+// 	// 	if len(e_mat) != 0 {
+// 	// 		//femIntFree(e_mat)
+// 	// 	}
+// 	// 	if len(e_t) != 0 {
+// 	// 		//femDblFree(e_t)
+// 	// 	}
+// 	// 	if len(d_n) != 0 {
+// 	// 		//femIntFree(d_n)
+// 	// 	}
+// 	// 	if len(d_dir) != 0 {
+// 	// 		//femIntFree(d_dir)
+// 	// 	}
+// 	// 	if len(d_val) != 0 {
+// 	// 		//femDblFree(d_val)
+// 	// 	}
+// 	// 	if n_f > 0 {
+// 	// 		if len(f_n) != 0 {
+// 	// 			//femIntFree(f_n)
+// 	// 		}
+// 	// 		if len(f_dir) != 0 {
+// 	// 			//femIntFree(f_dir)
+// 	// 		}
+// 	// 		if len(f_val) != 0 {
+// 	// 			//femDblFree(f_val)
+// 	// 		}
+// 	// 	}
+// 	// 	if n_r_inp > 0 {
+// 	// 		if len(rand_type) != 0 {
+// 	// 			//femIntFree(rand_type)
+// 	// 		}
+// 	// 		if len(rand_pos) != 0 {
+// 	// 			//femIntFree(rand_pos)
+// 	// 		}
+// 	// 		if len(rand_indx) != 0 {
+// 	// 			//femIntFree(rand_indx)
+// 	// 		}
+// 	// 	}
+// 	// 	if n_r_opt > 0 {
+// 	// 		if len(opt_type) != 0 {
+// 	// 			//femIntFree(opt_type)
+// 	// 		}
+// 	// 		if len(opt_pos) != 0 {
+// 	// 			//femIntFree(opt_pos)
+// 	// 		}
+// 	// 		if len(opt_indx) != 0 {
+// 	// 			//femIntFree(opt_indx)
+// 	// 		}
+// 	// 		if len(opt_data) != 0 {
+// 	// 			//femDblFree(opt_data)
+// 	// 		}
+// 	// 	}
+// 	// 	if n_en > 0 {
+// 	// 		if len(en_num) != 0 {
+// 	// 			//femIntFree(en_num)
+// 	// 		}
+// 	// 		if len(en_frm) != 0 {
+// 	// 			//femIntFree(en_frm)
+// 	// 		}
+// 	// 		if len(en_pos) != 0 {
+// 	// 			//femIntFree(en_pos)
+// 	// 		}
+// 	// 	}
+// 	// 	if n_fail > 0 {
+// 	// 		if len(fail_data) != 0 {
+// 	// 			//femDblFree(fail_data)
+// 	// 		}
+// 	// 	}
+// 	n_m = 0
+// 	n_n = 0
+// 	n_e = 0
+// 	n_d = 0
+// 	n_f = 0
+// 	n_r_inp = 0
+// 	n_r_opt = 0
+// 	n_en = 0
+// 	fail_type = 0
+// 	n_fail = 0
+// }
 
 // check_elem_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:205
 func check_elem_data() {
@@ -603,53 +603,53 @@ func check_elem_data() {
 }
 
 // get_enode_fields - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:222
-func get_enode_fields() int {
-	// will prepare element nodes filed for optimised result output
-	var i int
-	var j int
-	if len(en_num) == 0 {
-		return -3
-	}
-	if len(en_frm) == 0 {
-		return -3
-	}
-	for i = 0; i < n_e; i++ {
-		en_num[e_n1[i]]++
-		en_num[e_n2[i]]++
-	}
-	n_en = 0
-	for i = 0; i < n_n; i++ {
-		en_frm[i] = n_en
-		n_en += en_num[i]
-	}
-	if len((func() []int {
-		en_pos = femIntAlloc(n_en)
-		return en_pos
-	}())) == 0 {
-		goto memFree
-	}
-	for i = 0; i < n_en; i++ {
-		en_pos[i] = -1
-	}
-	for i = 0; i < n_e; i++ {
-		for j = 0; j < en_num[e_n1[i]]; j++ {
-			if en_pos[en_frm[e_n1[i]]+j] == -1 {
-				en_pos[en_frm[e_n1[i]]+j] = i
-				break
-			}
-		}
-		for j = 0; j < en_num[e_n2[i]]; j++ {
-			if en_pos[en_frm[e_n2[i]]+j] == -1 {
-				en_pos[en_frm[e_n2[i]]+j] = i
-				break
-			}
-		}
-	}
-	return 0
-memFree:
-	;
-	return -4
-}
+// func get_enode_fields() int {
+// 	// will prepare element nodes filed for optimised result output
+// 	var i int
+// 	var j int
+// 	if len(en_num) == 0 {
+// 		return -3
+// 	}
+// 	if len(en_frm) == 0 {
+// 		return -3
+// 	}
+// 	for i = 0; i < n_e; i++ {
+// 		en_num[e_n1[i]]++
+// 		en_num[e_n2[i]]++
+// 	}
+// 	n_en = 0
+// 	for i = 0; i < n_n; i++ {
+// 		en_frm[i] = n_en
+// 		n_en += en_num[i]
+// 	}
+// 	if len((func() []int {
+// 		en_pos = femIntAlloc(n_en)
+// 		return en_pos
+// 	}())) == 0 {
+// 		goto memFree
+// 	}
+// 	for i = 0; i < n_en; i++ {
+// 		en_pos[i] = -1
+// 	}
+// 	for i = 0; i < n_e; i++ {
+// 		for j = 0; j < en_num[e_n1[i]]; j++ {
+// 			if en_pos[en_frm[e_n1[i]]+j] == -1 {
+// 				en_pos[en_frm[e_n1[i]]+j] = i
+// 				break
+// 			}
+// 		}
+// 		for j = 0; j < en_num[e_n2[i]]; j++ {
+// 			if en_pos[en_frm[e_n2[i]]+j] == -1 {
+// 				en_pos[en_frm[e_n2[i]]+j] = i
+// 				break
+// 			}
+// 		}
+// 	}
+// 	return 0
+// memFree:
+// 	;
+// 	return -4
+// }
 
 // write_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:541
 func write_input_data(fw *noarch.File) int {
@@ -802,13 +802,13 @@ func alloc_solver_data() int {
 	//femIntFree(n_field)
 	return 0
 memFree:
-// 	;
-// 	if len(alloc_field) != 0 {
-// 		//femIntFree(alloc_field)
-// 	}
-// 	if len(n_field) != 0 {
-// 		//femIntFree(n_field)
-// 	}
+	// 	;
+	// 	if len(alloc_field) != 0 {
+	// 		//femIntFree(alloc_field)
+	// 	}
+	// 	if len(n_field) != 0 {
+	// 		//femIntFree(n_field)
+	// 	}
 	free_solver_data()
 	noarch.Fprintf(msgout, []byte("Out of memory!\x00"))
 	return -4
@@ -922,10 +922,10 @@ func get_matrix() int {
 		// femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&D))[:],[]byte("D"))
 		// B matrix
 		get_B_matrix(i, (*[1000000]tMatrix)(unsafe.Pointer(&B))[:], c4goUnsafeConvert_float64(&L), c4goUnsafeConvert_float64(&R))
-		femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&B))[:], []byte("B"))
+		//femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&B))[:], []byte("B"))
 		// transpose of B
 		femMatTran((*[1000000]tMatrix)(unsafe.Pointer(&B))[:], (*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
-		femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:], []byte("Bt"))
+		//	femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:], []byte("Bt"))
 		// matrix multiplications (Bt*D*B):
 		// => BtD
 		femMatMatMult((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:], (*[1000000]tMatrix)(unsafe.Pointer(&D))[:], (*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
@@ -934,7 +934,7 @@ func get_matrix() int {
 		// element stifness matrix Ke:
 		femValMatMultSelf(R*L, (*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
 
-		femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:], []byte("Ke"))
+		//	femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:], []byte("Ke"))
 
 		{
 			// localisation to "K":
@@ -977,8 +977,8 @@ func get_matrix() int {
 		0.000000e+00,
 	}
 
-	fmt.Printf("K = %#v\n", K)
-	femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], []byte("K"))
+	// 	fmt.Printf("K = %#v\n", K)
+	// 	femMatPrn((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], []byte("K"))
 	return 0
 }
 
@@ -1416,7 +1416,7 @@ func generate_rand_input_file(fw *noarch.File) {
 			noarch.Fprintf(fw, []byte("FC_%s_%d %e 1 normal-1-02.dis\n\x00"), generate_fc_type(rand_indx[i]), rand_indx[i], fail_data[rand_indx[i]])
 		default:
 			noarch.Fprintf(msgout, []byte("Unused input random variable %d!\n\x00"), i)
-		//	break
+			//	break
 		}
 	}
 }
@@ -1883,7 +1883,7 @@ func femMatNull(mat []tMatrix) {
 	//  $Id: fem_math.c,v 1.46 2005/07/11 17:56:16 jirka Exp $
 	//
 	// MATRIX ***
-	mat[0].type_ = 0
+	// 	mat[0].type_ = 0
 	mat[0].rows = 0
 	mat[0].cols = 0
 	mat[0].len_ = 0
@@ -2009,84 +2009,86 @@ func main() {
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
 func femMatAlloc(mat []tMatrix, type_ int, rows int, cols int, bandwidth int, rowdesc []int) int {
 	var sum int
+	_ = sum
 	var i int
+	_ = i
 	femMatNull(mat)
-	if type_ >= 0 && type_ <= 1 {
-		mat[0].type_ = type_
-		switch type_ {
-		case 0:
-			mat[0].rows = rows
-			mat[0].cols = cols
-			mat[0].len_ = cols * rows
-			if len((func() []float64 {
-				mat[0].data = femDblAlloc(mat[0].len_)
-				return mat[0].data
-			}())) == 0 {
-				goto memFree
-			}
-			mat[0].pos = nil
-			mat[0].frompos = nil
-			mat[0].defpos = nil
-		case 1:
-			mat[0].rows = rows
-			mat[0].cols = cols
-			if len((func() []int {
-				mat[0].defpos = femIntAlloc(mat[0].rows)
-				return mat[0].defpos
-			}())) == 0 {
-				goto memFree
-			}
-			if len((func() []int {
-				mat[0].frompos = femIntAlloc(mat[0].rows)
-				return mat[0].frompos
-			}())) == 0 {
-				goto memFree
-			}
-			if bandwidth > 0 && len(rowdesc) == 0 {
-				mat[0].len_ = rows * bandwidth
-				if len((func() []float64 {
-					mat[0].data = femDblAlloc(mat[0].len_)
-					return mat[0].data
-				}())) == 0 {
-					goto memFree
-				}
-				if len((func() []int {
-					mat[0].pos = femIntAlloc(mat[0].len_)
-					return mat[0].pos
-				}())) == 0 {
-					goto memFree
-				}
-				for i = 0; i < rows; i++ {
-					mat[0].frompos[i] = bandwidth * i
-				}
-			} else {
-				sum = 0
-				for i = 0; i < rows; i++ {
-					sum += rowdesc[i]
-					mat[0].defpos[i] = rowdesc[i]
-					mat[0].frompos[i] = sum - rowdesc[i]
-				}
-				mat[0].len_ = sum
-				if len((func() []float64 {
-					mat[0].data = femDblAlloc(mat[0].len_)
-					return mat[0].data
-				}())) == 0 {
-					goto memFree
-				}
-				if len((func() []int {
-					mat[0].pos = femIntAlloc(sum)
-					return mat[0].pos
-				}())) == 0 {
-					goto memFree
-				}
-			}
-			break
-		}
-		return 0
-	} else {
-		noarch.Fprintf(msgout, []byte("[E] %s: %d!\n\x00"), []byte("Matrix type unsupported\x00"), type_)
-		return -3
+	// 	if type_ >= 0 && type_ <= 1 {
+	// 		mat[0].type_ = type_
+	// 		switch type_ {
+	// 		case 0:
+	mat[0].rows = rows
+	mat[0].cols = cols
+	mat[0].len_ = cols * rows
+	if len((func() []float64 {
+		mat[0].data = femDblAlloc(mat[0].len_)
+		return mat[0].data
+	}())) == 0 {
+		goto memFree
 	}
+	mat[0].pos = nil
+	mat[0].frompos = nil
+	mat[0].defpos = nil
+	// 		case 1:
+	// 			mat[0].rows = rows
+	// 			mat[0].cols = cols
+	// 			if len((func() []int {
+	// 				mat[0].defpos = femIntAlloc(mat[0].rows)
+	// 				return mat[0].defpos
+	// 			}())) == 0 {
+	// 				goto memFree
+	// 			}
+	// 			if len((func() []int {
+	// 				mat[0].frompos = femIntAlloc(mat[0].rows)
+	// 				return mat[0].frompos
+	// 			}())) == 0 {
+	// 				goto memFree
+	// 			}
+	// 			if bandwidth > 0 && len(rowdesc) == 0 {
+	// 				mat[0].len_ = rows * bandwidth
+	// 				if len((func() []float64 {
+	// 					mat[0].data = femDblAlloc(mat[0].len_)
+	// 					return mat[0].data
+	// 				}())) == 0 {
+	// 					goto memFree
+	// 				}
+	// 				if len((func() []int {
+	// 					mat[0].pos = femIntAlloc(mat[0].len_)
+	// 					return mat[0].pos
+	// 				}())) == 0 {
+	// 					goto memFree
+	// 				}
+	// 				for i = 0; i < rows; i++ {
+	// 					mat[0].frompos[i] = bandwidth * i
+	// 				}
+	// 			} else {
+	// 				sum = 0
+	// 				for i = 0; i < rows; i++ {
+	// 					sum += rowdesc[i]
+	// 					mat[0].defpos[i] = rowdesc[i]
+	// 					mat[0].frompos[i] = sum - rowdesc[i]
+	// 				}
+	// 				mat[0].len_ = sum
+	// 				if len((func() []float64 {
+	// 					mat[0].data = femDblAlloc(mat[0].len_)
+	// 					return mat[0].data
+	// 				}())) == 0 {
+	// 					goto memFree
+	// 				}
+	// 				if len((func() []int {
+	// 					mat[0].pos = femIntAlloc(sum)
+	// 					return mat[0].pos
+	// 				}())) == 0 {
+	// 					goto memFree
+	// 				}
+	// 			}
+	// 			break
+	// 		}
+	return 0
+	// 	} else {
+	// 		noarch.Fprintf(msgout, []byte("[E] %s: %d!\n\x00"), []byte("Matrix type unsupported\x00"), type_)
+	// 		return -3
+	// 	}
 memFree:
 	;
 	//femMatFree(mat)
@@ -2103,32 +2105,33 @@ func femMatGet(mat []tMatrix, row int, col int) float64 {
 	//
 	var pos int
 	var i int
+	_ = i
 	if row < 0 || col < 0 {
 		return float64(0)
 	}
 	if row > mat[0].rows || col > mat[0].cols {
 		return float64(0)
 	}
-	switch mat[0].type_ {
-	case 0:
-		pos = (row-1)*mat[0].cols + (col - 1)
-		return mat[0].data[pos]
-	case 1:
-		for i = mat[0].frompos[row-1]; i < mat[0].frompos[row-1]+mat[0].defpos[row-1]; i++ {
-			if mat[0].pos[i] == 0 {
-				break
-			}
-			if mat[0].pos[i] == col {
-				return mat[0].data[i]
-				break
-			}
-		}
-	default:
-		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid matrix type\x00"))
-		return 0
-		break
-	}
-	return 0
+	// 	switch mat[0].type_ {
+	// 	case 0:
+	pos = (row-1)*mat[0].cols + (col - 1)
+	return mat[0].data[pos]
+	// 	case 1:
+	// 		for i = mat[0].frompos[row-1]; i < mat[0].frompos[row-1]+mat[0].defpos[row-1]; i++ {
+	// 			if mat[0].pos[i] == 0 {
+	// 				break
+	// 			}
+	// 			if mat[0].pos[i] == col {
+	// 				return mat[0].data[i]
+	// 				break
+	// 			}
+	// 		}
+	// 	default:
+	// 		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid matrix type\x00"))
+	// 		return 0
+	// 		break
+	// 	}
+	// 	return 0
 }
 
 // femMatPutAdd - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:185
@@ -2143,73 +2146,74 @@ func femMatPutAdd(mat []tMatrix, row int, col int, val float64, mode int) (c4goD
 	//
 	var pos int
 	var i int
+	_ = i
 	if row < 0 || col < 0 {
 		return -10
 	}
 	if row > mat[0].rows || col > mat[0].cols {
 		return -11
 	}
-	switch mat[0].type_ {
-	case 0:
-		pos = (row-1)*mat[0].cols + (col - 1)
-		if mode == 1 {
-			mat[0].data[pos] += val
-		} else {
-			mat[0].data[pos] = val
-		}
-		return 0
-	case 1:
-		{
-			// this is more complicated
-			for i = mat[0].frompos[row-1]; i < mat[0].frompos[row-1]+mat[0].defpos[row-1]; i++ {
-				if mat[0].pos[i] == col {
-					if mode == 1 {
-						mat[0].data[i] += val
-					} else {
-						mat[0].data[i] = val
-					}
-					return 0
-				}
-				if mat[0].pos[i] == 0 {
-					// empty field found
-					mat[0].pos[i] = col
-					if mode == 1 {
-						mat[0].data[i] += val
-					} else {
-						mat[0].data[i] = val
-					}
-					return 0
-				}
-			}
-		}
-		// if we are here
-		//           * because reallocation is needed !
-		//
-		noarch.Fprintf(msgout, []byte("[E] %s [%d,%d]!\n\x00"), []byte("Matrix reallocation needed - requested unwritten code\x00"), row, col)
-		noarch.Exit(-11)
-		return -11
-	default:
-		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid matrix type\x00"))
-		return -3
-		break
+	// 	switch mat[0].type_ {
+	// 	case 0:
+	pos = (row-1)*mat[0].cols + (col - 1)
+	if mode == 1 {
+		mat[0].data[pos] += val
+	} else {
+		mat[0].data[pos] = val
 	}
-	return
+	return 0
+	// 	case 1:
+	// 		{
+	// 			// this is more complicated
+	// 			for i = mat[0].frompos[row-1]; i < mat[0].frompos[row-1]+mat[0].defpos[row-1]; i++ {
+	// 				if mat[0].pos[i] == col {
+	// 					if mode == 1 {
+	// 						mat[0].data[i] += val
+	// 					} else {
+	// 						mat[0].data[i] = val
+	// 					}
+	// 					return 0
+	// 				}
+	// 				if mat[0].pos[i] == 0 {
+	// 					// empty field found
+	// 					mat[0].pos[i] = col
+	// 					if mode == 1 {
+	// 						mat[0].data[i] += val
+	// 					} else {
+	// 						mat[0].data[i] = val
+	// 					}
+	// 					return 0
+	// 				}
+	// 			}
+	// 		}
+	// 		// if we are here
+	// 		//           * because reallocation is needed !
+	// 		//
+	// 		noarch.Fprintf(msgout, []byte("[E] %s [%d,%d]!\n\x00"), []byte("Matrix reallocation needed - requested unwritten code\x00"), row, col)
+	// 		noarch.Exit(-11)
+	// 		return -11
+	// 	default:
+	// 		noarch.Fprintf(msgout, []byte("[E] %s!\n\x00"), []byte("Invalid matrix type\x00"))
+	// 		return -3
+	// 		break
+	// 	}
+	// 	return
 }
 
 // femMatPrn - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:238
-func femMatPrn(mat []tMatrix, name []byte) {
-	// Prints matrix to stdout, works only in DEVEL mode
-	var i int
-	var j int
-	noarch.Fprintf(msgout, []byte("\n%s %s %s[%d,%d]:\n\x00"), []byte("Matrix\x00"), name, []byte("listing\x00"), mat[0].rows, mat[0].cols)
-	for i = 1; i <= mat[0].rows; i++ {
-		for j = 1; j <= mat[0].cols; j++ {
-			noarch.Fprintf(msgout, []byte(" %f \x00"), femMatGet(mat, i, j))
-		}
-		noarch.Fprintf(msgout, []byte("\n\x00"))
-	}
-	noarch.Fprintf(msgout, []byte("\n\x00"))
-}
+// func femMatPrn(mat []tMatrix, name []byte) {
+// 	// Prints matrix to stdout, works only in DEVEL mode
+// 	var i int
+// 	var j int
+// 	noarch.Fprintf(msgout, []byte("\n%s %s %s[%d,%d]:\n\x00"), []byte("Matrix\x00"), name, []byte("listing\x00"), mat[0].rows, mat[0].cols)
+// 	for i = 1; i <= mat[0].rows; i++ {
+// 		for j = 1; j <= mat[0].cols; j++ {
+// 			noarch.Fprintf(msgout, []byte(" %f \x00"), femMatGet(mat, i, j))
+// 		}
+// 		noarch.Fprintf(msgout, []byte("\n\x00"))
+// 	}
+// 	noarch.Fprintf(msgout, []byte("\n\x00"))
+// }
 
 // femMatPrnF - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:261
 // func femMatPrnF(fname []byte, mat []tMatrix) int {
@@ -2479,19 +2483,19 @@ func femMatSetZeroRow(a []tMatrix, row int) {
 	if row < 1 || row > a[0].rows {
 		return
 	}
-	if a[0].type_ == 1 {
-		for i = a[0].frompos[row-1]; i < a[0].frompos[row-1]+a[0].defpos[row-1]; i++ {
-			if a[0].pos[i] == 0 {
-				break
-			}
-			a[0].data[i] = 0
-		}
-	} else {
-		//fprintf(msgout,"zero on %d\n",i);
-		for i = 1; i <= a[0].cols; i++ {
-			femMatPutAdd(a, row, i, 0, 0)
-		}
+	// 	if a[0].type_ == 1 {
+	// 		for i = a[0].frompos[row-1]; i < a[0].frompos[row-1]+a[0].defpos[row-1]; i++ {
+	// 			if a[0].pos[i] == 0 {
+	// 				break
+	// 			}
+	// 			a[0].data[i] = 0
+	// 		}
+	// 	} else {
+	//fprintf(msgout,"zero on %d\n",i);
+	for i = 1; i <= a[0].cols; i++ {
+		femMatPutAdd(a, row, i, 0, 0)
 	}
+	// 	}
 }
 
 // femMatSetZeroCol - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:592
@@ -2499,25 +2503,30 @@ func femMatSetZeroCol(a []tMatrix, Col int) {
 	// Sets all of matrix contents to 0
 	var i int
 	var j int
+	_ = j
+
+	_ = i
 	var ifrom int
+	_ = ifrom
 	var ito int
+	_ = ito
 	var ipos int
 	_ = ipos
-	if a[0].type_ == 1 {
-		ifrom = a[0].pos[a[0].frompos[Col-1]] - 1
-		ito = a[0].pos[a[0].frompos[Col-1]+a[0].defpos[Col-1]-1] - 1
-		for i = ifrom; i < ito; i++ {
-			for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
-				if a[0].pos[j] == Col {
-					a[0].data[j] = 0
-				}
-			}
-		}
-	} else {
-		for i = 1; i <= a[0].rows; i++ {
-			femMatPutAdd(a, i, Col, 0, 0)
-		}
+	// 	if a[0].type_ == 1 {
+	// 		ifrom = a[0].pos[a[0].frompos[Col-1]] - 1
+	// 		ito = a[0].pos[a[0].frompos[Col-1]+a[0].defpos[Col-1]-1] - 1
+	// 		for i = ifrom; i < ito; i++ {
+	// 			for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
+	// 				if a[0].pos[j] == Col {
+	// 					a[0].data[j] = 0
+	// 				}
+	// 			}
+	// 		}
+	// 	} else {
+	for i = 1; i <= a[0].rows; i++ {
+		femMatPutAdd(a, i, Col, 0, 0)
 	}
+	// 	}
 }
 
 // femVecNull - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:699
@@ -2977,37 +2986,37 @@ func femMatVecMultBig(a []tMatrix, b []tVector, c []tVector) int {
 	if c[0].type_ != 0 {
 		return -3
 	}
-	if a[0].type_ == 0 && b[0].type_ == 0 {
-		for i = 0; i < a[0].rows; i++ {
-			val = 0
-			for j = 0; j < a[0].cols; j++ {
-				val += b[0].data[j] * a[0].data[j+i*a[0].cols]
-			}
-			c[0].data[i] = val
+	// 	if a[0].type_ == 0 && b[0].type_ == 0 {
+	for i = 0; i < a[0].rows; i++ {
+		val = 0
+		for j = 0; j < a[0].cols; j++ {
+			val += b[0].data[j] * a[0].data[j+i*a[0].cols]
 		}
-	} else {
-		if a[0].type_ == 1 && b[0].type_ == 0 {
-			femVecSetZero(c)
-			for i = 0; i < a[0].rows; i++ {
-				val = 0
-				for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
-					if a[0].pos[j] <= 0 {
-						break
-					}
-					val += a[0].data[j] * b[0].data[a[0].pos[j]-1]
-				}
-				c[0].data[i] = val
-			}
-		} else {
-			for i = 1; i <= a[0].rows; i++ {
-				val = 0
-				for j = 1; j <= a[0].cols; j++ {
-					val += femMatGet(a, i, j) * femVecGet(b, j)
-				}
-				femVecPutAdd(c, i, val, 0)
-			}
-		}
+		c[0].data[i] = val
 	}
+	// 	} else {
+	// 		if a[0].type_ == 1 && b[0].type_ == 0 {
+	// 			femVecSetZero(c)
+	// 			for i = 0; i < a[0].rows; i++ {
+	// 				val = 0
+	// 				for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
+	// 					if a[0].pos[j] <= 0 {
+	// 						break
+	// 					}
+	// 					val += a[0].data[j] * b[0].data[a[0].pos[j]-1]
+	// 				}
+	// 				c[0].data[i] = val
+	// 			}
+	// 		} else {
+	// 			for i = 1; i <= a[0].rows; i++ {
+	// 				val = 0
+	// 				for j = 1; j <= a[0].cols; j++ {
+	// 					val += femMatGet(a, i, j) * femVecGet(b, j)
+	// 				}
+	// 				femVecPutAdd(c, i, val, 0)
+	// 			}
+	// 		}
+	// 	}
 	return 0
 }
 
@@ -3028,37 +3037,37 @@ func femMatVecMult(a []tMatrix, b []tVector, c []tVector) int {
 	if c[0].type_ != 0 {
 		return -3
 	}
-	if a[0].type_ == 0 && b[0].type_ == 0 {
-		for i = 0; i < a[0].rows; i++ {
-			val = 0
-			for j = 0; j < a[0].cols; j++ {
-				val += b[0].data[j] * a[0].data[j+i*a[0].cols]
-			}
-			c[0].data[i] = val
+	// 	if a[0].type_ == 0 && b[0].type_ == 0 {
+	for i = 0; i < a[0].rows; i++ {
+		val = 0
+		for j = 0; j < a[0].cols; j++ {
+			val += b[0].data[j] * a[0].data[j+i*a[0].cols]
 		}
-	} else {
-		if a[0].type_ == 1 && b[0].type_ == 0 {
-			femVecSetZero(c)
-			for i = 0; i < a[0].rows; i++ {
-				val = 0
-				for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
-					if a[0].pos[j] <= 0 {
-						break
-					}
-					val += a[0].data[j] * b[0].data[a[0].pos[j]-1]
-				}
-				c[0].data[i] = val
-			}
-		} else {
-			for i = 1; i <= a[0].rows; i++ {
-				val = 0
-				for j = 1; j <= a[0].cols; j++ {
-					val += femMatGet(a, i, j) * femVecGet(b, j)
-				}
-				femVecPutAdd(c, i, val, 0)
-			}
-		}
+		c[0].data[i] = val
 	}
+	// 	} else {
+	// 		if a[0].type_ == 1 && b[0].type_ == 0 {
+	// 			femVecSetZero(c)
+	// 			for i = 0; i < a[0].rows; i++ {
+	// 				val = 0
+	// 				for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
+	// 					if a[0].pos[j] <= 0 {
+	// 						break
+	// 					}
+	// 					val += a[0].data[j] * b[0].data[a[0].pos[j]-1]
+	// 				}
+	// 				c[0].data[i] = val
+	// 			}
+	// 		} else {
+	// 			for i = 1; i <= a[0].rows; i++ {
+	// 				val = 0
+	// 				for j = 1; j <= a[0].cols; j++ {
+	// 					val += femMatGet(a, i, j) * femVecGet(b, j)
+	// 				}
+	// 				femVecPutAdd(c, i, val, 0)
+	// 			}
+	// 		}
+	// 	}
 	return 0
 }
 
@@ -3137,32 +3146,32 @@ func femMatMatMult(a []tMatrix, b []tMatrix, c []tMatrix) int {
 	if a[0].cols != b[0].rows || b[0].cols != c[0].cols || a[0].rows != c[0].rows {
 		return -9
 	}
-	if c[0].type_ != 0 {
-		return -3
-	}
-	if a[0].type_ == 0 && b[0].type_ == 0 && c[0].type_ == 0 {
-		for i = 0; i < a[0].rows; i++ {
-			for j = 0; j < b[0].cols; j++ {
-				val = 0
-				for k = 0; k < a[0].cols; k++ {
-					//val += femMatGet(a, i,k)*femMatGet(b, k,j);
-					val += a[0].data[i*a[0].cols+k] * b[0].data[k*b[0].cols+j]
-				}
-				//femMatPut(c, i,j, val);
-				c[0].data[i*c[0].cols+j] = val
+	// 	if c[0].type_ != 0 {
+	// 		return -3
+	// 	}
+	// 	if a[0].type_ == 0 && b[0].type_ == 0 && c[0].type_ == 0 {
+	for i = 0; i < a[0].rows; i++ {
+		for j = 0; j < b[0].cols; j++ {
+			val = 0
+			for k = 0; k < a[0].cols; k++ {
+				//val += femMatGet(a, i,k)*femMatGet(b, k,j);
+				val += a[0].data[i*a[0].cols+k] * b[0].data[k*b[0].cols+j]
 			}
-		}
-	} else {
-		for i = 1; i <= a[0].rows; i++ {
-			for j = 1; j <= b[0].cols; j++ {
-				val = 0
-				for k = 1; k <= a[0].cols; k++ {
-					val += femMatGet(a, i, k) * femMatGet(b, k, j)
-				}
-				femMatPutAdd(c, i, j, val, 0)
-			}
+			//femMatPut(c, i,j, val);
+			c[0].data[i*c[0].cols+j] = val
 		}
 	}
+	// 	} else {
+	// 		for i = 1; i <= a[0].rows; i++ {
+	// 			for j = 1; j <= b[0].cols; j++ {
+	// 				val = 0
+	// 				for k = 1; k <= a[0].cols; k++ {
+	// 					val += femMatGet(a, i, k) * femMatGet(b, k, j)
+	// 				}
+	// 				femMatPutAdd(c, i, j, val, 0)
+	// 			}
+	// 		}
+	// 	}
 	return 0
 }
 
@@ -3212,9 +3221,9 @@ func femMatTran(a []tMatrix, b []tMatrix) int {
 	if a[0].cols != b[0].rows || b[0].cols != a[0].rows {
 		return -9
 	}
-	if a[0].type_ != 0 || b[0].type_ != 0 {
-		return -9
-	}
+	// 	if a[0].type_ != 0 || b[0].type_ != 0 {
+	// 		return -9
+	// 	}
 	for i = 0; i < a[0].rows; i++ {
 		for j = 0; j < a[0].cols; j++ {
 			if a[0].cols == a[0].rows {
@@ -3239,33 +3248,33 @@ func femMatNormBig(a []tMatrix) float64 {
 	var i int
 	var j int
 	MaxNorm = 0
-	if a[0].type_ == 1 {
-		for i = 0; i < a[0].rows; i++ {
-			Norm = 0
-			for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
-				if a[0].pos[j] <= 0 {
-					break
-				}
-				Norm += a[0].data[j] * a[0].data[j]
-			}
-			Norm = math.Sqrt(Norm)
-			if Norm > MaxNorm {
-				MaxNorm = Norm
-			}
+	// 	if a[0].type_ == 1 {
+	// 		for i = 0; i < a[0].rows; i++ {
+	// 			Norm = 0
+	// 			for j = a[0].frompos[i]; j < a[0].frompos[i]+a[0].defpos[i]; j++ {
+	// 				if a[0].pos[j] <= 0 {
+	// 					break
+	// 				}
+	// 				Norm += a[0].data[j] * a[0].data[j]
+	// 			}
+	// 			Norm = math.Sqrt(Norm)
+	// 			if Norm > MaxNorm {
+	// 				MaxNorm = Norm
+	// 			}
+	// 		}
+	// 	} else {
+	for i = 1; i <= a[0].rows; i++ {
+		Norm = 0
+		for j = 1; j <= a[0].cols; j++ {
+			val = femMatGet(a, i, j)
+			Norm += val * val
 		}
-	} else {
-		for i = 1; i <= a[0].rows; i++ {
-			Norm = 0
-			for j = 1; j <= a[0].cols; j++ {
-				val = femMatGet(a, i, j)
-				Norm += val * val
-			}
-			Norm = math.Sqrt(Norm)
-			if Norm > MaxNorm {
-				MaxNorm = Norm
-			}
+		Norm = math.Sqrt(Norm)
+		if Norm > MaxNorm {
+			MaxNorm = Norm
 		}
 	}
+	// 	}
 	return MaxNorm
 }
 
