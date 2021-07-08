@@ -2722,13 +2722,13 @@ func femVecGet(vec *tVector, pos int) float64 {
 // }
 
 // femVecSetZeroBig - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:917
-func femVecSetZeroBig(a *tVector) {
-	// Sets all of vertor contents to 0
-	var i int
-	for i = 0; i < a.len_; i++ {
-		a.data[i] = 0
-	}
-}
+// func femVecSetZeroBig(a *tVector) {
+// 	// Sets all of vertor contents to 0
+// 	var i int
+// 	for i = 0; i < a.len_; i++ {
+// 		a.data[i] = 0
+// 	}
+// }
 
 // femVecSetZero - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:961
 func femVecSetZero(a *tVector) {
@@ -3888,7 +3888,7 @@ func femEqsCGwJ(a *tMatrix, b *tVector, x *tVector, eps float64, maxIt int) int 
 	normA = femMatNormBig(a)
 	normB = femVecNormBig(b)
 	if normB <= 0 {
-		femVecSetZeroBig(x)
+		femVecSetZero(x)//Big(x)
 		fmt.Fprintf(os.Stdout, string("[ ]  %s!\n\x00"), string("solution done without iterations because of zero load\x00"))
 		return 0
 	}
