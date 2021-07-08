@@ -722,17 +722,17 @@ func alloc_solver_data() int {
 	var j int
 	var n_field []int
 	var alloc_field []int
-	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&u))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&F))[:])
-	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
-	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
-	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&B))[:])
-	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
-	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
-	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&DB))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&Fe))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&ue))[:])
+	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&K))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&u))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&F))[:])
+	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:])
+	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&D))[:])
+	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&B))[:])
+	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&Bt))[:])
+	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&BtD))[:])
+	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&DB))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&Fe))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&ue))[:])
 	if femMatAlloc((*[1000000]tMatrix)(unsafe.Pointer(&Ke))[:], 0, 6, 6, 0, nil) != 0 {
 		goto memFree
 	}
@@ -1853,44 +1853,44 @@ func compute_price() float64 {
 // 	return rv
 // }
 
-// femMatNull - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:33
-func femMatNull(mat []tMatrix) {
-	//
-	//   File name: fem_math.c
-	//   Date:      2003/04/12 12:44
-	//   Author:    Jiri Brozovsky
-	//
-	//   Copyright (C) 2003 Jiri Brozovsky
-	//
-	//   This program is free software; you can redistribute it and/or
-	//   modify it under the terms of the GNU General Public License as
-	//   published by the Free Software Foundation; either version 2 of the
-	//   License, or (at your option) any later version.
-	//
-	//   This program is distributed in the hope that it will be useful, but
-	//   WITHOUT ANY WARRANTY; without even the implied warranty of
-	//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	//   General Public License for more details.
-	//
-	//   You should have received a copy of the GNU General Public License
-	//   in a file called COPYING along with this program; if not, write to
-	//   the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
-	//   02139, USA.
-	//
-	//  FEM Solver - matrix library
-	//
-	//  $Id: fem_math.c,v 1.46 2005/07/11 17:56:16 jirka Exp $
-	//
-	// MATRIX ***
-	// 	mat[0].type_ = 0
-	mat[0].rows = 0
-	mat[0].cols = 0
-	mat[0].len_ = 0
-	mat[0].pos = nil
-	mat[0].data = nil
-	mat[0].frompos = nil
-	mat[0].defpos = nil
-}
+// //femMatNull - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:33
+// func //femMatNull(mat []tMatrix) {
+// 	//
+// 	//   File name: fem_math.c
+// 	//   Date:      2003/04/12 12:44
+// 	//   Author:    Jiri Brozovsky
+// 	//
+// 	//   Copyright (C) 2003 Jiri Brozovsky
+// 	//
+// 	//   This program is free software; you can redistribute it and/or
+// 	//   modify it under the terms of the GNU General Public License as
+// 	//   published by the Free Software Foundation; either version 2 of the
+// 	//   License, or (at your option) any later version.
+// 	//
+// 	//   This program is distributed in the hope that it will be useful, but
+// 	//   WITHOUT ANY WARRANTY; without even the implied warranty of
+// 	//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// 	//   General Public License for more details.
+// 	//
+// 	//   You should have received a copy of the GNU General Public License
+// 	//   in a file called COPYING along with this program; if not, write to
+// 	//   the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA
+// 	//   02139, USA.
+// 	//
+// 	//  FEM Solver - matrix library
+// 	//
+// 	//  $Id: fem_math.c,v 1.46 2005/07/11 17:56:16 jirka Exp $
+// 	//
+// 	// MATRIX ***
+// 	// 	mat[0].type_ = 0
+// 	mat[0].rows = 0
+// 	mat[0].cols = 0
+// 	mat[0].len_ = 0
+// 	mat[0].pos = nil
+// 	mat[0].data = nil
+// 	mat[0].frompos = nil
+// 	mat[0].defpos = nil
+// }
 
 // //femMatFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:45
 // func //femMatFree(mat []tMatrix) {
@@ -2011,7 +2011,7 @@ func femMatAlloc(mat []tMatrix, type_ int, rows int, cols int, bandwidth int, ro
 	_ = sum
 	var i int
 	_ = i
-	femMatNull(mat)
+	//femMatNull(mat)
 	// 	if type_ >= 0 && type_ <= 1 {
 	// 		mat[0].type_ = type_
 	// 		switch type_ {
@@ -2528,15 +2528,15 @@ func femMatSetZeroCol(a []tMatrix, Col int) {
 	// 	}
 }
 
-// femVecNull - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:699
-func femVecNull(mat []tVector) {
-	// VECTOR ***
-	// 	mat[0].type_ = 0
-	mat[0].rows = 0
-	mat[0].len_ = 0
-	mat[0].pos = nil
-	mat[0].data = nil
-}
+// //femVecNull - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:699
+// func //femVecNull(mat []tVector) {
+// 	// VECTOR ***
+// 	// 	mat[0].type_ = 0
+// 	mat[0].rows = 0
+// 	mat[0].len_ = 0
+// 	mat[0].pos = nil
+// 	mat[0].data = nil
+// }
 
 // //femVecFree - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:708
 // func //femVecFree(mat []tVector) {
@@ -2549,7 +2549,7 @@ func femVecNull(mat []tVector) {
 
 // femVecAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:718
 func femVecAlloc(mat []tVector, type_ int, rows int, items int) int {
-	femVecNull(mat)
+	//femVecNull(mat)
 	// 	if type_ >= 0 && type_ <= 1 {
 	// 		mat[0].type_ = type_
 	// 		switch type_ {
@@ -3409,7 +3409,7 @@ func femVecNormBig(a []tVector) float64 {
 // 		return -9
 // 	}
 // 	n = a[0].cols
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&f1))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&f1))[:])
 // 	if femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&f1))[:], 0, n, n) != 0 {
 // 		return -4
 // 	}
@@ -3467,7 +3467,7 @@ func femVecNormBig(a []tVector) float64 {
 // 	var sum float64
 // 	var temp float64
 // 	var vv tVector
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&vv))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&vv))[:])
 // 	if (func() int {
 // 		n = a[0].rows
 // 		return n
@@ -3611,9 +3611,9 @@ func femVecNormBig(a []tVector) float64 {
 // 	}()) <= 0 {
 // 		return -9
 // 	}
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&col))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&index))[:])
-// 	femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&b))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&col))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&index))[:])
+// 	//femMatNull((*[1000000]tMatrix)(unsafe.Pointer(&b))[:])
 // 	if (func() int {
 // 		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&col))[:], 0, n, n)
 // 		return rv
@@ -3881,11 +3881,11 @@ func femEqsCGwJ(a []tMatrix, b []tVector, x []tVector, eps float64, maxIt int) i
 		return 0
 	}
 	// vector initialization
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&z))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-	femVecNull((*[1000000]tVector)(unsafe.Pointer(&q))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&z))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&q))[:])
 	if (func() int {
 		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
 		return rv
@@ -4042,16 +4042,16 @@ memFree:
 // 	normX = femVecNormBig(x)
 // 	normB = femVecNormBig(b)
 // 	// vector initialization
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&rr))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&pp))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&s))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&ss))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&t))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&v))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&res))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&rr))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&pp))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&s))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&ss))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&t))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&v))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&res))[:])
 // 	if (func() int {
 // 		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
 // 		return rv
@@ -4245,7 +4245,7 @@ memFree:
 // 	}()) <= 0 {
 // 		return -9
 // 	}
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&indx))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&indx))[:])
 // 	if (func() int {
 // 		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&indx))[:], 0, n, n)
 // 		return rv
@@ -4311,11 +4311,11 @@ memFree:
 // 		return 0
 // 	}
 // 	// vector initializations
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&d))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&ap))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&d))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&ap))[:])
 // 	if (func() int {
 // 		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&p))[:], 0, n, n)
 // 		return rv
@@ -4433,7 +4433,7 @@ memFree:
 // 		}
 // 	}
 // 	if have_C == 0 {
-// 		femVecNull(C)
+// 		//femVecNull(C)
 // 		if femVecAlloc(C, 0, n, n) != 0 {
 // 			goto memFree
 // 		}
@@ -4490,7 +4490,7 @@ memFree:
 // 	var k int
 // 	var C tVector
 // 	n = a[0].rows
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&C))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&C))[:])
 // 	if femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&C))[:], 0, n, n) != 0 {
 // 		goto memFree
 // 	}
@@ -4576,8 +4576,8 @@ memFree:
 // 	var z tVector
 // 	nrot[0] = 0
 // 	n = a[0].rows
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&b))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&z))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&b))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&z))[:])
 // 	femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&b))[:], 0, n, n)
 // 	femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&z))[:], 0, n, n)
 // 	for i = 1; i <= n; i++ {
@@ -4711,12 +4711,12 @@ memFree:
 // 		return 0
 // 	}
 // 	// vector initialization
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&z))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&zz))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
-// 	femVecNull((*[1000000]tVector)(unsafe.Pointer(&q))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&M))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&r))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&z))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&zz))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&p))[:])
+// 	//femVecNull((*[1000000]tVector)(unsafe.Pointer(&q))[:])
 // 	if (func() int {
 // 		rv = femVecAlloc((*[1000000]tVector)(unsafe.Pointer(&M))[:], 0, n, n)
 // 		return rv
