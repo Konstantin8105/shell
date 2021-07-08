@@ -45,7 +45,7 @@ var msgout *noarch.File
 // femIntAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:37
 func femIntAlloc(length int) (c4goDefaultReturn []int) {
 
-	return make([]int, length, length)
+	return make([]int, length) //, length)
 	// 1D fields ----------------------------------------------------------
 	// allocates and returns 1D int field  (NULL if failed)
 	// * @param length length of field
@@ -153,7 +153,7 @@ func femDblAlloc(length int) (c4goDefaultReturn []float64) {
 //
 //	 $Id: fem_math.h,v 1.21 2005/07/11 17:56:16 jirka Exp $
 //
-type _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_47 struct {
+type tMatrix struct { //_struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_47 struct {
 	// type_   int
 	rows    int
 	cols    int
@@ -165,14 +165,14 @@ type _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_
 }
 
 // tMatrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.h:47
-type tMatrix = _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_47
+// type tMatrix = _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_47
 
 // _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_60 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.h:60
 // 0 = dense; 1 = sparse (rows)
 // lenght of "pos" and "data" (if used) fields
 // from in "pos" and "data" - sparse only sizeof(frompos) = rows
 // number in "pos" and "data" - sparse only
-type _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_60 struct {
+type tVector struct { // _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_60 struct {
 	// 	type_ int
 	rows int
 	len_ int
@@ -181,7 +181,7 @@ type _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_
 }
 
 // tVector - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.h:60
-type tVector = _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_60
+// type tVector = _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell_fem_math_h_60
 
 // n_m - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:44
 //
@@ -216,11 +216,11 @@ type tVector = _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c_src_shell
 //
 // DATA STRUCTURES
 // input variables
-var monte_i_len int
+// var monte_i_len int
 
 // monte_o_len - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:38
 // output variables
-var monte_o_len int
+//var monte_o_len int
 
 // n_m - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:44
 // INPUT DATA:
@@ -249,7 +249,7 @@ var n_r_inp int
 
 // n_r_opt - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:51
 // number of optim input data
-var n_r_opt int
+//var n_r_opt int
 
 // m_E1 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:54
 // materials
@@ -373,19 +373,19 @@ var rand_indx []int
 // opt_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:96
 // optim input data
 // type of data (see README.RANDOM)
-var opt_type []int
+//var opt_type []int
 
 // opt_pos - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:97
 // index of data
-var opt_pos []int
+//var opt_pos []int
 
 // opt_indx - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:98
 // data index - if applicable
-var opt_indx []int
+//var opt_indx []int
 
 // opt_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:99
 // data for replacing
-var opt_data []float64
+//var opt_data []float64
 
 // fail_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:102
 // failure condition data
@@ -444,23 +444,23 @@ var ue tVector
 
 // n_en - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:121
 // result helpers data
-var n_en int
+//var n_en int
 
 // en_num - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:122
-var en_num []int
+//var en_num []int
 
 // en_frm - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:123
-var en_frm []int
+//var en_frm []int
 
 // en_pos - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:124
-var en_pos []int
+//var en_pos []int
 
 // solution_only - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:127
 // program constants
 var solution_only int = 1
 
 // random_only - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:128
-var random_only int = 1
+//var random_only int = 1
 
 // price_only - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:129
 var price_only int = 1
@@ -807,7 +807,7 @@ memFree:
 	// 	if len(n_field) != 0 {
 	// 		//femIntFree(n_field)
 	// 	}
-// 	free_solver_data()
+	// 	free_solver_data()
 	noarch.Fprintf(msgout, []byte("Out of memory!\x00"))
 	return -4
 }
@@ -1227,6 +1227,12 @@ func print_result(fw *noarch.File) int {
 	sM1 = 0
 	sM2 = 0
 	sQ = 0
+
+	_ = sN1
+	_ = sN2
+	_ = sM1
+	_ = sM2
+	_ = sQ
 	noarch.Fprintf(fw, []byte("#  X     Y        w            u           angle            N1          N2           M1          M2          Q\n\x00"))
 	for i = 0; i < n_n; i++ {
 		sN1 = 0
@@ -1256,6 +1262,7 @@ func print_result(fw *noarch.File) int {
 		}
 		noarch.Fprintf(fw, []byte("%2.3f %2.3f %e %e %e %e %e %e %e %e \n\x00"), n_x[i], n_y[i], femVecGet((*[1000000]tVector)(unsafe.Pointer(&u))[:], 3*i+1), femVecGet((*[1000000]tVector)(unsafe.Pointer(&u))[:], 3*i+2), femVecGet((*[1000000]tVector)(unsafe.Pointer(&u))[:], 3*i+3), sN1, sN2, sM1, sM2, Q)
 	}
+	_ = sQ
 	return 0
 }
 
@@ -1280,77 +1287,77 @@ func print_result(fw *noarch.File) int {
 // }
 
 // generate_d_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1115
-func generate_d_type(type_ int) []byte {
-	switch type_ {
-	case 0:
-		// generates textual symbol for displacement
-		return []byte("UY\x00")
-	case 1:
-		return []byte("UX\x00")
-	case 2:
-		return []byte("RT\x00")
-	case 3:
-		return []byte("EY\x00")
-	case 4:
-		return []byte("EX\x00")
-	case 5:
-		return []byte("ER\x00")
-		break
-	}
-	return []byte("XX\x00")
-}
+// func generate_d_type(type_ int) []byte {
+// 	switch type_ {
+// 	case 0:
+// 		// generates textual symbol for displacement
+// 		return []byte("UY\x00")
+// 	case 1:
+// 		return []byte("UX\x00")
+// 	case 2:
+// 		return []byte("RT\x00")
+// 	case 3:
+// 		return []byte("EY\x00")
+// 	case 4:
+// 		return []byte("EX\x00")
+// 	case 5:
+// 		return []byte("ER\x00")
+// 		break
+// 	}
+// 	return []byte("XX\x00")
+// }
 
 // generate_f_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1130
-func generate_f_type(type_ int) []byte {
-	switch type_ {
-	case 0:
-		// generates textual symbol for force
-		return []byte("FY\x00")
-	case 1:
-		return []byte("FX\x00")
-	case 2:
-		return []byte("MT\x00")
-		break
-	}
-	return []byte("XX\x00")
-}
+// func generate_f_type(type_ int) []byte {
+// 	switch type_ {
+// 	case 0:
+// 		// generates textual symbol for force
+// 		return []byte("FY\x00")
+// 	case 1:
+// 		return []byte("FX\x00")
+// 	case 2:
+// 		return []byte("MT\x00")
+// 		break
+// 	}
+// 	return []byte("XX\x00")
+// }
 
 // generate_w_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1142
-func generate_w_type(type_ int) []byte {
-	switch type_ {
-	case 0:
-		// generates textual symbol for water load
-		return []byte("TOP\x00")
-	case 1:
-		return []byte("BOT\x00")
-	case 2:
-		return []byte("SIZE\x00")
-		break
-	}
-	return []byte("XX\x00")
-}
+// func generate_w_type(type_ int) []byte {
+// 	switch type_ {
+// 	case 0:
+// 		// generates textual symbol for water load
+// 		return []byte("TOP\x00")
+// 	case 1:
+// 		return []byte("BOT\x00")
+// 	case 2:
+// 		return []byte("SIZE\x00")
+// 		break
+// 	}
+// 	return []byte("XX\x00")
+// }
 
 // generate_fc_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1154
-func generate_fc_type(type_ int) []byte {
-	switch fail_type {
-	case 1:
-		switch type_ {
-		case 0:
-			// generates textual symbol for failure criteria
-			// concrete cracking limit
-			return []byte("COMPR\x00")
-		case 1:
-			return []byte("TENS\x00")
-		default:
-			return []byte("UNKNOWN\x00")
-			break
-		}
-	default:
-		return []byte("XX\x00")
-		break
-	}
-	return []byte("XX\x00")
-}
+// func generate_fc_type(type_ int) []byte {
+// 	switch fail_type {
+// 	case 1:
+// 		switch type_ {
+// 		case 0:
+// 			// generates textual symbol for failure criteria
+// 			// concrete cracking limit
+// 			return []byte("COMPR\x00")
+// 		case 1:
+// 			return []byte("TENS\x00")
+// 		default:
+// 			return []byte("UNKNOWN\x00")
+// 			break
+// 		}
+// 	default:
+// 		return []byte("XX\x00")
+// 		break
+// 	}
+// 	return []byte("XX\x00")
+// }
 
 // generate_rand_input_file - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1179
 // func generate_rand_input_file(fw *noarch.File) {
@@ -1502,7 +1509,7 @@ func fail_test() int {
 		return 0
 		//break
 	}
-	return 0
+	// return 0
 }
 
 // compute_price - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1364
@@ -1963,33 +1970,37 @@ func main() {
 	// 	}
 	// 	defer noarch.AtexitRun()
 	// main() routine for standalone program only.
-	var stat int
+	// var stat int
 	msgout = noarch.Stdout
 	// 	cmd_param(argc, argv)
 	read_input_data() //noarch.Stdin)
-	stat += alloc_solver_data()
+	//stat +=
+	alloc_solver_data()
 	// stat += optim_replace_data(opt_data)
 	if write_only == 1 {
 		write_input_data(noarch.Stdout)
 		return
 	}
 	if solution_only == 1 {
-		stat += get_matrix()
+		//stat +=
+		get_matrix()
 		// stat += generate_water_load_x()
-		stat += get_loads_and_supports()
-		stat = femEqsCGwJ((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], (*[1000000]tVector)(unsafe.Pointer(&F))[:], (*[1000000]tVector)(unsafe.Pointer(&u))[:], 1e-09, 6*3*n_n)
+		//stat +=
+		get_loads_and_supports()
+		//stat =
+		femEqsCGwJ((*[1000000]tMatrix)(unsafe.Pointer(&K))[:], (*[1000000]tVector)(unsafe.Pointer(&F))[:], (*[1000000]tVector)(unsafe.Pointer(&u))[:], 1e-09, 6*3*n_n)
 	}
-// 	if n_r_inp > 0 && random_only == 1 {
-// 		if solution_only != 0 {
-// 			print_result(noarch.Stdout)
-// 		}
-// 		generate_rand_input_file(noarch.Stdout)
-// 		generate_rand_out_file(noarch.Stdout)
-// 	} else {
-		if solution_only == 1 {
-			print_result(noarch.Stdout)
-		}
-// 	}
+	// 	if n_r_inp > 0 && random_only == 1 {
+	// 		if solution_only != 0 {
+	// 			print_result(noarch.Stdout)
+	// 		}
+	// 		generate_rand_input_file(noarch.Stdout)
+	// 		generate_rand_out_file(noarch.Stdout)
+	// 	} else {
+	if solution_only == 1 {
+		print_result(noarch.Stdout)
+	}
+	// 	}
 	if solution_only == 1 {
 		if fail_test() != 0 {
 			noarch.Fprintf(noarch.Stdout, []byte("# Structure FAILED\n\x00"))
@@ -2002,7 +2013,7 @@ func main() {
 			noarch.Fprintf(noarch.Stdout, []byte("%e\n\x00"), compute_price())
 		}
 	}
-	return
+	// return
 }
 
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
@@ -2653,7 +2664,7 @@ func femVecGet(vec []tVector, pos int) float64 {
 	// 		return float64(0)
 	// 		break
 	// 	}
-	return float64(0)
+	// return float64(0)
 }
 
 // femVecPrn - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:839

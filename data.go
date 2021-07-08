@@ -53,9 +53,9 @@ func read_input_data() {
 
 	f_val = femDblAlloc(n_f)
 
-	en_num = femIntAlloc(n_n)
+	// en_num = femIntAlloc(n_n)
 
-	en_frm = femIntAlloc(n_n)
+	//en_frm = femIntAlloc(n_n)
 
 	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
 
@@ -108,6 +108,6 @@ func read_input_data() {
 
 	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
 
-	n_r_opt = 0
+	// n_r_opt = 0
 
 }
