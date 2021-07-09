@@ -487,7 +487,7 @@ type tVector struct { // _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c
 // var K tMatrix
 
 // u - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:108
-var u tVector
+// var u tVector
 
 // F - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:109
 // var F tVector
@@ -903,7 +903,7 @@ func (m Model) alloc_solver_data() int {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femVecAlloc((&u), 0, n_n*3, n_n*3)
+	// femVecAlloc((&u), 0, n_n*3, n_n*3)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
@@ -933,7 +933,7 @@ func (m Model) get_D_matrix(i int) tMatrix {
 
 	D := tMatrix{}
 
-	femMatAlloc((&D),  5, 5 )
+	femMatAlloc((&D), 5, 5)
 
 	// 	var E1 float64
 	// 	var E2 float64
@@ -978,7 +978,7 @@ func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
 	// 	var R float64
 	// 	var dx float64
 	// 	var dy float64
-	femMatAlloc((&B),  5, 6)
+	femMatAlloc((&B), 5, 6)
 	var (
 		// dx = n_x[e_n2[i]] - n_x[e_n1[i]]
 		// dy = n_y[e_n2[i]] - n_y[e_n1[i]]
@@ -1016,7 +1016,7 @@ func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
 }
 
 // get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
-func (m Model) get_matrix() (K tMatrix, F tVector) {
+func (m Model) get_matrix() (K tMatrix, F, u tVector) {
 	// creates stiffness matrix
 	var t float64
 	// 	var L float64
@@ -1035,8 +1035,8 @@ func (m Model) get_matrix() (K tMatrix, F tVector) {
 	femMatAlloc((&K), n_n*3, n_n*3)
 	femMatSetZero((&K))
 
+	femVecAlloc((&u), 0, n_n*3, n_n*3)
 	femVecSetZero((&u))
-
 
 	femVecAlloc((&F), 0, n_n*3, n_n*3)
 	femVecSetZero((&F))
@@ -1052,11 +1052,11 @@ func (m Model) get_matrix() (K tMatrix, F tVector) {
 		// femMatSetZero((&Ke))
 		// femMatSetZero((&B))
 		var Bt tMatrix
-		femMatAlloc((&Bt),  6, 5)
+		femMatAlloc((&Bt), 6, 5)
 		femMatSetZero((&Bt))
 
 		var BtD tMatrix
-		femMatAlloc((&BtD),  6, 5)
+		femMatAlloc((&BtD), 6, 5)
 		femMatSetZero((&BtD))
 		// femMatSetZero((&D))
 		// material stiffness matrix D:
@@ -1123,7 +1123,7 @@ func (m Model) get_matrix() (K tMatrix, F tVector) {
 
 	// 	fmt.Printf("K = %#v\n", K)
 	// 	femMatPrn(((&K)), string("K"))
-	return  // 0
+	return // 0
 }
 
 // generate_water_load_x - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:809
@@ -1264,7 +1264,7 @@ func (m Model) get_matrix() (K tMatrix, F tVector) {
 // }
 
 // get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
-func (m Model) get_loads_and_supports(K tMatrix, F tVector) int {
+func (m Model) get_loads_and_supports(K tMatrix, F, u tVector) int {
 	// applies supports in nodes
 	// 	var i int
 	// 	var j int
@@ -1340,7 +1340,7 @@ func (m Model) get_loads_and_supports(K tMatrix, F tVector) int {
 }
 
 // get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
-func (m Model) get_int_forces(el int) (N1, N2, M1, M2, Q float64) {
+func (m Model) get_int_forces(el int, u tVector) (N1, N2, M1, M2, Q float64) {
 	// computes internal force is nodes
 	// * @param el element number <0..n_e-1>
 	// * @param N1 meridian force
@@ -1358,7 +1358,7 @@ func (m Model) get_int_forces(el int) (N1, N2, M1, M2, Q float64) {
 	// femMatSetZero((&D))
 	// femMatSetZero((&B))
 	var DB tMatrix
-	femMatAlloc((&DB),  5, 6)
+	femMatAlloc((&DB), 5, 6)
 	femMatSetZero((&DB))
 
 	var ue tVector
@@ -1395,7 +1395,7 @@ func (m Model) get_int_forces(el int) (N1, N2, M1, M2, Q float64) {
 }
 
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
-func (m Model) print_result() int { //fw *io.File) int {
+func (m Model) print_result(u tVector) int { //fw *io.File) int {
 	fw := os.Stdout
 	// 	var i int
 	// 	var j int
@@ -1443,7 +1443,7 @@ func (m Model) print_result() int { //fw *io.File) int {
 		for j := 0; j < n_e; j++ {
 			if m.Beams[j].N[0] == i || m.Beams[j].N[1] == i {
 				// internal forces in centroid
-				N1, N2, M1, M2, Q := m.get_int_forces(j) //, (&N1), (&N2), (&M1), (&M2), (&Q))
+				N1, N2, M1, M2, Q := m.get_int_forces(j, u) //, (&N1), (&N2), (&M1), (&M2), (&Q))
 				sN1 += N1
 				sN2 += N2
 				sM1 += M1
@@ -2161,7 +2161,7 @@ func (m Model) print_result() int { //fw *io.File) int {
 // }
 
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
-func femMatAlloc(mat *tMatrix,  rows int, cols int) int {
+func femMatAlloc(mat *tMatrix, rows int, cols int) int {
 	// 	var sum int
 	// 	_ = sum
 	// 	var i int

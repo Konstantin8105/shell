@@ -148,10 +148,10 @@ func Example() {
 	// 	}
 	// 	if solution_only == 1 {
 	//stat +=
-	K,F:=model.get_matrix()
+	K, F, u := model.get_matrix()
 	// stat += generate_water_load_x()
 	//stat +=
-	 model.get_loads_and_supports(K,F)
+	model.get_loads_and_supports(K, F, u)
 	//stat =
 	n_n := len(model.Points)
 	femEqsCGwJ((&K), (&F), (&u), 1e-09, 6*3*n_n)
@@ -164,7 +164,7 @@ func Example() {
 	// 		generate_rand_out_file(noarch.Stdout)
 	// 	} else {
 	// 	if solution_only == 1 {
-	model.print_result() //noarch.Stdout)
+	model.print_result(u) //noarch.Stdout)
 	// 	}
 	// 	}
 	// 	if solution_only == 1 {
