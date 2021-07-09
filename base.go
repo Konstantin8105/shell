@@ -1389,11 +1389,11 @@ func (m Model) print_result() int { //fw *io.File) int {
 	var i int
 	var j int
 	var count int
-	var N1 float64
-	var N2 float64
-	var Q float64
-	var M1 float64
-	var M2 float64
+// 	var N1 float64
+// 	var N2 float64
+// 	var Q float64
+// 	var M1 float64
+// 	var M2 float64
 	var sN1 float64
 	var sN2 float64
 	var sQ float64
@@ -1430,7 +1430,7 @@ func (m Model) print_result() int { //fw *io.File) int {
 		for j = 0; j < n_e; j++ {
 			if m.Beams[j].N[0] == i || m.Beams[j].N[1] == i {
 				// internal forces in centroid
-				m.get_int_forces(j, (&N1), (&N2), (&M1), (&M2), (&Q))
+				N1,N2,M1,M2,Q := m.get_int_forces(j)//, (&N1), (&N2), (&M1), (&M2), (&Q))
 				sN1 += N1
 				sN2 += N2
 				sM1 += M1
@@ -1446,9 +1446,9 @@ func (m Model) print_result() int { //fw *io.File) int {
 			sM2 /= float64(count)
 			sQ /= float64(count)
 		}
-		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), m.Points[i][0], m.Points[i][1], femVecGet((&u), 3*i+1), femVecGet((&u), 3*i+2), femVecGet((&u), 3*i+3), sN1, sN2, sM1, sM2, Q)
+		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), m.Points[i][0], m.Points[i][1], femVecGet((&u), 3*i+1), femVecGet((&u), 3*i+2), femVecGet((&u), 3*i+3), sN1, sN2, sM1, sM2, sQ)//Q)
 	}
-	_ = sQ
+	//_ = sQ
 	return 0
 }
 
