@@ -1331,7 +1331,7 @@ func (m Model) get_loads_and_supports() int {
 }
 
 // get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
-func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, Q *float64) {
+func (m Model) get_int_forces(el int) ( N1 , N2 , M1 , M2 , Q float64) {
 	// computes internal force is nodes
 	// * @param el element number <0..n_e-1>
 	// * @param N1 meridian force
@@ -1375,11 +1375,12 @@ func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 
 	femMatMatMult((&D), (&B), (&DB))
 	// get vector
 	femMatVecMult((&DB), (&ue), (&Fe))
-	*N1 = femVecGet((&Fe), 1)
-	*N2 = femVecGet((&Fe), 2)
-	*M1 = femVecGet((&Fe), 3)
-	*M2 = femVecGet((&Fe), 4)
-	*Q = femVecGet((&Fe), 5)
+	N1 = femVecGet((&Fe), 1)
+	N2 = femVecGet((&Fe), 2)
+	M1 = femVecGet((&Fe), 3)
+	M2 = femVecGet((&Fe), 4)
+	Q = femVecGet((&Fe), 5)
+	return
 }
 
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
