@@ -12,8 +12,17 @@ func Example() {
 		// 	e_n1[0], e_n2[0], e_mat[0], e_t[0] = 0, 1, 0, 0.2
 		// 	e_n1[1], e_n2[1], e_mat[1], e_t[1] = 1, 2, 0, 0.2
 		Beams: []BeamProp{
-			{N: [2]int{0, 1}, Mat: 0, T: 0.2},
-			{N: [2]int{1, 2}, Mat: 0, T: 0.2},
+			{N: [2]int{0, 1}, Mat: 0, T: 0.2, E1: 20e9, E2: 20e9, G: 20e9 / (2 * (1 + 0.2)), nu1: 0.2, nu2: 0.2, q: 25000},
+			{N: [2]int{1, 2}, Mat: 0, T: 0.2, E1: 20e9, E2: 20e9, G: 20e9 / (2 * (1 + 0.2)), nu1: 0.2, nu2: 0.2, q: 25000},
+		},
+
+		// 	d_n[0], d_dir[0], d_val[0] = 0, 0, 0
+		// 	d_n[1], d_dir[1], d_val[1] = 0, 1, 0
+		// 	d_n[2], d_dir[2], d_val[2] = 2, 1, 0
+		Supports: [][3]bool{
+			{true, true, false},
+			{false, false, false},
+			{false, true, false},
 		},
 
 		// f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
@@ -24,32 +33,32 @@ func Example() {
 
 	_ = model
 
-	var i int
-	n_m = 1
+	// 	var i int
+	// 	n_m = 1
 
 	// 	n_n = 3
 
 	// 	n_e = 2
 
-	n_d = 3
+	// 	n_d = 3
 
 	// n_f = 1
 
-	m_E1 = make([]float64, n_m)
-
-	m_E2 = make([]float64, n_m)
-
-	m_G = make([]float64, n_m)
-
-	m_nu1 = make([]float64, n_m)
-
-	m_nu2 = make([]float64, n_m)
-
-	m_q = make([]float64, n_m)
-
-	m_vp = make([]float64, n_m)
-
-	m_t = make([]float64, n_m)
+	// 	m_E1 = make([]float64, n_m)
+	//
+	// 	m_E2 = make([]float64, n_m)
+	//
+	// 	m_G = make([]float64, n_m)
+	//
+	// 	m_nu1 = make([]float64, n_m)
+	//
+	// 	m_nu2 = make([]float64, n_m)
+	//
+	// 	m_q = make([]float64, n_m)
+	//
+	// 	m_vp = make([]float64, n_m)
+	//
+	// 	m_t = make([]float64, n_m)
 
 	// 	n_x = make([]float64, n_n)
 	//
@@ -63,40 +72,36 @@ func Example() {
 	//
 	// 	e_t = make([]float64, n_e)
 
-	d_n = make([]int, n_d)
+	// 	d_n = make([]int, n_d)
+	//
+	// 	d_dir = make([]int, n_d)
+	//
+	// 	d_val = make([]float64, n_d)
 
-	d_dir = make([]int, n_d)
-
-	d_val = make([]float64, n_d)
-
-// 	f_n = make([]int, n_f)
-// 
-// 	f_dir = make([]int, n_f)
-// 
-// 	f_val = make([]float64, n_f)
+	// 	f_n = make([]int, n_f)
+	//
+	// 	f_dir = make([]int, n_f)
+	//
+	// 	f_val = make([]float64, n_f)
 
 	// en_num = make([]int,n_n)
 
 	//en_frm = make([]int,n_n)
 
-	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
-
-	for i = 0; i < n_m; i++ {
-
-		if m_E1[i] == m_E2[i] || m_E2[i] <= 0 {
-
-			m_E2[i] = m_E1[i]
-			m_nu2[i] = m_nu1[i]
-			if m_G[i] <= 0 {
-				m_G[i] = m_E1[i] / (2 * (1 + m_nu1[i]))
-
-			}
-		}
-	}
-
-	d_n[0], d_dir[0], d_val[0] = 0, 0, 0
-	d_n[1], d_dir[1], d_val[1] = 0, 1, 0
-	d_n[2], d_dir[2], d_val[2] = 2, 1, 0
+	// 	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
+	//
+	// 	for i = 0; i < n_m; i++ {
+	//
+	// 		if m_E1[i] == m_E2[i] || m_E2[i] <= 0 {
+	//
+	// 			m_E2[i] = m_E1[i]
+	// 			m_nu2[i] = m_nu1[i]
+	// 			if m_G[i] <= 0 {
+	// 				m_G[i] = m_E1[i] / (2 * (1 + m_nu1[i]))
+	//
+	// 			}
+	// 		}
+	// 	}
 
 	// 	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
 
@@ -190,7 +195,7 @@ func Example() {
 	// ro = 0.000840
 	// beta = 0.000001
 	// alpha = 0.555587
-	// [i] Convergence test 8536.877007 < 13.858395 (step 3 from 54)
+	// [i] Convergence test 8536.877008 < 13.858395 (step 3 from 54)
 	// [ ]   linear step 4
 	// ro = 0.000093
 	// beta = 0.111095

@@ -67,6 +67,8 @@ type BeamProp struct {
 	Mat int
 	T   float64
 
+	E1, E2, G, nu1, nu2, q float64
+
 	// A cross-section area
 	// Unit : sq. meter.
 	// A float64
@@ -305,7 +307,7 @@ type tVector struct { // _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c
 // n_m - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:44
 // INPUT DATA:
 // number of materials
-var n_m int
+// var n_m int
 
 // n_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:45
 // number of nodes
@@ -317,7 +319,7 @@ var n_m int
 
 // n_d - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:47
 // number of displacements/supports
-var n_d int
+// var n_d int
 
 // n_f - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:48
 // number of loads
@@ -334,35 +336,35 @@ var n_d int
 // m_E1 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:54
 // materials
 // E1 (bulk modullus)
-var m_E1 []float64
+// var m_E1 []float64
 
 // m_E2 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:55
 // E2 (bulk modullus)
-var m_E2 []float64
+// var m_E2 []float64
 
 // m_G - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:56
 // G (shear modullus)
-var m_G []float64
+// var m_G []float64
 
 // m_nu1 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:57
 // nu1 (poisson ratio)
-var m_nu1 []float64
+// var m_nu1 []float64
 
 // m_nu2 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:58
 // nu2 (poisson ratio)
-var m_nu2 []float64
+// var m_nu2 []float64
 
 // m_q - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:59
 // volume gravity force
-var m_q []float64
+// var m_q []float64
 
 // m_vp - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:60
 // volume unit  price
-var m_vp []float64
+// var m_vp []float64
 
 // m_t - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:61
 // width (if >=0 then ovewrites e_t[] data)
-var m_t []float64
+// var m_t []float64
 
 // n_x - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:64
 // nodes
@@ -393,15 +395,15 @@ var m_t []float64
 // d_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:74
 // displacements
 // nodes <0, n_n-1>
-var d_n []int
+// var d_n []int
 
 // d_dir - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:75
 // orientation w=0, u=1, pho=2, Ez=3, Ex=4, Erot=5
-var d_dir []int
+// var d_dir []int
 
 // d_val - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:76
 // size of displacement or stiffness
-var d_val []float64
+// var d_val []float64
 
 // f_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:79
 // forces in nodes
@@ -934,13 +936,13 @@ func (m Model) get_D_matrix(i int, t float64, D *tMatrix) {
 	var nu2 float64
 	var G float64
 	var mult float64
-	E1 = m_E1[m.Beams[i].Mat]
-	E2 = m_E2[m.Beams[i].Mat]
-	G = m_G[m.Beams[i].Mat]
+	E1 = m.Beams[i].E1
+	E2 = m.Beams[i].E1
+	G = m.Beams[i].G
 	// 	fmt.Println(	"G = ", G)
 	// 	fmt.Println(	"t = ", t)
-	nu1 = m_nu1[m.Beams[i].Mat]
-	nu2 = m_nu2[m.Beams[i].Mat]
+	nu1 = m.Beams[i].nu1
+	nu2 = m.Beams[i].nu2
 	mult = t / (1 - nu1*nu2)
 	femMatPutAdd(D, 1, 1, E1*mult, 0)
 	femMatPutAdd(D, 1, 2, nu2*mult, 0)
@@ -1016,13 +1018,13 @@ func (m Model) get_matrix() int {
 	femVecSetZero((&u))
 	femVecSetZero((&F))
 	for i := 0; i < len(m.Beams); i++ {
-		if (func() float64 {
-			t = m_t[m.Beams[i].Mat]
-			return t
-		}()) <= 0 {
-			// if material width is specified then use element width:
-			t = m.Beams[i].T // e_t[i]
-		}
+		// 		if (func() float64 {
+		// 			t = m_t[m.Beams[i].Mat]
+		// 			return t
+		// 		}()) <= 0 {
+		// 			// if material width is specified then use element width:
+		// 			t = m.Beams[i].T // e_t[i]
+		// 		}
 		t = m.Beams[i].T // e_t[i]
 		femMatSetZero((&Ke))
 		femMatSetZero((&B))
@@ -1066,7 +1068,7 @@ func (m Model) get_matrix() int {
 		}
 
 		if math.Abs((func() float64 {
-			q = m_q[m.Beams[i].Mat]
+			q = m.Beams[i].q
 			return q
 		}())) > 1e-07 {
 			// gravitation
@@ -1234,10 +1236,10 @@ func (m Model) get_matrix() int {
 // get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
 func (m Model) get_loads_and_supports() int {
 	// applies supports in nodes
-	var i int
-	var j int
+	// 	var i int
+	// 	var j int
 	var pos int
-	n_n := len(m.Points)
+	// 	n_n := len(m.Points)
 
 	for i := range m.Ln {
 		for g := range m.Ln[i].Forces {
@@ -1247,32 +1249,63 @@ func (m Model) get_loads_and_supports() int {
 	// 	for i = 0; i < n_f; i++ {
 	// 		femVecPutAdd((&F), f_n[i]*3+f_dir[i]+1, f_val[i], 1)
 	// 	}
-	for i = 0; i < n_d; i++ {
-		if d_dir[i] > 2 {
-			// stifnesses
-			pos = d_n[i]*3 + d_dir[i] - 2
-			femMatPutAdd((&K), pos, pos, d_val[i], 1)
-		} else {
-			// displacements
-			pos = d_n[i]*3 + d_dir[i] + 1
-			if math.Abs(d_val[i]) <= 1e-07 {
-				femMatSetZeroCol((&K), pos)
-				femMatSetZeroRow((&K), pos)
-				femVecPutAdd((&u), pos, 0, 0)
-				// yes, it deletes force in support
-				femVecPutAdd((&F), pos, 0, 0)
-				femMatPutAdd((&K), pos, pos, 1, 0)
-			} else {
-				for j = 1; j <= n_n*3; j++ {
-					femVecPutAdd((&F), j, -1*femMatGet((&K), j, pos)*d_val[i], 1)
-				}
-				femMatSetZeroCol((&K), pos)
-				femMatSetZeroRow((&K), pos)
-				femVecPutAdd((&u), pos, d_val[i], 0)
-				femMatPutAdd((&K), pos, pos, femVecGet((&F), pos)/d_val[i], 0)
+
+	for n := range m.Supports {
+		for d := range m.Supports[n] {
+			if !m.Supports[n][d] {
+				continue
 			}
+
+			d_n := n
+			d_dir := d
+
+			// pos = d_n[i]*3 + d_dir[i] + 1
+			pos = d_n*3 + d_dir + 1
+			// 			if math.Abs(d_val[i]) <= 1e-07 {
+			femMatSetZeroCol((&K), pos)
+			femMatSetZeroRow((&K), pos)
+			femVecPutAdd((&u), pos, 0, 0)
+			// yes, it deletes force in support
+			femVecPutAdd((&F), pos, 0, 0)
+			femMatPutAdd((&K), pos, pos, 1, 0)
+			// 			} else {
+			// 				for j = 1; j <= n_n*3; j++ {
+			// 					femVecPutAdd((&F), j, -1*femMatGet((&K), j, pos)*d_val[i], 1)
+			// 				}
+			// 				femMatSetZeroCol((&K), pos)
+			// 				femMatSetZeroRow((&K), pos)
+			// 				femVecPutAdd((&u), pos, d_val[i], 0)
+			// 				femMatPutAdd((&K), pos, pos, femVecGet((&F), pos)/d_val[i], 0)
+			// 			}
 		}
 	}
+
+	// 	for i = 0; i < n_d; i++ {
+	// 		// 		if d_dir[i] > 2 {
+	// 		// 			// stifnesses
+	// 		// 			pos = d_n[i]*3 + d_dir[i] - 2
+	// 		// 			femMatPutAdd((&K), pos, pos, d_val[i], 1)
+	// 		// 		} else {
+	// 		// displacements
+	// 		pos = d_n[i]*3 + d_dir[i] + 1
+	// 		if math.Abs(d_val[i]) <= 1e-07 {
+	// 			femMatSetZeroCol((&K), pos)
+	// 			femMatSetZeroRow((&K), pos)
+	// 			femVecPutAdd((&u), pos, 0, 0)
+	// 			// yes, it deletes force in support
+	// 			femVecPutAdd((&F), pos, 0, 0)
+	// 			femMatPutAdd((&K), pos, pos, 1, 0)
+	// 		} else {
+	// 			for j = 1; j <= n_n*3; j++ {
+	// 				femVecPutAdd((&F), j, -1*femMatGet((&K), j, pos)*d_val[i], 1)
+	// 			}
+	// 			femMatSetZeroCol((&K), pos)
+	// 			femMatSetZeroRow((&K), pos)
+	// 			femVecPutAdd((&u), pos, d_val[i], 0)
+	// 			femMatPutAdd((&K), pos, pos, femVecGet((&F), pos)/d_val[i], 0)
+	// 		}
+	// 		// 	}
+	// 	}
 	return 0
 }
 
