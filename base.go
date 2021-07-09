@@ -924,7 +924,7 @@ func (m Model) alloc_solver_data() int {
 }
 
 // get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
-func (m Model) get_D_matrix(i int, t float64) tMatrix {
+func (m Model) get_D_matrix(i int) tMatrix {
 	// computes material stiffness matrix of elemen
 	// * @param i element nomber <0..n_e-1>
 	// * @param t eleemnt width
@@ -935,12 +935,13 @@ func (m Model) get_D_matrix(i int, t float64) tMatrix {
 
 	femMatAlloc((&D), 0, 5, 5, 0, nil)
 
-	var E1 float64
-	var E2 float64
-	var nu1 float64
-	var nu2 float64
-	var G float64
-	var mult float64
+// 	var E1 float64
+// 	var E2 float64
+// 	var nu1 float64
+// 	var nu2 float64
+// 	var G float64
+// 	var mult float64
+var (
 	E1 = m.Beams[i].E1
 	E2 = m.Beams[i].E1
 	G = m.Beams[i].G
@@ -948,7 +949,9 @@ func (m Model) get_D_matrix(i int, t float64) tMatrix {
 	// 	fmt.Println(	"t = ", t)
 	nu1 = m.Beams[i].nu1
 	nu2 = m.Beams[i].nu2
+t = m.Beams[i].T
 	mult = t / (1 - nu1*nu2)
+)
 	femMatPutAdd(&D, 1, 1, E1*mult, 0)
 	femMatPutAdd(&D, 1, 2, nu2*mult, 0)
 	femMatPutAdd(&D, 2, 1, nu2*mult, 0)
@@ -1036,7 +1039,7 @@ func (m Model) get_matrix() int {
 		// 			// if material width is specified then use element width:
 		// 			t = m.Beams[i].T // e_t[i]
 		// 		}
-		t = m.Beams[i].T // e_t[i]
+		//t = m.Beams[i].T // e_t[i]
 		// femMatSetZero((&Ke))
 		// femMatSetZero((&B))
 		var Bt tMatrix
@@ -1048,7 +1051,7 @@ func (m Model) get_matrix() int {
 		femMatSetZero((&BtD))
 		// femMatSetZero((&D))
 		// material stiffness matrix D:
-		D := m.get_D_matrix(i, t)
+		D := m.get_D_matrix(i)//, t)
 		// femMatPrn(((&D)),string("D"))
 		// B matrix
 		B, L, R := m.get_B_matrix(i)
@@ -1366,8 +1369,8 @@ func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 
 	}
 
 	// get B and D
-	t := m.Beams[el].T         // e_t[el]
-	D := m.get_D_matrix(el, t) // , (&D))
+	//t := m.Beams[el].T         // e_t[el]
+	D := m.get_D_matrix(el)//, t) // , (&D))
 	B, _, _ := m.get_B_matrix(el)
 	femMatMatMult((&D), (&B), (&DB))
 	// get vector
