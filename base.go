@@ -498,11 +498,11 @@ var Ke tMatrix
 
 // D - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:112
 // 5x5
-var D tMatrix
+// var D tMatrix
 
 // B - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:113
 // 5x6
-var B tMatrix
+// var B tMatrix
 
 // Bt - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:114
 // 6x5
@@ -824,12 +824,12 @@ func (m Model) alloc_solver_data() int {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femMatAlloc((&D), 0, 5, 5, 0, nil)
+	// femMatAlloc((&D), 0, 5, 5, 0, nil)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femMatAlloc((&B), 0, 5, 6, 0, nil)
+	//  femMatAlloc((&B), 0, 5, 6, 0, nil)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
@@ -924,12 +924,17 @@ func (m Model) alloc_solver_data() int {
 }
 
 // get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
-func (m Model) get_D_matrix(i int, t float64, D *tMatrix) {
+func (m Model) get_D_matrix(i int, t float64) tMatrix {
 	// computes material stiffness matrix of elemen
 	// * @param i element nomber <0..n_e-1>
 	// * @param t eleemnt width
 	// * @param D pointer to allocated (!) D matrix
 	//
+
+	D := tMatrix{}
+
+	femMatAlloc((&D), 0, 5, 5, 0, nil)
+
 	var E1 float64
 	var E2 float64
 	var nu1 float64
@@ -944,19 +949,20 @@ func (m Model) get_D_matrix(i int, t float64, D *tMatrix) {
 	nu1 = m.Beams[i].nu1
 	nu2 = m.Beams[i].nu2
 	mult = t / (1 - nu1*nu2)
-	femMatPutAdd(D, 1, 1, E1*mult, 0)
-	femMatPutAdd(D, 1, 2, nu2*mult, 0)
-	femMatPutAdd(D, 2, 1, nu2*mult, 0)
-	femMatPutAdd(D, 2, 2, E2*mult, 0)
-	femMatPutAdd(D, 3, 3, E1*t*t/12.*mult, 0)
-	femMatPutAdd(D, 4, 4, E2*t*t/12.*mult, 0)
-	femMatPutAdd(D, 3, 4, nu2*(E1*t*t)/12.*mult, 0)
-	femMatPutAdd(D, 4, 3, nu2*(E1*t*t)/12.*mult, 0)
-	femMatPutAdd(D, 5, 5, 5.0/6.0*G/t, 0)
+	femMatPutAdd(&D, 1, 1, E1*mult, 0)
+	femMatPutAdd(&D, 1, 2, nu2*mult, 0)
+	femMatPutAdd(&D, 2, 1, nu2*mult, 0)
+	femMatPutAdd(&D, 2, 2, E2*mult, 0)
+	femMatPutAdd(&D, 3, 3, E1*t*t/12.*mult, 0)
+	femMatPutAdd(&D, 4, 4, E2*t*t/12.*mult, 0)
+	femMatPutAdd(&D, 3, 4, nu2*(E1*t*t)/12.*mult, 0)
+	femMatPutAdd(&D, 4, 3, nu2*(E1*t*t)/12.*mult, 0)
+	femMatPutAdd(&D, 5, 5, 5.0/6.0*G/t, 0)
+	return D
 }
 
 // get_B_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:704
-func (m Model) get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
+func (m Model) get_B_matrix(i int, Lc *float64, Rc *float64) tMatrix {
 	// computes B matrix
 	// * @param i element number
 	// * @param B pointer to allocated (!) B matrix
@@ -969,6 +975,9 @@ func (m Model) get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
 	// 	var R float64
 	// 	var dx float64
 	// 	var dy float64
+
+	B := tMatrix{}
+	femMatAlloc((&B), 0, 5, 6, 0, nil)
 	var (
 		// dx = n_x[e_n2[i]] - n_x[e_n1[i]]
 		// dy = n_y[e_n2[i]] - n_y[e_n1[i]]
@@ -981,24 +990,25 @@ func (m Model) get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
 		C = -1 * dy / L
 	)
 	// B matrix:
-	femMatPutAdd(B, 1, 1, -1.*C/L, 0)
-	femMatPutAdd(B, 1, 2, -1.*S/L, 0)
-	femMatPutAdd(B, 1, 4, 1.*C/L, 0)
-	femMatPutAdd(B, 1, 5, 1.*S/L, 0)
-	femMatPutAdd(B, 2, 2, 1./(2*R), 0)
-	femMatPutAdd(B, 2, 5, 1./(2.*R), 0)
-	femMatPutAdd(B, 3, 3, -1./L, 0)
-	femMatPutAdd(B, 3, 6, 1./L, 0)
-	femMatPutAdd(B, 4, 3, S/(2.*R), 0)
-	femMatPutAdd(B, 4, 6, S/(2.*R), 0)
-	femMatPutAdd(B, 5, 1, -1.*S/L, 0)
-	femMatPutAdd(B, 5, 2, 1.*C/L, 0)
-	femMatPutAdd(B, 5, 3, 1./2., 0)
-	femMatPutAdd(B, 5, 4, 1.*S/L, 0)
-	femMatPutAdd(B, 5, 5, -1.*C/L, 0)
-	femMatPutAdd(B, 5, 6, 1./2., 0)
+	femMatPutAdd(&B, 1, 1, -1.*C/L, 0)
+	femMatPutAdd(&B, 1, 2, -1.*S/L, 0)
+	femMatPutAdd(&B, 1, 4, 1.*C/L, 0)
+	femMatPutAdd(&B, 1, 5, 1.*S/L, 0)
+	femMatPutAdd(&B, 2, 2, 1./(2*R), 0)
+	femMatPutAdd(&B, 2, 5, 1./(2.*R), 0)
+	femMatPutAdd(&B, 3, 3, -1./L, 0)
+	femMatPutAdd(&B, 3, 6, 1./L, 0)
+	femMatPutAdd(&B, 4, 3, S/(2.*R), 0)
+	femMatPutAdd(&B, 4, 6, S/(2.*R), 0)
+	femMatPutAdd(&B, 5, 1, -1.*S/L, 0)
+	femMatPutAdd(&B, 5, 2, 1.*C/L, 0)
+	femMatPutAdd(&B, 5, 3, 1./2., 0)
+	femMatPutAdd(&B, 5, 4, 1.*S/L, 0)
+	femMatPutAdd(&B, 5, 5, -1.*C/L, 0)
+	femMatPutAdd(&B, 5, 6, 1./2., 0)
 	*Lc = L
 	*Rc = R
+	return B
 }
 
 // get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
@@ -1027,15 +1037,15 @@ func (m Model) get_matrix() int {
 		// 		}
 		t = m.Beams[i].T // e_t[i]
 		femMatSetZero((&Ke))
-		femMatSetZero((&B))
+		// femMatSetZero((&B))
 		femMatSetZero((&Bt))
 		femMatSetZero((&BtD))
-		femMatSetZero((&D))
+		// femMatSetZero((&D))
 		// material stiffness matrix D:
-		m.get_D_matrix(i, t, (&D))
+		D := m.get_D_matrix(i, t)
 		// femMatPrn(((&D)),string("D"))
 		// B matrix
-		m.get_B_matrix(i, (&B), (&L), (&R))
+		B := m.get_B_matrix(i, (&L), (&R))
 		//femMatPrn(((&B)), string("B"))
 		// transpose of B
 		femMatTran((&B), (&Bt))
@@ -1325,8 +1335,8 @@ func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 
 	var R float64
 	// 	var j int
 	var posj int
-	femMatSetZero((&D))
-	femMatSetZero((&B))
+	// femMatSetZero((&D))
+	// femMatSetZero((&B))
 	femMatSetZero((&DB))
 	femVecSetZero((&ue))
 	femVecSetZero((&Fe))
@@ -1342,9 +1352,9 @@ func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 
 	}
 
 	// get B and D
-	t := m.Beams[el].T // e_t[el]
-	m.get_D_matrix(el, t, (&D))
-	m.get_B_matrix(el, (&B), (&L), (&R))
+	t := m.Beams[el].T         // e_t[el]
+	D := m.get_D_matrix(el, t) // , (&D))
+	B := m.get_B_matrix(el, (&L), (&R))
 	femMatMatMult((&D), (&B), (&DB))
 	// get vector
 	femMatVecMult((&DB), (&ue), (&Fe))
