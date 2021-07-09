@@ -962,7 +962,7 @@ func (m Model) get_D_matrix(i int, t float64) tMatrix {
 }
 
 // get_B_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:704
-func (m Model) get_B_matrix(i int, Lc *float64, Rc *float64) tMatrix {
+func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
 	// computes B matrix
 	// * @param i element number
 	// * @param B pointer to allocated (!) B matrix
@@ -975,17 +975,18 @@ func (m Model) get_B_matrix(i int, Lc *float64, Rc *float64) tMatrix {
 	// 	var R float64
 	// 	var dx float64
 	// 	var dy float64
-
-	B := tMatrix{}
 	femMatAlloc((&B), 0, 5, 6, 0, nil)
 	var (
 		// dx = n_x[e_n2[i]] - n_x[e_n1[i]]
 		// dy = n_y[e_n2[i]] - n_y[e_n1[i]]
 		dx = m.Points[m.Beams[i].N[1]][0] - m.Points[m.Beams[i].N[0]][0]
 		dy = m.Points[m.Beams[i].N[1]][1] - m.Points[m.Beams[i].N[0]][1]
-		L  = math.Sqrt(math.Pow(dx, 2) + math.Pow(dy, 2))
-		// R  = 0.5 * (n_x[e_n1[i]] + n_x[e_n2[i]])
-		R = 0.5 * (m.Points[m.Beams[i].N[1]][0] + m.Points[m.Beams[i].N[0]][0])
+	)
+	L = math.Sqrt(math.Pow(dx, 2) + math.Pow(dy, 2))
+	// R  = 0.5 * (n_x[e_n1[i]] + n_x[e_n2[i]])
+	R = 0.5 * (m.Points[m.Beams[i].N[1]][0] + m.Points[m.Beams[i].N[0]][0])
+
+	var (
 		S = -1 * dx / L
 		C = -1 * dy / L
 	)
@@ -1006,17 +1007,17 @@ func (m Model) get_B_matrix(i int, Lc *float64, Rc *float64) tMatrix {
 	femMatPutAdd(&B, 5, 4, 1.*S/L, 0)
 	femMatPutAdd(&B, 5, 5, -1.*C/L, 0)
 	femMatPutAdd(&B, 5, 6, 1./2., 0)
-	*Lc = L
-	*Rc = R
-	return B
+	// 	Lc = L
+	// 	Rc = R
+	return B, L, R
 }
 
 // get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
 func (m Model) get_matrix() int {
 	// creates stiffness matrix
 	var t float64
-	var L float64
-	var R float64
+	// 	var L float64
+	// 	var R float64
 	var F2 float64
 	var q float64
 	// 	var i int
@@ -1050,7 +1051,7 @@ func (m Model) get_matrix() int {
 		D := m.get_D_matrix(i, t)
 		// femMatPrn(((&D)),string("D"))
 		// B matrix
-		B := m.get_B_matrix(i, (&L), (&R))
+		B, L, R := m.get_B_matrix(i)
 		//femMatPrn(((&B)), string("B"))
 		// transpose of B
 		femMatTran((&B), (&Bt))
@@ -1338,8 +1339,8 @@ func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 
 	// * @return status
 	//
 	//var t float64
-	var L float64
-	var R float64
+	// 	var L float64
+	// 	var R float64
 	// 	var j int
 	var posj int
 	// femMatSetZero((&D))
@@ -1367,7 +1368,7 @@ func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 
 	// get B and D
 	t := m.Beams[el].T         // e_t[el]
 	D := m.get_D_matrix(el, t) // , (&D))
-	B := m.get_B_matrix(el, (&L), (&R))
+	B, _, _ := m.get_B_matrix(el)
 	femMatMatMult((&D), (&B), (&DB))
 	// get vector
 	femMatVecMult((&DB), (&ue), (&Fe))
