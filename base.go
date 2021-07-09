@@ -801,127 +801,127 @@ func (m Model) check_elem_data() {
 // }
 
 // alloc_solver_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:600
-func (m Model) alloc_solver_data() int {
-	// Allocates data for f.e. solver (K,u,F)
-	var i int
-	var j int
-	var n_field []int
-	var alloc_field []int
-	//femMatNull(((&K)))
-	//femVecNull(((&u)))
-	//femVecNull(((&F)))
-	//femMatNull(((&Ke)))
-	//femMatNull(((&D)))
-	//femMatNull(((&B)))
-	//femMatNull(((&Bt)))
-	//femMatNull(((&BtD)))
-	//femMatNull(((&DB)))
-	//femVecNull(((&Fe)))
-	//femVecNull(((&ue)))
-	// 	if
-	// femMatAlloc((&Ke), 0, 6, 6, 0, nil)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femMatAlloc((&D), 0, 5, 5, 0, nil)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	//  femMatAlloc((&B), 0, 5, 6, 0, nil)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femMatAlloc((&Bt), 0, 6, 5, 0, nil)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femMatAlloc((&BtD), 0, 6, 5, 0, nil)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femMatAlloc((&DB), 0, 5, 6, 0, nil)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femVecAlloc((&Fe), 0, 5, 5)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femVecAlloc((&ue), 0, 6, 6)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int {
-
-	n_n := len(m.Points)
-	n_e := len(m.Beams)
-
-	n_field = make([]int, n_n)
-	// 		return n_field
-	// 	}())) == 0 {
-	// 		// Compute allocation vector
-	// 		goto memFree
-	// 	}
-	// 	if len((func() []int {
-	alloc_field = make([]int, n_n*3)
-	// 		return alloc_field
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	for i = 0; i < n_n; i++ {
-		for j = 0; j < n_e; j++ {
-			if m.Beams[j].N[0] == i {
-				n_field[i]++
-			}
-			if m.Beams[j].N[1] == i {
-				n_field[i]++
-			}
-		}
-	}
-	for i = 0; i < n_n; i++ {
-		for j = 0; j < 3; j++ {
-			// is "6" enough?
-			alloc_field[3*i+j] = 3 * 6 * n_field[i]
-		}
-	}
-	// 	if
-	// femMatAlloc((&K), 1, n_n*3, n_n*3, 0, alloc_field)
-	// 	!= 0 {
-	// 		// alloc K, u, F
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femVecAlloc((&F), 0, n_n*3, n_n*3)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	// 	if
-	// femVecAlloc((&u), 0, n_n*3, n_n*3)
-	// 	!= 0 {
-	// 		goto memFree
-	// 	}
-	//femIntFree(alloc_field)
-	//femIntFree(n_field)
-	return 0
-	// memFree:
-	// 	// 	;
-	// 	// 	if len(alloc_field) != 0 {
-	// 	// 		//femIntFree(alloc_field)
-	// 	// 	}
-	// 	// 	if len(n_field) != 0 {
-	// 	// 		//femIntFree(n_field)
-	// 	// 	}
-	// 	// 	free_solver_data()
-	// 	fmt.Fprintf(os.Stdout, string("Out of memory!"))
-	// 	return -4
-}
+// func (m Model) alloc_solver_data() int {
+// 	// Allocates data for f.e. solver (K,u,F)
+// 	var i int
+// 	var j int
+// 	var n_field []int
+// 	var alloc_field []int
+// 	//femMatNull(((&K)))
+// 	//femVecNull(((&u)))
+// 	//femVecNull(((&F)))
+// 	//femMatNull(((&Ke)))
+// 	//femMatNull(((&D)))
+// 	//femMatNull(((&B)))
+// 	//femMatNull(((&Bt)))
+// 	//femMatNull(((&BtD)))
+// 	//femMatNull(((&DB)))
+// 	//femVecNull(((&Fe)))
+// 	//femVecNull(((&ue)))
+// 	// 	if
+// 	// femMatAlloc((&Ke), 0, 6, 6, 0, nil)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femMatAlloc((&D), 0, 5, 5, 0, nil)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	//  femMatAlloc((&B), 0, 5, 6, 0, nil)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femMatAlloc((&Bt), 0, 6, 5, 0, nil)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femMatAlloc((&BtD), 0, 6, 5, 0, nil)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femMatAlloc((&DB), 0, 5, 6, 0, nil)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femVecAlloc((&Fe), 0, 5, 5)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femVecAlloc((&ue), 0, 6, 6)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if len((func() []int {
+// 
+// 	n_n := len(m.Points)
+// 	n_e := len(m.Beams)
+// 
+// 	n_field = make([]int, n_n)
+// 	// 		return n_field
+// 	// 	}())) == 0 {
+// 	// 		// Compute allocation vector
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if len((func() []int {
+// 	alloc_field = make([]int, n_n*3)
+// 	// 		return alloc_field
+// 	// 	}())) == 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	for i = 0; i < n_n; i++ {
+// 		for j = 0; j < n_e; j++ {
+// 			if m.Beams[j].N[0] == i {
+// 				n_field[i]++
+// 			}
+// 			if m.Beams[j].N[1] == i {
+// 				n_field[i]++
+// 			}
+// 		}
+// 	}
+// 	for i = 0; i < n_n; i++ {
+// 		for j = 0; j < 3; j++ {
+// 			// is "6" enough?
+// 			alloc_field[3*i+j] = 3 * 6 * n_field[i]
+// 		}
+// 	}
+// 	// 	if
+// 	// femMatAlloc((&K), 1, n_n*3, n_n*3, 0, alloc_field)
+// 	// 	!= 0 {
+// 	// 		// alloc K, u, F
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femVecAlloc((&F), 0, n_n*3, n_n*3)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// 	if
+// 	// femVecAlloc((&u), 0, n_n*3, n_n*3)
+// 	// 	!= 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	//femIntFree(alloc_field)
+// 	//femIntFree(n_field)
+// 	return 0
+// 	// memFree:
+// 	// 	// 	;
+// 	// 	// 	if len(alloc_field) != 0 {
+// 	// 	// 		//femIntFree(alloc_field)
+// 	// 	// 	}
+// 	// 	// 	if len(n_field) != 0 {
+// 	// 	// 		//femIntFree(n_field)
+// 	// 	// 	}
+// 	// 	// 	free_solver_data()
+// 	// 	fmt.Fprintf(os.Stdout, string("Out of memory!"))
+// 	// 	return -4
+// }
 
 // get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
 func (m Model) get_D_matrix(i int) tMatrix {

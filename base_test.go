@@ -140,7 +140,7 @@ func Example() {
 	// 	cmd_param(argc, argv)
 	// read_input_data() //noarch.Stdin)
 	//stat +=
-	model.alloc_solver_data()
+	// model.alloc_solver_data()
 	// stat += optim_replace_data(opt_data)
 	// 	if write_only == 1 {
 	// write_input_data() //noarch.Stdout)
