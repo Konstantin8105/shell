@@ -389,15 +389,15 @@ var f_val []float64
 // fail_type - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:102
 // failure condition data
 // type of failure condition
-var fail_type int
-
-// n_fail - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:103
-// number of failure condition data
-var n_fail int
-
-// fail_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:104
-// failure condition data
-var fail_data []float64
+// var fail_type int
+//
+// // n_fail - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:103
+// // number of failure condition data
+// var n_fail int
+//
+// // fail_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:104
+// // failure condition data
+// var fail_data []float64
 
 // K - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:107
 // SOLUTION DATA
@@ -655,47 +655,43 @@ func write_input_data() int { //fw *io.File) int {
 	var i int
 	// sizes
 	fmt.Fprintf(fw, string("%d %d %d %d %d\n"), n_m, n_n, n_e, n_d, n_f)
-	{
-		// materials
-		for i = 0; i < n_m; i++ {
-			fmt.Fprintf(fw, string(" %e %e %e %e %e %e %e %e\n"), m_E1[i], m_E2[i], m_G[i], m_nu1[i], m_nu2[i], m_q[i], m_vp[i], m_t[i])
-		}
+
+	// materials
+	for i = 0; i < n_m; i++ {
+		fmt.Fprintf(fw, string(" %e %e %e %e %e %e %e %e\n"), m_E1[i], m_E2[i], m_G[i], m_nu1[i], m_nu2[i], m_q[i], m_vp[i], m_t[i])
 	}
-	{
-		// nodes
-		for i = 0; i < n_n; i++ {
-			fmt.Fprintf(fw, string("%e %e\n"), n_x[i], n_y[i])
-		}
+
+	// nodes
+	for i = 0; i < n_n; i++ {
+		fmt.Fprintf(fw, string("%e %e\n"), n_x[i], n_y[i])
 	}
-	{
-		// elements
-		for i = 0; i < n_e; i++ {
-			fmt.Fprintf(fw, string("%d %d %d %e\n"), e_n1[i], e_n2[i], e_mat[i], e_t[i])
-		}
+
+	// elements
+	for i = 0; i < n_e; i++ {
+		fmt.Fprintf(fw, string("%d %d %d %e\n"), e_n1[i], e_n2[i], e_mat[i], e_t[i])
 	}
-	{
-		// displacements
-		for i = 0; i < n_d; i++ {
-			fmt.Fprintf(fw, string("%d %d %e\n"), d_n[i], d_dir[i], d_val[i])
-		}
+
+	// displacements
+	for i = 0; i < n_d; i++ {
+		fmt.Fprintf(fw, string("%d %d %e\n"), d_n[i], d_dir[i], d_val[i])
 	}
-	{
-		// supports
-		for i = 0; i < n_f; i++ {
-			fmt.Fprintf(fw, string("%d %d %e\n"), f_n[i], f_dir[i], f_val[i])
-		}
+
+	// supports
+	for i = 0; i < n_f; i++ {
+		fmt.Fprintf(fw, string("%d %d %e\n"), f_n[i], f_dir[i], f_val[i])
 	}
+
 	// water pressure data
 	// fmt.Fprintf(fw, string("%e %e %e %d %d\n"), w_top, w_bot, w_val, w_min, w_max)
 	// failure condition data:
-	fmt.Fprintf(fw, string("%d\n"), fail_type)
-	if fail_type > 0 {
-		fmt.Fprintf(fw, string("%d\n"), n_fail)
-		for i = 0; i < n_fail; i++ {
-			fmt.Fprintf(fw, string(" %e"), fail_data[i])
-		}
-		fmt.Fprintf(fw, string("\n"))
-	}
+	// 	fmt.Fprintf(fw, string("%d\n"), fail_type)
+	// 	if fail_type > 0 {
+	// 		fmt.Fprintf(fw, string("%d\n"), n_fail)
+	// 		for i = 0; i < n_fail; i++ {
+	// 			fmt.Fprintf(fw, string(" %e"), fail_data[i])
+	// 		}
+	// 		fmt.Fprintf(fw, string("\n"))
+	// 	}
 	return 0
 }
 
@@ -733,43 +729,59 @@ func alloc_solver_data() int {
 	//femMatNull(((&DB)))
 	//femVecNull(((&Fe)))
 	//femVecNull(((&ue)))
-	if femMatAlloc((&Ke), 0, 6, 6, 0, nil) != 0 {
-		goto memFree
-	}
-	if femMatAlloc((&D), 0, 5, 5, 0, nil) != 0 {
-		goto memFree
-	}
-	if femMatAlloc((&B), 0, 5, 6, 0, nil) != 0 {
-		goto memFree
-	}
-	if femMatAlloc((&Bt), 0, 6, 5, 0, nil) != 0 {
-		goto memFree
-	}
-	if femMatAlloc((&BtD), 0, 6, 5, 0, nil) != 0 {
-		goto memFree
-	}
-	if femMatAlloc((&DB), 0, 5, 6, 0, nil) != 0 {
-		goto memFree
-	}
-	if femVecAlloc((&Fe), 0, 5, 5) != 0 {
-		goto memFree
-	}
-	if femVecAlloc((&ue), 0, 6, 6) != 0 {
-		goto memFree
-	}
-	if len((func() []int {
-		n_field = make([]int, n_n)
-		return n_field
-	}())) == 0 {
-		// Compute allocation vector
-		goto memFree
-	}
-	if len((func() []int {
-		alloc_field = make([]int, n_n*3)
-		return alloc_field
-	}())) == 0 {
-		goto memFree
-	}
+	// 	if
+	femMatAlloc((&Ke), 0, 6, 6, 0, nil)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femMatAlloc((&D), 0, 5, 5, 0, nil)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femMatAlloc((&B), 0, 5, 6, 0, nil)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femMatAlloc((&Bt), 0, 6, 5, 0, nil)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femMatAlloc((&BtD), 0, 6, 5, 0, nil)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femMatAlloc((&DB), 0, 5, 6, 0, nil)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femVecAlloc((&Fe), 0, 5, 5)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femVecAlloc((&ue), 0, 6, 6)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int {
+	n_field = make([]int, n_n)
+	// 		return n_field
+	// 	}())) == 0 {
+	// 		// Compute allocation vector
+	// 		goto memFree
+	// 	}
+	// 	if len((func() []int {
+	alloc_field = make([]int, n_n*3)
+	// 		return alloc_field
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
 	for i = 0; i < n_n; i++ {
 		for j = 0; j < n_e; j++ {
 			if e_n1[j] == i {
@@ -786,30 +798,36 @@ func alloc_solver_data() int {
 			alloc_field[3*i+j] = 3 * 6 * n_field[i]
 		}
 	}
-	if femMatAlloc((&K), 1, n_n*3, n_n*3, 0, alloc_field) != 0 {
-		// alloc K, u, F
-		goto memFree
-	}
-	if femVecAlloc((&F), 0, n_n*3, n_n*3) != 0 {
-		goto memFree
-	}
-	if femVecAlloc((&u), 0, n_n*3, n_n*3) != 0 {
-		goto memFree
-	}
+	// 	if
+	femMatAlloc((&K), 1, n_n*3, n_n*3, 0, alloc_field)
+	// 	!= 0 {
+	// 		// alloc K, u, F
+	// 		goto memFree
+	// 	}
+	// 	if
+	femVecAlloc((&F), 0, n_n*3, n_n*3)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
+	// 	if
+	femVecAlloc((&u), 0, n_n*3, n_n*3)
+	// 	!= 0 {
+	// 		goto memFree
+	// 	}
 	//femIntFree(alloc_field)
 	//femIntFree(n_field)
 	return 0
-memFree:
-	// 	;
-	// 	if len(alloc_field) != 0 {
-	// 		//femIntFree(alloc_field)
-	// 	}
-	// 	if len(n_field) != 0 {
-	// 		//femIntFree(n_field)
-	// 	}
-	// 	free_solver_data()
-	fmt.Fprintf(os.Stdout, string("Out of memory!"))
-	return -4
+	// memFree:
+	// 	// 	;
+	// 	// 	if len(alloc_field) != 0 {
+	// 	// 		//femIntFree(alloc_field)
+	// 	// 	}
+	// 	// 	if len(n_field) != 0 {
+	// 	// 		//femIntFree(n_field)
+	// 	// 	}
+	// 	// 	free_solver_data()
+	// 	fmt.Fprintf(os.Stdout, string("Out of memory!"))
+	// 	return -4
 }
 
 // get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
@@ -852,18 +870,20 @@ func get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
 	// * @param Lc element length (result)
 	// * @param Rc average distance from axis or revolution
 	//
-	var L float64
-	var C float64
-	var S float64
-	var R float64
-	var dx float64
-	var dy float64
-	dx = n_x[e_n2[i]] - n_x[e_n1[i]]
-	dy = n_y[e_n2[i]] - n_y[e_n1[i]]
-	L = math.Sqrt(math.Pow(dx, 2) + math.Pow(dy, 2))
-	R = 0.5 * (n_x[e_n1[i]] + n_x[e_n2[i]])
-	S = -1 * dx / L
-	C = -1 * dy / L
+	// 	var L float64
+	// 	var C float64
+	// 	var S float64
+	// 	var R float64
+	// 	var dx float64
+	// 	var dy float64
+	var (
+		dx = n_x[e_n2[i]] - n_x[e_n1[i]]
+		dy = n_y[e_n2[i]] - n_y[e_n1[i]]
+		L  = math.Sqrt(math.Pow(dx, 2) + math.Pow(dy, 2))
+		R  = 0.5 * (n_x[e_n1[i]] + n_x[e_n2[i]])
+		S  = -1 * dx / L
+		C  = -1 * dy / L
+	)
 	// B matrix:
 	femMatPutAdd(B, 1, 1, -1.*C/L, 0)
 	femMatPutAdd(B, 1, 2, -1.*S/L, 0)
@@ -893,7 +913,7 @@ func get_matrix() int {
 	var R float64
 	var F2 float64
 	var q float64
-	var i int
+	// 	var i int
 	var j int
 	var k int
 	var posj int
@@ -901,7 +921,7 @@ func get_matrix() int {
 	femMatSetZero((&K))
 	femVecSetZero((&u))
 	femVecSetZero((&F))
-	for i = 0; i < n_e; i++ {
+	for i := 0; i < n_e; i++ {
 		if (func() float64 {
 			t = m_t[e_mat[i]]
 			return t
@@ -934,24 +954,23 @@ func get_matrix() int {
 
 		//	femMatPrn(((&Ke)), string("Ke"))
 
-		{
-			// localisation to "K":
-			for j = 1; j <= 6; j++ {
-				if j < 4 {
-					posj = e_n1[i]*3 + j
+		// localisation to "K":
+		for j = 1; j <= 6; j++ {
+			if j < 4 {
+				posj = e_n1[i]*3 + j
+			} else {
+				posj = e_n2[i]*3 + j - 3
+			}
+			for k = 1; k <= 6; k++ {
+				if k < 4 {
+					posk = e_n1[i]*3 + k
 				} else {
-					posj = e_n2[i]*3 + j - 3
+					posk = e_n2[i]*3 + k - 3
 				}
-				for k = 1; k <= 6; k++ {
-					if k < 4 {
-						posk = e_n1[i]*3 + k
-					} else {
-						posk = e_n2[i]*3 + k - 3
-					}
-					femMatPutAdd((&K), posj, posk, femMatGet((&Ke), j, k), 1)
-				}
+				femMatPutAdd((&K), posj, posk, femMatGet((&Ke), j, k), 1)
 			}
 		}
+
 		if math.Abs((func() float64 {
 			q = m_q[e_mat[i]]
 			return q
@@ -1167,29 +1186,29 @@ func get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, 
 	// * @param Q tangent force
 	// * @return status
 	//
-	var t float64
+	//var t float64
 	var L float64
 	var R float64
-	var j int
+	// 	var j int
 	var posj int
 	femMatSetZero((&D))
 	femMatSetZero((&B))
 	femMatSetZero((&DB))
 	femVecSetZero((&ue))
 	femVecSetZero((&Fe))
-	{
-		// get local stiffness vector
-		for j = 1; j <= 6; j++ {
-			if j < 4 {
-				posj = e_n1[el]*3 + j
-			} else {
-				posj = e_n2[el]*3 + j - 3
-			}
-			femVecPutAdd((&ue), j, femVecGet((&u), posj), 0)
+
+	// get local stiffness vector
+	for j := 1; j <= 6; j++ {
+		if j < 4 {
+			posj = e_n1[el]*3 + j
+		} else {
+			posj = e_n2[el]*3 + j - 3
 		}
+		femVecPutAdd((&ue), j, femVecGet((&u), posj), 0)
 	}
+
 	// get B and D
-	t = e_t[el]
+	t := e_t[el]
 	get_D_matrix(el, t, (&D))
 	get_B_matrix(el, (&B), (&L), (&R))
 	femMatMatMult((&D), (&B), (&DB))
@@ -1218,17 +1237,17 @@ func print_result() int { //fw *io.File) int {
 	var sQ float64
 	var sM1 float64
 	var sM2 float64
-	N1 = 0
-	N2 = 0
-	M1 = 0
-	M2 = 0
-	Q = 0
-	sN1 = 0
-	sN2 = 0
-	sM1 = 0
-	sM2 = 0
-	sQ = 0
-
+	// 	N1 = 0
+	// 	N2 = 0
+	// 	M1 = 0
+	// 	M2 = 0
+	// 	Q = 0
+	// 	sN1 = 0
+	// 	sN2 = 0
+	// 	sM1 = 0
+	// 	sM2 = 0
+	// 	sQ = 0
+	//
 	_ = sN1
 	_ = sN2
 	_ = sM1
@@ -1429,123 +1448,123 @@ func print_result() int { //fw *io.File) int {
 // }
 
 // fail_test_concrete - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1283
-func fail_test_concrete() int {
-	// ** FAILURE CRITERIA DEFINITIONS **
-	//
-	// *  provides failure testing
-	var N1 float64
-	var N2 float64
-	var Q float64
-	var M1 float64
-	var M2 float64
-	var h float64
-	var I1 float64
-	var J2 float64
-	var J3 float64
-	var alpha float64
-	var beta float64
-	var lambda float64
-	var k float64
-	var cos3f float64
-	var c1 float64
-	var c2 float64
-	var fc float64
-	var s1 float64
-	var s2 float64
-	var sm float64
-	var tmp float64
-	var i int
-	k = fail_data[1] / fail_data[0]
-	for i = 0; i < n_e; i++ {
-		// internal forces in centroid
-		get_int_forces(i, (&N1), (&N2), (&M1), (&M2), (&Q))
-		h = e_t[i]
-		s1 = 6*M1/h + N1/h
-		s2 = 6*M2/h + N2/h
-		if s1 < s2 {
-			tmp = s1
-			s1 = s2
-			s2 = tmp
-		}
-		I1 = s1 + s2
-		sm = I1 / 3.
-		J3 = (s1 - sm) * (s2 - sm)
-		J2 = 1. / 6. * (math.Pow(s1-s2, 2) + s1*s1 + s2*s2)
-		alpha = 1. / (9. * math.Pow(k, 1.4))
-		beta = 1. / (3.7 * math.Pow(k, 1.1))
-		cos3f = 3. * math.Pow(3, 0.5) / 2 * (J3 / math.Pow(J2, 1.5))
-		c1 = 1. / (0.7 * math.Pow(k, 1.1))
-		c2 = 1. - 6.8*math.Pow(k-0.07, 2)
-		if cos3f < 0 {
-			lambda = c1 * math.Cos(3.141592653589793/3-1./3.*math.Acos(0-c2*cos3f))
-		} else {
-			lambda = c1 * math.Cos(1./3.*math.Acos(0-c2*cos3f))
-		}
-		fc = alpha*(J2/math.Pow(fail_data[0], 2)) + lambda*(math.Sqrt(J2)/fail_data[0]) + beta*(I1/fail_data[0])
-		fmt.Fprintf(os.Stdout, string("[%d] fc = %e, ft = %e\n"), i, fail_data, fail_data[1])
-		fmt.Fprintf(os.Stdout, string("[%d] s1: %e, s2: %e\nsm: %e I1: %e, J2: %e, J3: %e\n"), i, s1, s2, sm, I1, J2, J3)
-		fmt.Fprintf(os.Stdout, string("[%d] alpha: %e, beta: %e, lambda: %e cos3f: %e\nc1: %e, c2: %e => fc: %e\n"), i, alpha, beta, lambda, cos3f, c1, c2, fc)
-		if fc > 1 {
-			// failed
-			fmt.Fprintf(os.Stdout, string("Element %d FAILED : %.2f procent\n"), i, fc*100)
-			return 1
-		}
-	}
-	return 0
-}
+// func fail_test_concrete() int {
+// 	// ** FAILURE CRITERIA DEFINITIONS **
+// 	//
+// 	// *  provides failure testing
+// 	var N1 float64
+// 	var N2 float64
+// 	var Q float64
+// 	var M1 float64
+// 	var M2 float64
+// 	var h float64
+// 	var I1 float64
+// 	var J2 float64
+// 	var J3 float64
+// 	var alpha float64
+// 	var beta float64
+// 	var lambda float64
+// 	var k float64
+// 	var cos3f float64
+// 	var c1 float64
+// 	var c2 float64
+// 	var fc float64
+// 	var s1 float64
+// 	var s2 float64
+// 	var sm float64
+// 	var tmp float64
+// 	var i int
+// 	k = fail_data[1] / fail_data[0]
+// 	for i = 0; i < n_e; i++ {
+// 		// internal forces in centroid
+// 		get_int_forces(i, (&N1), (&N2), (&M1), (&M2), (&Q))
+// 		h = e_t[i]
+// 		s1 = 6*M1/h + N1/h
+// 		s2 = 6*M2/h + N2/h
+// 		if s1 < s2 {
+// 			tmp = s1
+// 			s1 = s2
+// 			s2 = tmp
+// 		}
+// 		I1 = s1 + s2
+// 		sm = I1 / 3.
+// 		J3 = (s1 - sm) * (s2 - sm)
+// 		J2 = 1. / 6. * (math.Pow(s1-s2, 2) + s1*s1 + s2*s2)
+// 		alpha = 1. / (9. * math.Pow(k, 1.4))
+// 		beta = 1. / (3.7 * math.Pow(k, 1.1))
+// 		cos3f = 3. * math.Pow(3, 0.5) / 2 * (J3 / math.Pow(J2, 1.5))
+// 		c1 = 1. / (0.7 * math.Pow(k, 1.1))
+// 		c2 = 1. - 6.8*math.Pow(k-0.07, 2)
+// 		if cos3f < 0 {
+// 			lambda = c1 * math.Cos(3.141592653589793/3-1./3.*math.Acos(0-c2*cos3f))
+// 		} else {
+// 			lambda = c1 * math.Cos(1./3.*math.Acos(0-c2*cos3f))
+// 		}
+// 		fc = alpha*(J2/math.Pow(fail_data[0], 2)) + lambda*(math.Sqrt(J2)/fail_data[0]) + beta*(I1/fail_data[0])
+// 		fmt.Fprintf(os.Stdout, string("[%d] fc = %e, ft = %e\n"), i, fail_data, fail_data[1])
+// 		fmt.Fprintf(os.Stdout, string("[%d] s1: %e, s2: %e\nsm: %e I1: %e, J2: %e, J3: %e\n"), i, s1, s2, sm, I1, J2, J3)
+// 		fmt.Fprintf(os.Stdout, string("[%d] alpha: %e, beta: %e, lambda: %e cos3f: %e\nc1: %e, c2: %e => fc: %e\n"), i, alpha, beta, lambda, cos3f, c1, c2, fc)
+// 		if fc > 1 {
+// 			// failed
+// 			fmt.Fprintf(os.Stdout, string("Element %d FAILED : %.2f procent\n"), i, fc*100)
+// 			return 1
+// 		}
+// 	}
+// 	return 0
+// }
 
 // fail_test - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1348
-func fail_test() int {
-	switch fail_type {
-	case 1:
-		// runs failure test
-		// * @return 1 for failure, 0 for tother cases
-		//
-		// concrete: no-crack allowed
-		return fail_test_concrete()
-	case 0:
-		fallthrough
-	default:
-		// no criteria -> no fail
-		return 0
-		//break
-	}
-	// return 0
-}
+// func fail_test() int {
+// 	switch fail_type {
+// 	case 1:
+// 		// runs failure test
+// 		// * @return 1 for failure, 0 for tother cases
+// 		//
+// 		// concrete: no-crack allowed
+// 		return fail_test_concrete()
+// 	case 0:
+// 		fallthrough
+// 	default:
+// 		// no criteria -> no fail
+// 		return 0
+// 		//break
+// 	}
+// 	// return 0
+// }
 
 // compute_price - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1364
-func compute_price() float64 {
-	// Computes price of the structure based on material volume
-	var price float64
-	var volume float64
-	var dx float64
-	var dpx float64
-	var dy float64
-	var i int
-	price = 0
-	for i = 0; i < n_e; i++ {
-		// R-r
-		dx = math.Abs(n_x[e_n2[i]] - n_x[e_n1[i]])
-		// R+r
-		dpx = n_x[e_n2[i]] + n_x[e_n1[i]]
-		dy = math.Abs(n_y[e_n2[i]] - n_y[e_n1[i]])
-		if dx <= 1e-07 {
-			// cillinder
-			// 2*pi*r
-			volume = dy * (2 * 3.141592653589793 * n_x[e_n2[i]])
-		} else {
-			if dy <= 1e-07 {
-				// circle in plane
-				volume = 3.141592653589793 * math.Abs(math.Pow(n_x[e_n2[i]], 2)-math.Pow(n_x[e_n1[i]], 2))
-			} else {
-				// arbitrary shape
-				volume = 3.141592653589793 * dpx * math.Sqrt(dy*dy+dx*dx)
-			}
-		}
-		price += e_t[i] * volume * m_vp[e_mat[i]]
-	}
-	return price
-}
+// func compute_price() float64 {
+// 	// Computes price of the structure based on material volume
+// 	var price float64
+// 	var volume float64
+// 	var dx float64
+// 	var dpx float64
+// 	var dy float64
+// 	var i int
+// 	price = 0
+// 	for i = 0; i < n_e; i++ {
+// 		// R-r
+// 		dx = math.Abs(n_x[e_n2[i]] - n_x[e_n1[i]])
+// 		// R+r
+// 		dpx = n_x[e_n2[i]] + n_x[e_n1[i]]
+// 		dy = math.Abs(n_y[e_n2[i]] - n_y[e_n1[i]])
+// 		if dx <= 1e-07 {
+// 			// cillinder
+// 			// 2*pi*r
+// 			volume = dy * (2 * 3.141592653589793 * n_x[e_n2[i]])
+// 		} else {
+// 			if dy <= 1e-07 {
+// 				// circle in plane
+// 				volume = 3.141592653589793 * math.Abs(math.Pow(n_x[e_n2[i]], 2)-math.Pow(n_x[e_n1[i]], 2))
+// 			} else {
+// 				// arbitrary shape
+// 				volume = 3.141592653589793 * dpx * math.Sqrt(dy*dy+dx*dx)
+// 			}
+// 		}
+// 		price += e_t[i] * volume * m_vp[e_mat[i]]
+// 	}
+// 	return price
+// }
 
 // optim_replace_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1399
 // func optim_replace_data(ifld []float64) int {
@@ -1976,12 +1995,12 @@ func femMatAlloc(mat *tMatrix, type_ int, rows int, cols int, bandwidth int, row
 	mat.rows = rows
 	mat.cols = cols
 	mat.len_ = cols * rows
-	if len((func() []float64 {
-		mat.data = make([]float64, mat.len_)
-		return mat.data
-	}())) == 0 {
-		goto memFree
-	}
+	// 	if len((func() []float64 {
+	mat.data = make([]float64, mat.len_)
+	// 		return mat.data
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
 	//mat.pos = nil
 	//mat.frompos = nil
 	// mat.defpos = nil
@@ -2045,10 +2064,10 @@ func femMatAlloc(mat *tMatrix, type_ int, rows int, cols int, bandwidth int, row
 	// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d!\n"), string("Matrix type unsupported"), type_)
 	// 		return -3
 	// 	}
-memFree:
-	;
-	//femMatFree(mat)
-	return -4
+	// memFree:
+	// 	;
+	// 	//femMatFree(mat)
+	// 	return -4
 }
 
 // femMatGet - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:142
@@ -2513,12 +2532,12 @@ func femVecAlloc(mat *tVector, type_ int, rows int, items int) int {
 	// 		case 0:
 	mat.rows = rows
 	mat.len_ = rows
-	if len((func() []float64 {
-		mat.data = make([]float64, mat.len_)
-		return mat.data
-	}())) == 0 {
-		goto memFree
-	}
+	// 	if len((func() []float64 {
+	mat.data = make([]float64, mat.len_)
+	// 		return mat.data
+	// 	}())) == 0 {
+	// 		goto memFree
+	// 	}
 	// mat.pos = nil
 	// 		case 1:
 	// 			// VEC_SPAR cannot be used ;-)
@@ -2549,10 +2568,10 @@ func femVecAlloc(mat *tVector, type_ int, rows int, items int) int {
 	// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d!\n"), string("Matrix type unsupported"), type_)
 	// 		return -3
 	// 	}
-memFree:
-	;
-	//femVecFree(mat)
-	return -4
+	// memFree:
+	// 	;
+	// 	//femVecFree(mat)
+	// 	return -4
 }
 
 // femVecPutAdd - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:776
@@ -2678,8 +2697,8 @@ func femVecGet(vec *tVector, pos int) float64 {
 // femVecSetZero - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:961
 func femVecSetZero(a *tVector) {
 	// Sets all of vertor contents to 0 FOR SMALL DATA
-	var i int
-	for i = 0; i < a.len_; i++ {
+	// 	var i int
+	for i := 0; i < a.len_; i++ {
 		a.data[i] = 0
 	}
 }
@@ -2841,8 +2860,8 @@ func femValMatMultSelf(val float64, a *tMatrix) int {
 	// * @param a original number (WILL BE modified)
 	// * @return status
 	//
-	var i int
-	for i = 0; i < a.len_; i++ {
+	// var i int
+	for i := 0; i < a.len_; i++ {
 		a.data[i] *= val
 	}
 	return 0
@@ -4940,14 +4959,14 @@ func read_input_data() {
 
 	check_elem_data()
 
-	fail_type = 1
-
-	n_fail = 2
-
-	fail_data = make([]float64, n_fail)
-
-	fail_data[0] = 20e6
-	fail_data[1] = 1e6
+	// 	fail_type = 1
+	//
+	// 	n_fail = 2
+	//
+	// 	fail_data = make([]float64, n_fail)
+	//
+	// 	fail_data[0] = 20e6
+	// 	fail_data[1] = 1e6
 
 	n_r_inp = 1
 
