@@ -494,7 +494,7 @@ var F tVector
 
 // Ke - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:111
 // 6x6
-var Ke tMatrix
+// var Ke tMatrix
 
 // D - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:112
 // 5x5
@@ -506,15 +506,15 @@ var Ke tMatrix
 
 // Bt - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:114
 // 6x5
-var Bt tMatrix
+// var Bt tMatrix
 
 // BtD - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:115
 // 6x5
-var BtD tMatrix
+// var BtD tMatrix
 
 // DB - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:116
 // 5x6
-var DB tMatrix
+// var DB tMatrix
 
 // Fe - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:117
 // 5
@@ -522,7 +522,7 @@ var Fe tVector
 
 // ue - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:118
 // 6
-var ue tVector
+// var ue tVector
 
 // n_en - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:121
 // result helpers data
@@ -819,7 +819,7 @@ func (m Model) alloc_solver_data() int {
 	//femVecNull(((&Fe)))
 	//femVecNull(((&ue)))
 	// 	if
-	femMatAlloc((&Ke), 0, 6, 6, 0, nil)
+	// femMatAlloc((&Ke), 0, 6, 6, 0, nil)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
@@ -834,17 +834,17 @@ func (m Model) alloc_solver_data() int {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femMatAlloc((&Bt), 0, 6, 5, 0, nil)
+	// femMatAlloc((&Bt), 0, 6, 5, 0, nil)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femMatAlloc((&BtD), 0, 6, 5, 0, nil)
+	// femMatAlloc((&BtD), 0, 6, 5, 0, nil)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femMatAlloc((&DB), 0, 5, 6, 0, nil)
+	// femMatAlloc((&DB), 0, 5, 6, 0, nil)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
@@ -854,7 +854,7 @@ func (m Model) alloc_solver_data() int {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femVecAlloc((&ue), 0, 6, 6)
+	// femVecAlloc((&ue), 0, 6, 6)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
@@ -1036,9 +1036,14 @@ func (m Model) get_matrix() int {
 		// 			t = m.Beams[i].T // e_t[i]
 		// 		}
 		t = m.Beams[i].T // e_t[i]
-		femMatSetZero((&Ke))
+		// femMatSetZero((&Ke))
 		// femMatSetZero((&B))
+		var Bt tMatrix
+		femMatAlloc((&Bt), 0, 6, 5, 0, nil)
 		femMatSetZero((&Bt))
+
+		var BtD tMatrix
+		femMatAlloc((&BtD), 0, 6, 5, 0, nil)
 		femMatSetZero((&BtD))
 		// femMatSetZero((&D))
 		// material stiffness matrix D:
@@ -1054,6 +1059,8 @@ func (m Model) get_matrix() int {
 		// => BtD
 		femMatMatMult((&Bt), (&D), (&BtD))
 		// => Ke  without L*R
+		var Ke tMatrix
+		femMatAlloc((&Ke), 0, 6, 6, 0, nil)
 		femMatMatMult((&BtD), (&B), (&Ke))
 		// element stifness matrix Ke:
 		femValMatMultSelf(R*L, (&Ke))
@@ -1337,8 +1344,14 @@ func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 
 	var posj int
 	// femMatSetZero((&D))
 	// femMatSetZero((&B))
+	var DB tMatrix
+	femMatAlloc((&DB), 0, 5, 6, 0, nil)
 	femMatSetZero((&DB))
+
+	var ue tVector
+	femVecAlloc((&ue), 0, 6, 6)
 	femVecSetZero((&ue))
+
 	femVecSetZero((&Fe))
 
 	// get local stiffness vector
