@@ -152,9 +152,20 @@ func Example() {
 	// stat += generate_water_load_x()
 	//stat +=
 	model.get_loads_and_supports(K, F, u)
+
+	// 	fmt.Printf("K = %.2e\n", mat.Formatted(K, mat.Prefix("    "), mat.Squeeze()))
+	// 	fmt.Println("FF", F)
 	//stat =
-	n_n := len(model.Points)
-	femEqsCGwJ((&K), (&F), (&u), 1e-09, 6*3*n_n)
+	// n_n := len(model.Points)
+
+	// err :
+	_ = u.Solve(K, F)
+
+	// 	fmt.Println(">>>>>>>>>>>>>>> ", err)
+	//
+	// 	fmt.Println("uu ", u)
+
+	// 	femEqsCGwJ((&K), (&F), (&u), 1e-09, 6*3*n_n)
 	// 	}
 	// 	if n_r_inp > 0 && random_only == 1 {
 	// 		if solution_only != 0 {
@@ -182,27 +193,8 @@ func Example() {
 	// return
 
 	// Output:
-	// [ ]   linear step 1
-	// ro = 1011.833528
-	// alpha = 1.001683
-	// [i] Convergence test 20913196.986873 < 0.102458 (step 1 from 54)
-	// [ ]   linear step 2
-	// ro = 1007.616880
-	// beta = 0.995833
-	// alpha = 132.973046
-	// [i] Convergence test 20912.455361 < 13.858395 (step 2 from 54)
-	// [ ]   linear step 3
-	// ro = 0.000840
-	// beta = 0.000001
-	// alpha = 0.555587
-	// [i] Convergence test 8536.877008 < 13.858395 (step 3 from 54)
-	// [ ]   linear step 4
-	// ro = 0.000093
-	// beta = 0.111095
-	// alpha = 7031.747778
-	// [ ]  linear solution done in 4 iterations!
 	// #  X     Y        w            u           angle            N1          N2           M1          M2          Q
-	// 10.000 0.000 0.000000e+00 0.000000e+00 -4.590364e-03 -4.610823e-02 2.361648e+06 1.290723e+04 2.581446e+03 4.162893e+03
-	// 10.000 5.000 5.535822e-11 1.133591e-02 5.623920e-05 -2.307347e-02 2.361648e+06 1.259473e+04 2.518946e+03 -3.750000e+02
-	// 10.000 10.000 5.543302e-11 0.000000e+00 4.477843e-03 -3.871466e-05 2.361648e+06 1.228223e+04 2.456446e+03 -4.912893e+03
+	// 10.000 0.000 0.000000e+00 0.000000e+00 -4.590364e-03 6.776264e-21 2.361648e+06 1.290723e+04 2.581446e+03 4.162893e+03
+	// 10.000 5.000 2.833978e-14 1.133591e-02 5.623920e-05 6.776264e-21 2.361648e+06 1.259473e+04 2.518946e+03 -3.750000e+02
+	// 10.000 10.000 5.667956e-14 0.000000e+00 4.477843e-03 6.776264e-21 2.361648e+06 1.228223e+04 2.456446e+03 -4.912893e+03
 }

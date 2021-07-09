@@ -11,6 +11,8 @@ import (
 	"fmt"
 	"math"
 	"os"
+
+	"gonum.org/v1/gonum/mat"
 )
 
 // Model is structural calculation model
@@ -859,10 +861,10 @@ func (m Model) check_elem_data() {
 // 	// 		goto memFree
 // 	// 	}
 // 	// 	if len((func() []int {
-// 
+//
 // 	n_n := len(m.Points)
 // 	n_e := len(m.Beams)
-// 
+//
 // 	n_field = make([]int, n_n)
 // 	// 		return n_field
 // 	// 	}())) == 0 {
@@ -924,16 +926,17 @@ func (m Model) check_elem_data() {
 // }
 
 // get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
-func (m Model) get_D_matrix(i int) tMatrix {
+func (m Model) get_D_matrix(i int) (D *mat.Dense) {
 	// computes material stiffness matrix of elemen
 	// * @param i element nomber <0..n_e-1>
 	// * @param t eleemnt width
 	// * @param D pointer to allocated (!) D matrix
 	//
 
-	D := tMatrix{}
+	// 	D := tMatrix{}
 
-	femMatAlloc((&D), 5, 5)
+	D = mat.NewDense(5, 5, nil)
+	// 	femMatAlloc((&D), 5, 5)
 
 	// 	var E1 float64
 	// 	var E2 float64
@@ -952,20 +955,20 @@ func (m Model) get_D_matrix(i int) tMatrix {
 		t    = m.Beams[i].T
 		mult = t / (1 - nu1*nu2)
 	)
-	femMatPutAdd(&D, 1, 1, E1*mult, 0)
-	femMatPutAdd(&D, 1, 2, nu2*mult, 0)
-	femMatPutAdd(&D, 2, 1, nu2*mult, 0)
-	femMatPutAdd(&D, 2, 2, E2*mult, 0)
-	femMatPutAdd(&D, 3, 3, E1*t*t/12.*mult, 0)
-	femMatPutAdd(&D, 4, 4, E2*t*t/12.*mult, 0)
-	femMatPutAdd(&D, 3, 4, nu2*(E1*t*t)/12.*mult, 0)
-	femMatPutAdd(&D, 4, 3, nu2*(E1*t*t)/12.*mult, 0)
-	femMatPutAdd(&D, 5, 5, 5.0/6.0*G/t, 0)
+	D.Set(0, 0, E1*mult)
+	D.Set(0, 1, nu2*mult)
+	D.Set(1, 0, nu2*mult)
+	D.Set(1, 1, E2*mult)
+	D.Set(2, 2, E1*t*t/12.*mult)
+	D.Set(3, 3, E2*t*t/12.*mult)
+	D.Set(2, 3, nu2*(E1*t*t)/12.*mult)
+	D.Set(3, 2, nu2*(E1*t*t)/12.*mult)
+	D.Set(4, 4, 5.0/6.0*G/t)
 	return D
 }
 
 // get_B_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:704
-func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
+func (m Model) get_B_matrix(i int) (B *mat.Dense, L float64, R float64) {
 	// computes B matrix
 	// * @param i element number
 	// * @param B pointer to allocated (!) B matrix
@@ -978,7 +981,10 @@ func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
 	// 	var R float64
 	// 	var dx float64
 	// 	var dy float64
-	femMatAlloc((&B), 5, 6)
+
+	B = mat.NewDense(5, 6, nil)
+
+	// femMatAlloc((&B), 5, 6)
 	var (
 		// dx = n_x[e_n2[i]] - n_x[e_n1[i]]
 		// dy = n_y[e_n2[i]] - n_y[e_n1[i]]
@@ -994,29 +1000,29 @@ func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
 		C = -1 * dy / L
 	)
 	// B matrix:
-	femMatPutAdd(&B, 1, 1, -1.*C/L, 0)
-	femMatPutAdd(&B, 1, 2, -1.*S/L, 0)
-	femMatPutAdd(&B, 1, 4, 1.*C/L, 0)
-	femMatPutAdd(&B, 1, 5, 1.*S/L, 0)
-	femMatPutAdd(&B, 2, 2, 1./(2*R), 0)
-	femMatPutAdd(&B, 2, 5, 1./(2.*R), 0)
-	femMatPutAdd(&B, 3, 3, -1./L, 0)
-	femMatPutAdd(&B, 3, 6, 1./L, 0)
-	femMatPutAdd(&B, 4, 3, S/(2.*R), 0)
-	femMatPutAdd(&B, 4, 6, S/(2.*R), 0)
-	femMatPutAdd(&B, 5, 1, -1.*S/L, 0)
-	femMatPutAdd(&B, 5, 2, 1.*C/L, 0)
-	femMatPutAdd(&B, 5, 3, 1./2., 0)
-	femMatPutAdd(&B, 5, 4, 1.*S/L, 0)
-	femMatPutAdd(&B, 5, 5, -1.*C/L, 0)
-	femMatPutAdd(&B, 5, 6, 1./2., 0)
+	B.Set(0, 0, -1.*C/L)
+	B.Set(0, 1, -1.*S/L)
+	B.Set(0, 3, 1.*C/L)
+	B.Set(0, 4, 1.*S/L)
+	B.Set(1, 1, 1./(2*R))
+	B.Set(1, 4, 1./(2.*R))
+	B.Set(2, 2, -1./L)
+	B.Set(2, 5, 1./L)
+	B.Set(3, 2, S/(2.*R))
+	B.Set(3, 5, S/(2.*R))
+	B.Set(4, 0, -1.*S/L)
+	B.Set(4, 1, 1.*C/L)
+	B.Set(4, 2, 1./2.)
+	B.Set(4, 3, 1.*S/L)
+	B.Set(4, 4, -1.*C/L)
+	B.Set(4, 5, 1./2.)
 	// 	Lc = L
 	// 	Rc = R
 	return B, L, R
 }
 
 // get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
-func (m Model) get_matrix() (K tMatrix, F, u tVector) {
+func (m Model) get_matrix() (K, F, u *mat.Dense) {
 	// creates stiffness matrix
 	var t float64
 	// 	var L float64
@@ -1032,14 +1038,17 @@ func (m Model) get_matrix() (K tMatrix, F, u tVector) {
 	n_n := len(m.Points)
 
 	// var K tMatrix
-	femMatAlloc((&K), n_n*3, n_n*3)
-	femMatSetZero((&K))
+	K = mat.NewDense(n_n*3, n_n*3, nil)
+	// 	femMatAlloc((&K), n_n*3, n_n*3)
+	// 	femMatSetZero((&K))
 
-	femVecAlloc((&u), 0, n_n*3, n_n*3)
-	femVecSetZero((&u))
+	u = mat.NewDense(n_n*3, 1, nil)
+	// 	femVecAlloc((&u), 0, n_n*3, n_n*3)
+	// 	femVecSetZero((&u))
 
-	femVecAlloc((&F), 0, n_n*3, n_n*3)
-	femVecSetZero((&F))
+	F = mat.NewDense(n_n*3, 1, nil)
+	// 	femVecAlloc((&F), 0, n_n*3, n_n*3)
+	// 	femVecSetZero((&F))
 	for i := 0; i < len(m.Beams); i++ {
 		// 		if (func() float64 {
 		// 			t = m_t[m.Beams[i].Mat]
@@ -1051,13 +1060,13 @@ func (m Model) get_matrix() (K tMatrix, F, u tVector) {
 		//t = m.Beams[i].T // e_t[i]
 		// femMatSetZero((&Ke))
 		// femMatSetZero((&B))
-		var Bt tMatrix
-		femMatAlloc((&Bt), 6, 5)
-		femMatSetZero((&Bt))
+		// 		var Bt tMatrix
+		// 		femMatAlloc((&Bt), 6, 5)
+		// 		femMatSetZero((&Bt))
 
-		var BtD tMatrix
-		femMatAlloc((&BtD), 6, 5)
-		femMatSetZero((&BtD))
+		// 		var BtD tMatrix
+		// 		femMatAlloc((&BtD), 6, 5)
+		// 		femMatSetZero((&BtD))
 		// femMatSetZero((&D))
 		// material stiffness matrix D:
 		D := m.get_D_matrix(i) //, t)
@@ -1066,17 +1075,32 @@ func (m Model) get_matrix() (K tMatrix, F, u tVector) {
 		B, L, R := m.get_B_matrix(i)
 		//femMatPrn(((&B)), string("B"))
 		// transpose of B
-		femMatTran((&B), (&Bt))
+		// femMatTran((&B), (&Bt))
+
+		// Bt := mat.NewDense(6,5)
+		Bt := B.T()
+
 		//	femMatPrn(((&Bt)), string("Bt"))
 		// matrix multiplications (Bt*D*B):
 		// => BtD
-		femMatMatMult((&Bt), (&D), (&BtD))
+		// femMatMatMult((&Bt), (&D), (&BtD))
+
+		BtD := mat.NewDense(6, 5, nil)
+		BtD.Mul(Bt, D)
+
 		// => Ke  without L*R
-		var Ke tMatrix
-		femMatAlloc((&Ke), 6, 6)
-		femMatMatMult((&BtD), (&B), (&Ke))
+		// 		var Ke tMatrix
+		// 		femMatAlloc((&Ke), 6, 6)
+		//
+		// 		femMatMatMult((&BtD), (&B), (&Ke))
+
+		Ke := mat.NewDense(6, 6, nil)
+		Ke.Mul(BtD, B)
+
 		// element stifness matrix Ke:
-		femValMatMultSelf(R*L, (&Ke))
+		// 		femValMatMultSelf(R*L, (&Ke))
+
+		Ke.Scale(R*L, Ke)
 
 		//	femMatPrn(((&Ke)), string("Ke"))
 
@@ -1093,7 +1117,8 @@ func (m Model) get_matrix() (K tMatrix, F, u tVector) {
 				} else {
 					posk = m.Beams[i].N[1]*3 + k - 3
 				}
-				femMatPutAdd((&K), posj, posk, femMatGet((&Ke), j, k), 1)
+				// femMatPutAdd((&K), posj, posk, femMatGet((&Ke), j, k), 1)
+				K.Set(posj-1, posk-1, K.At(posj-1, posk-1)+Ke.At(j-1, k-1))
 			}
 		}
 
@@ -1103,23 +1128,26 @@ func (m Model) get_matrix() (K tMatrix, F, u tVector) {
 		}())) > 1e-07 {
 			// gravitation
 			F2 = -0.5 * q * t * L
-			femVecPutAdd((&F), 3*m.Beams[i].N[0]+1, F2, 1)
-			femVecPutAdd((&F), 3*m.Beams[i].N[1]+1, F2, 1)
+			F.Set(3*m.Beams[i].N[0], 0, F2+F.At(3*m.Beams[i].N[0], 0))
+			// femVecPutAdd((&F), 3*m.Beams[i].N[0]+1, F2, 1)
+			F.Set(3*m.Beams[i].N[1], 0, F2+F.At(3*m.Beams[i].N[1], 0))
+			// femVecPutAdd((&F), 3*m.Beams[i].N[1]+1, F2, 1)
 		}
 	}
 	// 	_ = F2
 	// TODO : KI strange calcualation F
-	F.data = []float64{
-		0.000000e+00,
-		0.000000e+00,
-		-2.500000e+04,
-		0.000000e+00,
-		0.000000e+00,
-		-1.250000e+04,
-		0.000000e+00,
-		0.000000e+00,
-		0.000000e+00,
-	}
+
+	F = mat.NewDense(3*n_n, 1, nil)
+
+	F.Set(0, 0, +0.000000e+00)
+	F.Set(1, 0, +0.000000e+00)
+	F.Set(2, 0, -2.500000e+04)
+	F.Set(3, 0, +0.000000e+00)
+	F.Set(4, 0, +0.000000e+00)
+	F.Set(5, 0, -1.250000e+04)
+	F.Set(6, 0, +0.000000e+00)
+	F.Set(7, 0, +0.000000e+00)
+	F.Set(8, 0, +0.000000e+00)
 
 	// 	fmt.Printf("K = %#v\n", K)
 	// 	femMatPrn(((&K)), string("K"))
@@ -1263,8 +1291,22 @@ func (m Model) get_matrix() (K tMatrix, F, u tVector) {
 // 	return 0
 // }
 
+func ZeroCol(m *mat.Dense, pos int) {
+	v, _ := m.Caps()
+	for i := 0; i < v; i++ {
+		m.Set(i, pos, 0)
+	}
+}
+
+func ZeroRow(m *mat.Dense, pos int) {
+	_, v := m.Caps()
+	for i := 0; i < v; i++ {
+		m.Set(pos, i, 0)
+	}
+}
+
 // get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
-func (m Model) get_loads_and_supports(K tMatrix, F, u tVector) int {
+func (m Model) get_loads_and_supports(K, F, u *mat.Dense) int {
 	// applies supports in nodes
 	// 	var i int
 	// 	var j int
@@ -1273,7 +1315,9 @@ func (m Model) get_loads_and_supports(K tMatrix, F, u tVector) int {
 
 	for i := range m.Ln {
 		for g := range m.Ln[i].Forces {
-			femVecPutAdd((&F), m.Ln[i].N*3+g+1, m.Ln[i].Forces[g], 1)
+			w := m.Ln[i].N*3 + g
+			F.Set(w, 0, F.At(w, 0)+m.Ln[i].Forces[g])
+			// femVecPutAdd((&F), m.Ln[i].N*3+g+1, m.Ln[i].Forces[g], 1)
 		}
 	}
 	// 	for i = 0; i < n_f; i++ {
@@ -1290,14 +1334,17 @@ func (m Model) get_loads_and_supports(K tMatrix, F, u tVector) int {
 			d_dir := d
 
 			// pos = d_n[i]*3 + d_dir[i] + 1
-			pos = d_n*3 + d_dir + 1
+			pos = d_n*3 + d_dir
 			// 			if math.Abs(d_val[i]) <= 1e-07 {
-			femMatSetZeroCol((&K), pos)
-			femMatSetZeroRow((&K), pos)
-			femVecPutAdd((&u), pos, 0, 0)
+			ZeroCol(K, pos)
+			ZeroRow(K, pos)
+			u.Set(pos, 0, 0)
+			// femVecPutAdd((&u), pos, 0, 0)
 			// yes, it deletes force in support
-			femVecPutAdd((&F), pos, 0, 0)
-			femMatPutAdd((&K), pos, pos, 1, 0)
+			F.Set(pos, 0, 0)
+			K.Set(pos, pos, 1)
+			// 			femVecPutAdd((&F), pos, 0, 0)
+			// 			femMatPutAdd((&K), pos, pos, 1, 0)
 			// 			} else {
 			// 				for j = 1; j <= n_n*3; j++ {
 			// 					femVecPutAdd((&F), j, -1*femMatGet((&K), j, pos)*d_val[i], 1)
@@ -1340,7 +1387,7 @@ func (m Model) get_loads_and_supports(K tMatrix, F, u tVector) int {
 }
 
 // get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
-func (m Model) get_int_forces(el int, u tVector) (N1, N2, M1, M2, Q float64) {
+func (m Model) get_int_forces(el int, u *mat.Dense) (N1, N2, M1, M2, Q float64) {
 	// computes internal force is nodes
 	// * @param el element number <0..n_e-1>
 	// * @param N1 meridian force
@@ -1357,17 +1404,20 @@ func (m Model) get_int_forces(el int, u tVector) (N1, N2, M1, M2, Q float64) {
 	var posj int
 	// femMatSetZero((&D))
 	// femMatSetZero((&B))
-	var DB tMatrix
-	femMatAlloc((&DB), 5, 6)
-	femMatSetZero((&DB))
+	// 	var DB tMatrix
+	// 	femMatAlloc((&DB), 5, 6)
+	// 	femMatSetZero((&DB))
 
-	var ue tVector
-	femVecAlloc((&ue), 0, 6, 6)
-	femVecSetZero((&ue))
+	ue := mat.NewDense(6, 1, nil)
+	//
+	// 	var ue tVector
+	// 	femVecAlloc((&ue), 0, 6, 6)
+	// 	femVecSetZero((&ue))
 
-	var Fe tVector
-	femVecAlloc((&Fe), 0, 5, 5)
-	femVecSetZero((&Fe))
+	Fe := mat.NewDense(5, 1, nil)
+	// 	var Fe tVector
+	// 	femVecAlloc((&Fe), 0, 5, 5)
+	// 	femVecSetZero((&Fe))
 
 	// get local stiffness vector
 	for j := 1; j <= 6; j++ {
@@ -1376,26 +1426,35 @@ func (m Model) get_int_forces(el int, u tVector) (N1, N2, M1, M2, Q float64) {
 		} else {
 			posj = m.Beams[el].N[1]*3 + j - 3
 		}
-		femVecPutAdd((&ue), j, femVecGet((&u), posj), 0)
+		ue.Set(j-1, 0, ue.At(j-1, 0)+u.At(posj-1, 0))
+		// femVecPutAdd((&ue), j, femVecGet((&u), posj), 0)
 	}
 
 	// get B and D
 	//t := m.Beams[el].T         // e_t[el]
 	D := m.get_D_matrix(el) //, t) // , (&D))
 	B, _, _ := m.get_B_matrix(el)
-	femMatMatMult((&D), (&B), (&DB))
-	// get vector
-	femMatVecMult((&DB), (&ue), (&Fe))
-	N1 = femVecGet((&Fe), 1)
-	N2 = femVecGet((&Fe), 2)
-	M1 = femVecGet((&Fe), 3)
-	M2 = femVecGet((&Fe), 4)
-	Q = femVecGet((&Fe), 5)
+
+	DB := mat.NewDense(5, 6, nil)
+	DB.Mul(D, B)
+	//
+	// 	femMatMatMult((&D), (&B), (&DB))
+	// get VECTOR
+
+	Fe.Mul(DB, ue)
+	//
+	// 	femMatVecMult((&DB), (&ue), (&Fe))
+
+	N1 = Fe.At(0, 0)
+	N2 = Fe.At(1, 0)
+	M1 = Fe.At(2, 0)
+	M2 = Fe.At(3, 0)
+	Q = Fe.At(4, 0)
 	return
 }
 
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
-func (m Model) print_result(u tVector) int { //fw *io.File) int {
+func (m Model) print_result(u *mat.Dense) int { //fw *io.File) int {
 	fw := os.Stdout
 	// 	var i int
 	// 	var j int
@@ -1459,7 +1518,11 @@ func (m Model) print_result(u tVector) int { //fw *io.File) int {
 			sM2 /= float64(count)
 			sQ /= float64(count)
 		}
-		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), m.Points[i][0], m.Points[i][1], femVecGet((&u), 3*i+1), femVecGet((&u), 3*i+2), femVecGet((&u), 3*i+3), sN1, sN2, sM1, sM2, sQ) //Q)
+		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), m.Points[i][0], m.Points[i][1],
+			u.At(3*i+1-1, 0),
+			u.At(3*i+2-1, 0),
+			u.At(3*i+3-1, 0),
+			sN1, sN2, sM1, sM2, sQ) //Q)
 	}
 	//_ = sQ
 	return 0
@@ -2161,198 +2224,198 @@ func (m Model) print_result(u tVector) int { //fw *io.File) int {
 // }
 
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
-func femMatAlloc(mat *tMatrix, rows int, cols int) int {
-	// 	var sum int
-	// 	_ = sum
-	// 	var i int
-	// 	_ = i
-	//femMatNull(mat)
-	// 	if type_ >= 0 && type_ <= 1 {
-	// 		mat.type_ = type_
-	// 		switch type_ {
-	// 		case 0:
-	mat.rows = rows
-	mat.cols = cols
-	mat.len_ = cols * rows
-	// 	if len((func() []float64 {
-	mat.data = make([]float64, mat.len_)
-	// 		return mat.data
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	//mat.pos = nil
-	//mat.frompos = nil
-	// mat.defpos = nil
-	// 		case 1:
-	// 			mat.rows = rows
-	// 			mat.cols = cols
-	// 			if len((func() []int {
-	// 				mat.defpos = make([]int,mat.rows)
-	// 				return mat.defpos
-	// 			}())) == 0 {
-	// 				goto memFree
-	// 			}
-	// 			if len((func() []int {
-	// 				mat.frompos = make([]int,mat.rows)
-	// 				return mat.frompos
-	// 			}())) == 0 {
-	// 				goto memFree
-	// 			}
-	// 			if bandwidth > 0 && len(rowdesc) == 0 {
-	// 				mat.len_ = rows * bandwidth
-	// 				if len((func() []float64 {
-	// 					mat.data = make([]float64,mat.len_)
-	// 					return mat.data
-	// 				}())) == 0 {
-	// 					goto memFree
-	// 				}
-	// 				if len((func() []int {
-	// 					mat.pos = make([]int,mat.len_)
-	// 					return mat.pos
-	// 				}())) == 0 {
-	// 					goto memFree
-	// 				}
-	// 				for i = 0; i < rows; i++ {
-	// 					mat.frompos[i] = bandwidth * i
-	// 				}
-	// 			} else {
-	// 				sum = 0
-	// 				for i = 0; i < rows; i++ {
-	// 					sum += rowdesc[i]
-	// 					mat.defpos[i] = rowdesc[i]
-	// 					mat.frompos[i] = sum - rowdesc[i]
-	// 				}
-	// 				mat.len_ = sum
-	// 				if len((func() []float64 {
-	// 					mat.data = make([]float64,mat.len_)
-	// 					return mat.data
-	// 				}())) == 0 {
-	// 					goto memFree
-	// 				}
-	// 				if len((func() []int {
-	// 					mat.pos = make([]int,sum)
-	// 					return mat.pos
-	// 				}())) == 0 {
-	// 					goto memFree
-	// 				}
-	// 			}
-	// 			break
-	// 		}
-	return 0
-	// 	} else {
-	// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d!\n"), string("Matrix type unsupported"), type_)
-	// 		return -3
-	// 	}
-	// memFree:
-	// 	;
-	// 	//femMatFree(mat)
-	// 	return -4
-}
+// func femMatAlloc(mat *tMatrix, rows int, cols int) int {
+// 	// 	var sum int
+// 	// 	_ = sum
+// 	// 	var i int
+// 	// 	_ = i
+// 	//femMatNull(mat)
+// 	// 	if type_ >= 0 && type_ <= 1 {
+// 	// 		mat.type_ = type_
+// 	// 		switch type_ {
+// 	// 		case 0:
+// 	mat.rows = rows
+// 	mat.cols = cols
+// 	mat.len_ = cols * rows
+// 	// 	if len((func() []float64 {
+// 	mat.data = make([]float64, mat.len_)
+// 	// 		return mat.data
+// 	// 	}())) == 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	//mat.pos = nil
+// 	//mat.frompos = nil
+// 	// mat.defpos = nil
+// 	// 		case 1:
+// 	// 			mat.rows = rows
+// 	// 			mat.cols = cols
+// 	// 			if len((func() []int {
+// 	// 				mat.defpos = make([]int,mat.rows)
+// 	// 				return mat.defpos
+// 	// 			}())) == 0 {
+// 	// 				goto memFree
+// 	// 			}
+// 	// 			if len((func() []int {
+// 	// 				mat.frompos = make([]int,mat.rows)
+// 	// 				return mat.frompos
+// 	// 			}())) == 0 {
+// 	// 				goto memFree
+// 	// 			}
+// 	// 			if bandwidth > 0 && len(rowdesc) == 0 {
+// 	// 				mat.len_ = rows * bandwidth
+// 	// 				if len((func() []float64 {
+// 	// 					mat.data = make([]float64,mat.len_)
+// 	// 					return mat.data
+// 	// 				}())) == 0 {
+// 	// 					goto memFree
+// 	// 				}
+// 	// 				if len((func() []int {
+// 	// 					mat.pos = make([]int,mat.len_)
+// 	// 					return mat.pos
+// 	// 				}())) == 0 {
+// 	// 					goto memFree
+// 	// 				}
+// 	// 				for i = 0; i < rows; i++ {
+// 	// 					mat.frompos[i] = bandwidth * i
+// 	// 				}
+// 	// 			} else {
+// 	// 				sum = 0
+// 	// 				for i = 0; i < rows; i++ {
+// 	// 					sum += rowdesc[i]
+// 	// 					mat.defpos[i] = rowdesc[i]
+// 	// 					mat.frompos[i] = sum - rowdesc[i]
+// 	// 				}
+// 	// 				mat.len_ = sum
+// 	// 				if len((func() []float64 {
+// 	// 					mat.data = make([]float64,mat.len_)
+// 	// 					return mat.data
+// 	// 				}())) == 0 {
+// 	// 					goto memFree
+// 	// 				}
+// 	// 				if len((func() []int {
+// 	// 					mat.pos = make([]int,sum)
+// 	// 					return mat.pos
+// 	// 				}())) == 0 {
+// 	// 					goto memFree
+// 	// 				}
+// 	// 			}
+// 	// 			break
+// 	// 		}
+// 	return 0
+// 	// 	} else {
+// 	// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d!\n"), string("Matrix type unsupported"), type_)
+// 	// 		return -3
+// 	// 	}
+// 	// memFree:
+// 	// 	;
+// 	// 	//femMatFree(mat)
+// 	// 	return -4
+// }
 
 // femMatGet - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:142
-func femMatGet(mat *tMatrix, row int, col int) float64 {
-	// Gets value from matrix
-	// * @param mat matrix
-	// * @param row row
-	// * @param row collumn
-	// * @return value
-	//
-	var pos int
-	// 	var i int
-	// 	_ = i
-	if row < 0 || col < 0 {
-		return float64(0)
-	}
-	if row > mat.rows || col > mat.cols {
-		return float64(0)
-	}
-	// 	switch mat.type_ {
-	// 	case 0:
-	pos = (row-1)*mat.cols + (col - 1)
-	return mat.data[pos]
-	// 	case 1:
-	// 		for i = mat.frompos[row-1]; i < mat.frompos[row-1]+mat.defpos[row-1]; i++ {
-	// 			if mat.pos[i] == 0 {
-	// 				break
-	// 			}
-	// 			if mat.pos[i] == col {
-	// 				return mat.data[i]
-	// 				break
-	// 			}
-	// 		}
-	// 	default:
-	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid matrix type"))
-	// 		return 0
-	// 		break
-	// 	}
-	// 	return 0
-}
+// func femMatGet(mat *tMatrix, row int, col int) float64 {
+// 	// Gets value from matrix
+// 	// * @param mat matrix
+// 	// * @param row row
+// 	// * @param row collumn
+// 	// * @return value
+// 	//
+// 	var pos int
+// 	// 	var i int
+// 	// 	_ = i
+// 	if row < 0 || col < 0 {
+// 		return float64(0)
+// 	}
+// 	if row > mat.rows || col > mat.cols {
+// 		return float64(0)
+// 	}
+// 	// 	switch mat.type_ {
+// 	// 	case 0:
+// 	pos = (row-1)*mat.cols + (col - 1)
+// 	return mat.data[pos]
+// 	// 	case 1:
+// 	// 		for i = mat.frompos[row-1]; i < mat.frompos[row-1]+mat.defpos[row-1]; i++ {
+// 	// 			if mat.pos[i] == 0 {
+// 	// 				break
+// 	// 			}
+// 	// 			if mat.pos[i] == col {
+// 	// 				return mat.data[i]
+// 	// 				break
+// 	// 			}
+// 	// 		}
+// 	// 	default:
+// 	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid matrix type"))
+// 	// 		return 0
+// 	// 		break
+// 	// 	}
+// 	// 	return 0
+// }
 
 // femMatPutAdd - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:185
-func femMatPutAdd(mat *tMatrix, row int, col int, val float64, mode int) (c4goDefaultReturn int) {
-	// Adds value to matrix
-	// * @param mat matrix
-	// * @param row row
-	// * @param col column
-	// * @param val value
-	// * @param mode FEM_PUT for putting ("=") FEM_ADD for adding ("+=")
-	// * @return  status
-	//
-	var pos int
-	// 	var i int
-	// 	_ = i
-	if row < 0 || col < 0 {
-		return -10
-	}
-	if row > mat.rows || col > mat.cols {
-		return -11
-	}
-	// 	switch mat.type_ {
-	// 	case 0:
-	pos = (row-1)*mat.cols + (col - 1)
-	if mode == 1 {
-		mat.data[pos] += val
-	} else {
-		mat.data[pos] = val
-	}
-	return 0
-	// 	case 1:
-	// 		{
-	// 			// this is more complicated
-	// 			for i = mat.frompos[row-1]; i < mat.frompos[row-1]+mat.defpos[row-1]; i++ {
-	// 				if mat.pos[i] == col {
-	// 					if mode == 1 {
-	// 						mat.data[i] += val
-	// 					} else {
-	// 						mat.data[i] = val
-	// 					}
-	// 					return 0
-	// 				}
-	// 				if mat.pos[i] == 0 {
-	// 					// empty field found
-	// 					mat.pos[i] = col
-	// 					if mode == 1 {
-	// 						mat.data[i] += val
-	// 					} else {
-	// 						mat.data[i] = val
-	// 					}
-	// 					return 0
-	// 				}
-	// 			}
-	// 		}
-	// 		// if we are here
-	// 		//           * because reallocation is needed !
-	// 		//
-	// 		fmt.Fprintf(os.Stdout, string("[E] %s [%d,%d]!\n"), string("Matrix reallocation needed - requested unwritten code"), row, col)
-	// 		noarch.Exit(-11)
-	// 		return -11
-	// 	default:
-	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid matrix type"))
-	// 		return -3
-	// 		break
-	// 	}
-	// 	return
-}
+// func femMatPutAdd(mat *tMatrix, row int, col int, val float64, mode int) (c4goDefaultReturn int) {
+// 	// Adds value to matrix
+// 	// * @param mat matrix
+// 	// * @param row row
+// 	// * @param col column
+// 	// * @param val value
+// 	// * @param mode FEM_PUT for putting ("=") FEM_ADD for adding ("+=")
+// 	// * @return  status
+// 	//
+// 	var pos int
+// 	// 	var i int
+// 	// 	_ = i
+// 	if row < 0 || col < 0 {
+// 		return -10
+// 	}
+// 	if row > mat.rows || col > mat.cols {
+// 		return -11
+// 	}
+// 	// 	switch mat.type_ {
+// 	// 	case 0:
+// 	pos = (row-1)*mat.cols + (col - 1)
+// 	if mode == 1 {
+// 		mat.data[pos] += val
+// 	} else {
+// 		mat.data[pos] = val
+// 	}
+// 	return 0
+// 	// 	case 1:
+// 	// 		{
+// 	// 			// this is more complicated
+// 	// 			for i = mat.frompos[row-1]; i < mat.frompos[row-1]+mat.defpos[row-1]; i++ {
+// 	// 				if mat.pos[i] == col {
+// 	// 					if mode == 1 {
+// 	// 						mat.data[i] += val
+// 	// 					} else {
+// 	// 						mat.data[i] = val
+// 	// 					}
+// 	// 					return 0
+// 	// 				}
+// 	// 				if mat.pos[i] == 0 {
+// 	// 					// empty field found
+// 	// 					mat.pos[i] = col
+// 	// 					if mode == 1 {
+// 	// 						mat.data[i] += val
+// 	// 					} else {
+// 	// 						mat.data[i] = val
+// 	// 					}
+// 	// 					return 0
+// 	// 				}
+// 	// 			}
+// 	// 		}
+// 	// 		// if we are here
+// 	// 		//           * because reallocation is needed !
+// 	// 		//
+// 	// 		fmt.Fprintf(os.Stdout, string("[E] %s [%d,%d]!\n"), string("Matrix reallocation needed - requested unwritten code"), row, col)
+// 	// 		noarch.Exit(-11)
+// 	// 		return -11
+// 	// 	default:
+// 	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid matrix type"))
+// 	// 		return -3
+// 	// 		break
+// 	// 	}
+// 	// 	return
+// }
 
 // femMatPrn - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:238
 // func femMatPrn(mat *tMatrix, name string) {
@@ -2622,66 +2685,66 @@ func femMatPutAdd(mat *tMatrix, row int, col int, val float64, mode int) (c4goDe
 // }
 
 // femMatSetZero - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:527
-func femMatSetZero(a *tMatrix) {
-	// Sets all of matrix contents to 0 FOR SMALL DATA
-	var i int
-	for i = 0; i < a.len_; i++ {
-		a.data[i] = 0
-	}
-}
+// func femMatSetZero(a *tMatrix) {
+// 	// Sets all of matrix contents to 0 FOR SMALL DATA
+// 	var i int
+// 	for i = 0; i < a.len_; i++ {
+// 		a.data[i] = 0
+// 	}
+// }
 
 // femMatSetZeroRow - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:535
-func femMatSetZeroRow(a *tMatrix, row int) {
-	// Sets matrix row to 0
-	var i int
-	if row < 1 || row > a.rows {
-		return
-	}
-	// 	if a.type_ == 1 {
-	// 		for i = a.frompos[row-1]; i < a.frompos[row-1]+a.defpos[row-1]; i++ {
-	// 			if a.pos[i] == 0 {
-	// 				break
-	// 			}
-	// 			a.data[i] = 0
-	// 		}
-	// 	} else {
-	//fprintf(os.Stdout,"zero on %d\n",i);
-	for i = 1; i <= a.cols; i++ {
-		femMatPutAdd(a, row, i, 0, 0)
-	}
-	// 	}
-}
+// func femMatSetZeroRow(a *tMatrix, row int) {
+// 	// Sets matrix row to 0
+// 	var i int
+// 	if row < 1 || row > a.rows {
+// 		return
+// 	}
+// 	// 	if a.type_ == 1 {
+// 	// 		for i = a.frompos[row-1]; i < a.frompos[row-1]+a.defpos[row-1]; i++ {
+// 	// 			if a.pos[i] == 0 {
+// 	// 				break
+// 	// 			}
+// 	// 			a.data[i] = 0
+// 	// 		}
+// 	// 	} else {
+// 	//fprintf(os.Stdout,"zero on %d\n",i);
+// 	for i = 1; i <= a.cols; i++ {
+// 		femMatPutAdd(a, row, i, 0, 0)
+// 	}
+// 	// 	}
+// }
 
 // femMatSetZeroCol - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:592
-func femMatSetZeroCol(a *tMatrix, Col int) {
-	// Sets all of matrix contents to 0
-	// 	var i int
-	// 	var j int
-	// 	_ = j
-
-	// 	_ = i
-	// 	var ifrom int
-	// 	_ = ifrom
-	// 	var ito int
-	// 	_ = ito
-	// 	var ipos int
-	// 	_ = ipos
-	// 	if a.type_ == 1 {
-	// 		ifrom = a.pos[a.frompos[Col-1]] - 1
-	// 		ito = a.pos[a.frompos[Col-1]+a.defpos[Col-1]-1] - 1
-	// 		for i = ifrom; i < ito; i++ {
-	// 			for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
-	// 				if a.pos[j] == Col {
-	// 					a.data[j] = 0
-	// 				}
-	// 			}
-	// 		}
-	// 	} else {
-	for i := 1; i <= a.rows; i++ {
-		femMatPutAdd(a, i, Col, 0, 0)
-	}
-	// 	}
-}
+// func femMatSetZeroCol(a *tMatrix, Col int) {
+// 	// Sets all of matrix contents to 0
+// 	// 	var i int
+// 	// 	var j int
+// 	// 	_ = j
+//
+// 	// 	_ = i
+// 	// 	var ifrom int
+// 	// 	_ = ifrom
+// 	// 	var ito int
+// 	// 	_ = ito
+// 	// 	var ipos int
+// 	// 	_ = ipos
+// 	// 	if a.type_ == 1 {
+// 	// 		ifrom = a.pos[a.frompos[Col-1]] - 1
+// 	// 		ito = a.pos[a.frompos[Col-1]+a.defpos[Col-1]-1] - 1
+// 	// 		for i = ifrom; i < ito; i++ {
+// 	// 			for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
+// 	// 				if a.pos[j] == Col {
+// 	// 					a.data[j] = 0
+// 	// 				}
+// 	// 			}
+// 	// 		}
+// 	// 	} else {
+// 	for i := 1; i <= a.rows; i++ {
+// 		femMatPutAdd(a, i, Col, 0, 0)
+// 	}
+// 	// 	}
+// }
 
 // //femVecNull - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:699
 // func //femVecNull(mat *tVector) {
@@ -2703,113 +2766,113 @@ func femMatSetZeroCol(a *tMatrix, Col int) {
 // }
 
 // femVecAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:718
-func femVecAlloc(mat *tVector, type_ int, rows int, items int) int {
-	//femVecNull(mat)
-	// 	if type_ >= 0 && type_ <= 1 {
-	// 		mat.type_ = type_
-	// 		switch type_ {
-	// 		case 0:
-	mat.rows = rows
-	mat.len_ = rows
-	// 	if len((func() []float64 {
-	mat.data = make([]float64, mat.len_)
-	// 		return mat.data
-	// 	}())) == 0 {
-	// 		goto memFree
-	// 	}
-	// mat.pos = nil
-	// 		case 1:
-	// 			// VEC_SPAR cannot be used ;-)
-	// 			noarch.Exit(-3)
-	// 			mat.rows = rows
-	// 			if items > 0 {
-	// 				mat.len_ = items
-	// 				if len((func() []float64 {
-	// 					mat.data = make([]float64,mat.len_)
-	// 					return mat.data
-	// 				}())) == 0 {
-	// 					goto memFree
-	// 				}
-	// 				if len((func() []int {
-	// 					mat.pos = make([]int,mat.len_)
-	// 					return mat.pos
-	// 				}())) == 0 {
-	// 					goto memFree
-	// 				}
-	// 			} else {
-	// 				fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Number of sparse vector items MUST BE nonzero"))
-	// 				goto memFree
-	// 			}
-	// 			break
-	// 		}
-	return 0
-	// 	} else {
-	// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d!\n"), string("Matrix type unsupported"), type_)
-	// 		return -3
-	// 	}
-	// memFree:
-	// 	;
-	// 	//femVecFree(mat)
-	// 	return -4
-}
+// func femVecAlloc(mat *tVector, type_ int, rows int, items int) int {
+// 	//femVecNull(mat)
+// 	// 	if type_ >= 0 && type_ <= 1 {
+// 	// 		mat.type_ = type_
+// 	// 		switch type_ {
+// 	// 		case 0:
+// 	mat.rows = rows
+// 	mat.len_ = rows
+// 	// 	if len((func() []float64 {
+// 	mat.data = make([]float64, mat.len_)
+// 	// 		return mat.data
+// 	// 	}())) == 0 {
+// 	// 		goto memFree
+// 	// 	}
+// 	// mat.pos = nil
+// 	// 		case 1:
+// 	// 			// VEC_SPAR cannot be used ;-)
+// 	// 			noarch.Exit(-3)
+// 	// 			mat.rows = rows
+// 	// 			if items > 0 {
+// 	// 				mat.len_ = items
+// 	// 				if len((func() []float64 {
+// 	// 					mat.data = make([]float64,mat.len_)
+// 	// 					return mat.data
+// 	// 				}())) == 0 {
+// 	// 					goto memFree
+// 	// 				}
+// 	// 				if len((func() []int {
+// 	// 					mat.pos = make([]int,mat.len_)
+// 	// 					return mat.pos
+// 	// 				}())) == 0 {
+// 	// 					goto memFree
+// 	// 				}
+// 	// 			} else {
+// 	// 				fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Number of sparse vector items MUST BE nonzero"))
+// 	// 				goto memFree
+// 	// 			}
+// 	// 			break
+// 	// 		}
+// 	return 0
+// 	// 	} else {
+// 	// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d!\n"), string("Matrix type unsupported"), type_)
+// 	// 		return -3
+// 	// 	}
+// 	// memFree:
+// 	// 	;
+// 	// 	//femVecFree(mat)
+// 	// 	return -4
+// }
 
 // femVecPutAdd - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:776
-func femVecPutAdd(vec *tVector, pos int, val float64, mode int) int {
-	if pos > vec.rows {
-		// Adds value to vector
-		// * @param vec vector
-		// * @param pos row to add value
-		// * @param val value
-		// * @param mode FEM_PUT for putting ("=") FEM_ADD for adding ("+=")
-		// * @return  status
-		//
-		fmt.Fprintf(os.Stdout, string("[E] %s: %d > %d!\n"), string("Index outside vector (Add/Put)"), pos, vec.rows)
-		return -11
-	}
-	// 	switch vec.type_ {
-	// 	case 0:
-	if mode == 0 {
-		// put
-		vec.data[pos-1] = val
-	} else {
-		// add
-		vec.data[pos-1] += val
-	}
-	// 	case 1:
-	// 		// unimplemented
-	// 		noarch.Exit(-3)
-	// 	default:
-	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid vector type (Add/Put)"))
-	// 		return -5
-	// 		break
-	// 	}
-	return 0
-}
+// func femVecPutAdd(vec *tVector, pos int, val float64, mode int) int {
+// 	if pos > vec.rows {
+// 		// Adds value to vector
+// 		// * @param vec vector
+// 		// * @param pos row to add value
+// 		// * @param val value
+// 		// * @param mode FEM_PUT for putting ("=") FEM_ADD for adding ("+=")
+// 		// * @return  status
+// 		//
+// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d > %d!\n"), string("Index outside vector (Add/Put)"), pos, vec.rows)
+// 		return -11
+// 	}
+// 	// 	switch vec.type_ {
+// 	// 	case 0:
+// 	if mode == 0 {
+// 		// put
+// 		vec.data[pos-1] = val
+// 	} else {
+// 		// add
+// 		vec.data[pos-1] += val
+// 	}
+// 	// 	case 1:
+// 	// 		// unimplemented
+// 	// 		noarch.Exit(-3)
+// 	// 	default:
+// 	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid vector type (Add/Put)"))
+// 	// 		return -5
+// 	// 		break
+// 	// 	}
+// 	return 0
+// }
 
 // femVecGet - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:811
-func femVecGet(vec *tVector, pos int) float64 {
-	if pos > vec.rows {
-		// Gets value from vector
-		// * @param vec vector
-		// * @param pos row to add value
-		// * @return value
-		//
-		fmt.Fprintf(os.Stdout, string("[E] %s: %d/%d!\n"), string("Index outside vector (Get)"), pos, vec.rows)
-		return float64(0)
-	}
-	// 	switch vec.type_ {
-	// 	case 0:
-	return vec.data[pos-1]
-	// 	case 1:
-	// 		// unimplemented
-	// 		noarch.Exit(0)
-	// 	default:
-	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid vector type (Get)"))
-	// 		return float64(0)
-	// 		break
-	// 	}
-	// return float64(0)
-}
+// func femVecGet(vec *tVector, pos int) float64 {
+// 	if pos > vec.rows {
+// 		// Gets value from vector
+// 		// * @param vec vector
+// 		// * @param pos row to add value
+// 		// * @return value
+// 		//
+// 		fmt.Fprintf(os.Stdout, string("[E] %s: %d/%d!\n"), string("Index outside vector (Get)"), pos, vec.rows)
+// 		return float64(0)
+// 	}
+// 	// 	switch vec.type_ {
+// 	// 	case 0:
+// 	return vec.data[pos-1]
+// 	// 	case 1:
+// 	// 		// unimplemented
+// 	// 		noarch.Exit(0)
+// 	// 	default:
+// 	// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("Invalid vector type (Get)"))
+// 	// 		return float64(0)
+// 	// 		break
+// 	// 	}
+// 	// return float64(0)
+// }
 
 // femVecPrn - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:839
 // func femVecPrn(mat *tVector, name string) {
@@ -2874,13 +2937,13 @@ func femVecGet(vec *tVector, pos int) float64 {
 // }
 
 // femVecSetZero - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:961
-func femVecSetZero(a *tVector) {
-	// Sets all of vertor contents to 0 FOR SMALL DATA
-	// 	var i int
-	for i := 0; i < a.len_; i++ {
-		a.data[i] = 0
-	}
-}
+// func femVecSetZero(a *tVector) {
+// 	// Sets all of vertor contents to 0 FOR SMALL DATA
+// 	// 	var i int
+// 	for i := 0; i < a.len_; i++ {
+// 		a.data[i] = 0
+// 	}
+// }
 
 // femVecClone - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:971
 // func femVecClone(src *tVector, dest *tVector) int {
@@ -2902,33 +2965,33 @@ func femVecSetZero(a *tVector) {
 // }
 
 // femVecVecMultBig - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1014
-func femVecVecMultBig(a *tVector, b *tVector) float64 {
-	// ------------------    Matrix Operations    --------------------
-	// vector multiplication (scalar) (a[n]^t * b[n])
-	// * @param a vector
-	// * @param b vector
-	// * @return multiplication product
-	//
-	var i int
-	var mult float64
-	if a.rows != b.rows {
-		return float64(0)
-	}
-	if a.rows <= 0 || b.rows <= 0 {
-		return float64(0)
-	}
-	mult = 0
-	// 	if a.type_ == 0 && b.type_ == 0 {
-	for i = 0; i < a.rows; i++ {
-		mult += a.data[i] * b.data[i]
-	}
-	// 	} else {
-	// 		for i = 1; i <= a.rows; i++ {
-	// 			mult += femVecGet(a, i) * femVecGet(b, i)
-	// 		}
-	// 	}
-	return mult
-}
+// func femVecVecMultBig(a *tVector, b *tVector) float64 {
+// 	// ------------------    Matrix Operations    --------------------
+// 	// vector multiplication (scalar) (a[n]^t * b[n])
+// 	// * @param a vector
+// 	// * @param b vector
+// 	// * @return multiplication product
+// 	//
+// 	var i int
+// 	var mult float64
+// 	if a.rows != b.rows {
+// 		return float64(0)
+// 	}
+// 	if a.rows <= 0 || b.rows <= 0 {
+// 		return float64(0)
+// 	}
+// 	mult = 0
+// 	// 	if a.type_ == 0 && b.type_ == 0 {
+// 	for i = 0; i < a.rows; i++ {
+// 		mult += a.data[i] * b.data[i]
+// 	}
+// 	// 	} else {
+// 	// 		for i = 1; i <= a.rows; i++ {
+// 	// 			mult += femVecGet(a, i) * femVecGet(b, i)
+// 	// 		}
+// 	// 	}
+// 	return mult
+// }
 
 // femVecVecMult - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1104
 // func femVecVecMult(a *tVector, b *tVector) float64 {
@@ -3033,18 +3096,18 @@ func femVecVecMultBig(a *tVector, b *tVector) float64 {
 // }
 
 // femValMatMultSelf - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1215
-func femValMatMultSelf(val float64, a *tMatrix) int {
-	// number by matrix multiplication (a[n] = val * a[n])
-	// * @param val number
-	// * @param a original number (WILL BE modified)
-	// * @return status
-	//
-	// var i int
-	for i := 0; i < a.len_; i++ {
-		a.data[i] *= val
-	}
-	return 0
-}
+// func femValMatMultSelf(val float64, a *tMatrix) int {
+// 	// number by matrix multiplication (a[n] = val * a[n])
+// 	// * @param val number
+// 	// * @param a original number (WILL BE modified)
+// 	// * @return status
+// 	//
+// 	// var i int
+// 	for i := 0; i < a.len_; i++ {
+// 		a.data[i] *= val
+// 	}
+// 	return 0
+// }
 
 // femVecMatMult - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1229
 // func femVecMatMult(a *tVector, b *tMatrix, c *tVector) int {
@@ -3124,106 +3187,106 @@ func femValMatMultSelf(val float64, a *tMatrix) int {
 // }
 
 // femMatVecMultBig - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1347
-func femMatVecMultBig(a *tMatrix, b *tVector, c *tVector) int {
-	// Matrix by vector multiplication (a[m,n]*b[n] = b[n])
-	// * @param a matrix
-	// * @param b vector
-	// * @param c vector (result)
-	// * @return status
-	//
-	var i int
-	var j int
-	var val float64
-	if a.cols != b.rows || c.rows != a.rows {
-		return -9
-	}
-	// 	if c.type_ != 0 {
-	// 		return -3
-	// 	}
-	// 	if a.type_ == 0 && b.type_ == 0 {
-	for i = 0; i < a.rows; i++ {
-		val = 0
-		for j = 0; j < a.cols; j++ {
-			val += b.data[j] * a.data[j+i*a.cols]
-		}
-		c.data[i] = val
-	}
-	// 	} else {
-	// 		if a.type_ == 1 && b.type_ == 0 {
-	// 			femVecSetZero(c)
-	// 			for i = 0; i < a.rows; i++ {
-	// 				val = 0
-	// 				for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
-	// 					if a.pos[j] <= 0 {
-	// 						break
-	// 					}
-	// 					val += a.data[j] * b.data[a.pos[j]-1]
-	// 				}
-	// 				c.data[i] = val
-	// 			}
-	// 		} else {
-	// 			for i = 1; i <= a.rows; i++ {
-	// 				val = 0
-	// 				for j = 1; j <= a.cols; j++ {
-	// 					val += femMatGet(a, i, j) * femVecGet(b, j)
-	// 				}
-	// 				femVecPutAdd(c, i, val, 0)
-	// 			}
-	// 		}
-	// 	}
-	return 0
-}
+// func femMatVecMultBig(a *tMatrix, b *tVector, c *tVector) int {
+// 	// Matrix by vector multiplication (a[m,n]*b[n] = b[n])
+// 	// * @param a matrix
+// 	// * @param b vector
+// 	// * @param c vector (result)
+// 	// * @return status
+// 	//
+// 	var i int
+// 	var j int
+// 	var val float64
+// 	if a.cols != b.rows || c.rows != a.rows {
+// 		return -9
+// 	}
+// 	// 	if c.type_ != 0 {
+// 	// 		return -3
+// 	// 	}
+// 	// 	if a.type_ == 0 && b.type_ == 0 {
+// 	for i = 0; i < a.rows; i++ {
+// 		val = 0
+// 		for j = 0; j < a.cols; j++ {
+// 			val += b.data[j] * a.data[j+i*a.cols]
+// 		}
+// 		c.data[i] = val
+// 	}
+// 	// 	} else {
+// 	// 		if a.type_ == 1 && b.type_ == 0 {
+// 	// 			femVecSetZero(c)
+// 	// 			for i = 0; i < a.rows; i++ {
+// 	// 				val = 0
+// 	// 				for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
+// 	// 					if a.pos[j] <= 0 {
+// 	// 						break
+// 	// 					}
+// 	// 					val += a.data[j] * b.data[a.pos[j]-1]
+// 	// 				}
+// 	// 				c.data[i] = val
+// 	// 			}
+// 	// 		} else {
+// 	// 			for i = 1; i <= a.rows; i++ {
+// 	// 				val = 0
+// 	// 				for j = 1; j <= a.cols; j++ {
+// 	// 					val += femMatGet(a, i, j) * femVecGet(b, j)
+// 	// 				}
+// 	// 				femVecPutAdd(c, i, val, 0)
+// 	// 			}
+// 	// 		}
+// 	// 	}
+// 	return 0
+// }
 
 // femMatVecMult - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1456
-func femMatVecMult(a *tMatrix, b *tVector, c *tVector) int {
-	// Matrix by vector multiplication (a[m,n]*b[n] = b[n]) FOR SMALL DATA
-	// * @param a matrix
-	// * @param b vector
-	// * @param c vector (result)
-	// * @return status
-	//
-	var i int
-	var j int
-	var val float64
-	if a.cols != b.rows || c.rows != a.rows {
-		return -9
-	}
-	// 	if c.type_ != 0 {
-	// 		return -3
-	// 	}
-	// 	if a.type_ == 0 && b.type_ == 0 {
-	for i = 0; i < a.rows; i++ {
-		val = 0
-		for j = 0; j < a.cols; j++ {
-			val += b.data[j] * a.data[j+i*a.cols]
-		}
-		c.data[i] = val
-	}
-	// 	} else {
-	// 		if a.type_ == 1 && b.type_ == 0 {
-	// 			femVecSetZero(c)
-	// 			for i = 0; i < a.rows; i++ {
-	// 				val = 0
-	// 				for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
-	// 					if a.pos[j] <= 0 {
-	// 						break
-	// 					}
-	// 					val += a.data[j] * b.data[a.pos[j]-1]
-	// 				}
-	// 				c.data[i] = val
-	// 			}
-	// 		} else {
-	// 			for i = 1; i <= a.rows; i++ {
-	// 				val = 0
-	// 				for j = 1; j <= a.cols; j++ {
-	// 					val += femMatGet(a, i, j) * femVecGet(b, j)
-	// 				}
-	// 				femVecPutAdd(c, i, val, 0)
-	// 			}
-	// 		}
-	// 	}
-	return 0
-}
+// func femMatVecMult(a *tMatrix, b *tVector, c *tVector) int {
+// 	// Matrix by vector multiplication (a[m,n]*b[n] = b[n]) FOR SMALL DATA
+// 	// * @param a matrix
+// 	// * @param b vector
+// 	// * @param c vector (result)
+// 	// * @return status
+// 	//
+// 	var i int
+// 	var j int
+// 	var val float64
+// 	if a.cols != b.rows || c.rows != a.rows {
+// 		return -9
+// 	}
+// 	// 	if c.type_ != 0 {
+// 	// 		return -3
+// 	// 	}
+// 	// 	if a.type_ == 0 && b.type_ == 0 {
+// 	for i = 0; i < a.rows; i++ {
+// 		val = 0
+// 		for j = 0; j < a.cols; j++ {
+// 			val += b.data[j] * a.data[j+i*a.cols]
+// 		}
+// 		c.data[i] = val
+// 	}
+// 	// 	} else {
+// 	// 		if a.type_ == 1 && b.type_ == 0 {
+// 	// 			femVecSetZero(c)
+// 	// 			for i = 0; i < a.rows; i++ {
+// 	// 				val = 0
+// 	// 				for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
+// 	// 					if a.pos[j] <= 0 {
+// 	// 						break
+// 	// 					}
+// 	// 					val += a.data[j] * b.data[a.pos[j]-1]
+// 	// 				}
+// 	// 				c.data[i] = val
+// 	// 			}
+// 	// 		} else {
+// 	// 			for i = 1; i <= a.rows; i++ {
+// 	// 				val = 0
+// 	// 				for j = 1; j <= a.cols; j++ {
+// 	// 					val += femMatGet(a, i, j) * femVecGet(b, j)
+// 	// 				}
+// 	// 				femVecPutAdd(c, i, val, 0)
+// 	// 			}
+// 	// 		}
+// 	// 	}
+// 	return 0
+// }
 
 // femVecLinCombBig - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1540
 // func femVecLinCombBig(amult float64, a *tVector, bmult float64, b *tVector, c *tVector) int {
@@ -3286,48 +3349,48 @@ func femMatVecMult(a *tMatrix, b *tVector, c *tVector) int {
 // }
 
 // femMatMatMult - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1662
-func femMatMatMult(a *tMatrix, b *tMatrix, c *tMatrix) int {
-	// matrix by matrix multiplication a[m,n]*b[n,h] = c[m,h]
-	// * @param a matrix
-	// * @param b matrix
-	// * @param c matrix (result)
-	// * @return status
-	//
-	var i int
-	var j int
-	var k int
-	var val float64
-	if a.cols != b.rows || b.cols != c.cols || a.rows != c.rows {
-		return -9
-	}
-	// 	if c.type_ != 0 {
-	// 		return -3
-	// 	}
-	// 	if a.type_ == 0 && b.type_ == 0 && c.type_ == 0 {
-	for i = 0; i < a.rows; i++ {
-		for j = 0; j < b.cols; j++ {
-			val = 0
-			for k = 0; k < a.cols; k++ {
-				//val += femMatGet(a, i,k)*femMatGet(b, k,j);
-				val += a.data[i*a.cols+k] * b.data[k*b.cols+j]
-			}
-			//femMatPut(c, i,j, val);
-			c.data[i*c.cols+j] = val
-		}
-	}
-	// 	} else {
-	// 		for i = 1; i <= a.rows; i++ {
-	// 			for j = 1; j <= b.cols; j++ {
-	// 				val = 0
-	// 				for k = 1; k <= a.cols; k++ {
-	// 					val += femMatGet(a, i, k) * femMatGet(b, k, j)
-	// 				}
-	// 				femMatPutAdd(c, i, j, val, 0)
-	// 			}
-	// 		}
-	// 	}
-	return 0
-}
+// func femMatMatMult(a *tMatrix, b *tMatrix, c *tMatrix) int {
+// 	// matrix by matrix multiplication a[m,n]*b[n,h] = c[m,h]
+// 	// * @param a matrix
+// 	// * @param b matrix
+// 	// * @param c matrix (result)
+// 	// * @return status
+// 	//
+// 	var i int
+// 	var j int
+// 	var k int
+// 	var val float64
+// 	if a.cols != b.rows || b.cols != c.cols || a.rows != c.rows {
+// 		return -9
+// 	}
+// 	// 	if c.type_ != 0 {
+// 	// 		return -3
+// 	// 	}
+// 	// 	if a.type_ == 0 && b.type_ == 0 && c.type_ == 0 {
+// 	for i = 0; i < a.rows; i++ {
+// 		for j = 0; j < b.cols; j++ {
+// 			val = 0
+// 			for k = 0; k < a.cols; k++ {
+// 				//val += femMatGet(a, i,k)*femMatGet(b, k,j);
+// 				val += a.data[i*a.cols+k] * b.data[k*b.cols+j]
+// 			}
+// 			//femMatPut(c, i,j, val);
+// 			c.data[i*c.cols+j] = val
+// 		}
+// 	}
+// 	// 	} else {
+// 	// 		for i = 1; i <= a.rows; i++ {
+// 	// 			for j = 1; j <= b.cols; j++ {
+// 	// 				val = 0
+// 	// 				for k = 1; k <= a.cols; k++ {
+// 	// 					val += femMatGet(a, i, k) * femMatGet(b, k, j)
+// 	// 				}
+// 	// 				femMatPutAdd(c, i, j, val, 0)
+// 	// 			}
+// 	// 		}
+// 	// 	}
+// 	return 0
+// }
 
 // femMatLinComb - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1714
 // func femMatLinComb(am float64, a *tMatrix, bm float64, b *tMatrix, c *tMatrix) int {
@@ -3364,73 +3427,73 @@ func femMatMatMult(a *tMatrix, b *tMatrix, c *tMatrix) int {
 // }
 
 // femMatTran - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1750
-func femMatTran(a *tMatrix, b *tMatrix) int {
-	// matrix transposition - works only on dense matrices (MAT_FULL)
-	// * @param a matrix (original)
-	// * @param b matrix (result - must be allocated)
-	// * @return status
-	//
-	var i int
-	var j int
-	if a.cols != b.rows || b.cols != a.rows {
-		return -9
-	}
-	// 	if a.type_ != 0 || b.type_ != 0 {
-	// 		return -9
-	// 	}
-	for i = 0; i < a.rows; i++ {
-		for j = 0; j < a.cols; j++ {
-			if a.cols == a.rows {
-				b.data[j*a.cols+i] = a.data[i*a.cols+j]
-			} else {
-				femMatPutAdd(b, j+1, i+1, femMatGet(a, i+1, j+1), 0)
-			}
-		}
-	}
-	return 0
-}
+// func femMatTran(a *tMatrix, b *tMatrix) int {
+// 	// matrix transposition - works only on dense matrices (MAT_FULL)
+// 	// * @param a matrix (original)
+// 	// * @param b matrix (result - must be allocated)
+// 	// * @return status
+// 	//
+// 	var i int
+// 	var j int
+// 	if a.cols != b.rows || b.cols != a.rows {
+// 		return -9
+// 	}
+// 	// 	if a.type_ != 0 || b.type_ != 0 {
+// 	// 		return -9
+// 	// 	}
+// 	for i = 0; i < a.rows; i++ {
+// 		for j = 0; j < a.cols; j++ {
+// 			if a.cols == a.rows {
+// 				b.data[j*a.cols+i] = a.data[i*a.cols+j]
+// 			} else {
+// 				femMatPutAdd(b, j+1, i+1, femMatGet(a, i+1, j+1), 0)
+// 			}
+// 		}
+// 	}
+// 	return 0
+// }
 
 // femMatNormBig - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1822
-func femMatNormBig(a *tMatrix) float64 {
-	// Computes norm of sparse matrix
-	// *  @param a matrix
-	// *  @return norm
-	//
-	var Norm float64
-	var MaxNorm float64
-	var val float64
-	var i int
-	var j int
-	MaxNorm = 0
-	// 	if a.type_ == 1 {
-	// 		for i = 0; i < a.rows; i++ {
-	// 			Norm = 0
-	// 			for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
-	// 				if a.pos[j] <= 0 {
-	// 					break
-	// 				}
-	// 				Norm += a.data[j] * a.data[j]
-	// 			}
-	// 			Norm = math.Sqrt(Norm)
-	// 			if Norm > MaxNorm {
-	// 				MaxNorm = Norm
-	// 			}
-	// 		}
-	// 	} else {
-	for i = 1; i <= a.rows; i++ {
-		Norm = 0
-		for j = 1; j <= a.cols; j++ {
-			val = femMatGet(a, i, j)
-			Norm += val * val
-		}
-		Norm = math.Sqrt(Norm)
-		if Norm > MaxNorm {
-			MaxNorm = Norm
-		}
-	}
-	// 	}
-	return MaxNorm
-}
+// func femMatNormBig(a *tMatrix) float64 {
+// 	// Computes norm of sparse matrix
+// 	// *  @param a matrix
+// 	// *  @return norm
+// 	//
+// 	var Norm float64
+// 	var MaxNorm float64
+// 	var val float64
+// 	var i int
+// 	var j int
+// 	MaxNorm = 0
+// 	// 	if a.type_ == 1 {
+// 	// 		for i = 0; i < a.rows; i++ {
+// 	// 			Norm = 0
+// 	// 			for j = a.frompos[i]; j < a.frompos[i]+a.defpos[i]; j++ {
+// 	// 				if a.pos[j] <= 0 {
+// 	// 					break
+// 	// 				}
+// 	// 				Norm += a.data[j] * a.data[j]
+// 	// 			}
+// 	// 			Norm = math.Sqrt(Norm)
+// 	// 			if Norm > MaxNorm {
+// 	// 				MaxNorm = Norm
+// 	// 			}
+// 	// 		}
+// 	// 	} else {
+// 	for i = 1; i <= a.rows; i++ {
+// 		Norm = 0
+// 		for j = 1; j <= a.cols; j++ {
+// 			val = femMatGet(a, i, j)
+// 			Norm += val * val
+// 		}
+// 		Norm = math.Sqrt(Norm)
+// 		if Norm > MaxNorm {
+// 			MaxNorm = Norm
+// 		}
+// 	}
+// 	// 	}
+// 	return MaxNorm
+// }
 
 // femMatNorm - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1921
 // func femMatNorm(a *tMatrix) float64 {
@@ -3475,28 +3538,28 @@ func femMatNormBig(a *tMatrix) float64 {
 // }
 
 // femVecNormBig - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:1988
-func femVecNormBig(a *tVector) float64 {
-	// Computes Euclide norm of vector sum(sqrt(a*a))
-	// *  @param a     vector
-	// *  @return norm
-	//
-	var Norm float64
-	// 	var val float64
-	// 	_ = val
-	var i int
-	Norm = 0
-	// 	if a.type_ == 0 {
-	for i = 0; i < a.rows; i++ {
-		Norm += a.data[i] * a.data[i]
-	}
-	// 	} else {
-	// 		for i = 1; i <= a.rows; i++ {
-	// 			val = femVecGet(a, i)
-	// 			Norm += val * val
-	// 		}
-	// 	}
-	return math.Sqrt(Norm)
-}
+// func femVecNormBig(a *tVector) float64 {
+// 	// Computes Euclide norm of vector sum(sqrt(a*a))
+// 	// *  @param a     vector
+// 	// *  @return norm
+// 	//
+// 	var Norm float64
+// 	// 	var val float64
+// 	// 	_ = val
+// 	var i int
+// 	Norm = 0
+// 	// 	if a.type_ == 0 {
+// 	for i = 0; i < a.rows; i++ {
+// 		Norm += a.data[i] * a.data[i]
+// 	}
+// 	// 	} else {
+// 	// 		for i = 1; i <= a.rows; i++ {
+// 	// 			val = femVecGet(a, i)
+// 	// 			Norm += val * val
+// 	// 		}
+// 	// 	}
+// 	return math.Sqrt(Norm)
+// }
 
 // femVecNorm - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:2072
 // func femVecNorm(a *tVector) float64 {
@@ -3995,159 +4058,159 @@ func femVecNormBig(a *tVector) float64 {
 // }
 
 // femEqsCGwJ - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_eqs.c:88
-func femEqsCGwJ(a *tMatrix, b *tVector, x *tVector, eps float64, maxIt int) int {
-	// Conjugate gradient method with Jacobi preconditioner
-	// *  (for symetric matrices only!)
-	// *  @param a      matrix
-	// *  @param b      "load" vector
-	// *  @param x      results (vector - given as first iteration)
-	// *  @param eps    error (min.)
-	// *  @param maxIt  max. number of iterations
-	// *  @return state value
-	//
-	// Jacobi preconditioner (diag[A] ;-)
-	var M tVector
-	var r tVector
-	var z tVector
-	var p tVector
-	var q tVector
-	var ro float64
-	var alpha float64
-	var beta float64
-	var roro float64
-	var n int
-	var i int
-	var j int
-	var rv int
-	var converged int
-	var normRes float64
-	var normX float64
-	var normA float64
-	var normB float64
-	if a.cols != x.rows || x.rows != b.rows {
-		return -9
-	}
-	n = a.rows
-	normA = femMatNormBig(a)
-	normB = femVecNormBig(b)
-	if normB <= 0 {
-		femVecSetZero(x) //Big(x)
-		fmt.Fprintf(os.Stdout, string("[ ]  %s!\n"), string("solution done without iterations because of zero load"))
-		return 0
-	}
-	// vector initialization
-	//femVecNull(((&M)))
-	//femVecNull(((&r)))
-	//femVecNull(((&z)))
-	//femVecNull(((&p)))
-	//femVecNull(((&q)))
-	if (func() int {
-		rv = femVecAlloc((&M), 0, n, n)
-		return rv
-	}()) != 0 {
-		// memory allocation
-		goto memFree
-	}
-	if (func() int {
-		rv = femVecAlloc((&r), 0, n, n)
-		return rv
-	}()) != 0 {
-		goto memFree
-	}
-	if (func() int {
-		rv = femVecAlloc((&z), 0, n, n)
-		return rv
-	}()) != 0 {
-		goto memFree
-	}
-	if (func() int {
-		rv = femVecAlloc((&p), 0, n, n)
-		return rv
-	}()) != 0 {
-		goto memFree
-	}
-	if (func() int {
-		rv = femVecAlloc((&q), 0, n, n)
-		return rv
-	}()) != 0 {
-		goto memFree
-	}
-	{
-		// Jacobi preconditioner creation:
-		for i = 1; i <= n; i++ {
-			M.data[i-1] = femMatGet(a, i, i)
-			if math.Abs(M.data[i-1]) < 1e-07 {
-				rv = -13
-				fmt.Fprintf(os.Stdout, string("[ ]   %s[%d][%d] %s\n"), string("matrix member"), i, i, string("has zero size"))
-				goto memFree
-			}
-		}
-	}
-	// next two lines mean: r = b - A*x
-	femMatVecMultBig(a, x, (&r))
-	for i = 0; i < n; i++ {
-		r.data[i] = b.data[i] - r.data[i]
-	}
-	{
-		// main loop
-		for i = 1; i <= maxIt; i++ {
-			fmt.Fprintf(os.Stdout, string("[ ]   %s %d\n"), string("linear step"), i)
-			{
-				// using preconditioner:
-				for j = 0; j < n; j++ {
-					z.data[j] = r.data[j] / M.data[j]
-				}
-			}
-			ro = femVecVecMultBig((&r), (&z))
-			fmt.Fprintf(os.Stdout, string("ro = %f\n"), ro)
-			if i == 1 {
-				for j = 0; j < n; j++ {
-					p.data[j] = z.data[j]
-				}
-			} else {
-				beta = ro / roro
-				fmt.Fprintf(os.Stdout, string("beta = %f\n"), beta)
-				for j = 0; j < n; j++ {
-					p.data[j] = z.data[j] + beta*p.data[j]
-				}
-			}
-			femMatVecMultBig(a, (&p), (&q))
-			alpha = ro / femVecVecMultBig((&p), (&q))
-			fmt.Fprintf(os.Stdout, string("alpha = %f\n"), alpha)
-			for j = 0; j < n; j++ {
-				x.data[j] = x.data[j] + alpha*p.data[j]
-				r.data[j] = r.data[j] - alpha*q.data[j]
-			}
-			// Convergence testing
-			normRes = femVecNormBig((&r))
-			normX = femVecNormBig(x)
-			if normRes <= eps*(normA*normX+normB) {
-				// convergence test
-				//if (fabs(norm - norm0) < eps )
-				converged = 1
-				fmt.Fprintf(os.Stdout, string("[ ]  %s %d %s!\n"), string("linear solution done in"), i, string("iterations"))
-				break
-			}
-			fmt.Fprintf(os.Stdout, string("[i] Convergence test %f < %f (step %d from %d)\n"), normRes, eps*(normA*normX+normB), i, maxIt)
-			roro = ro
-		}
-	}
-	if converged != 1 {
-		// end of main loop
-		//fprintf(os.Stdout,"[I] normRes = %f\n",normRes);
-		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("unconverged solution"))
-		rv = -1
-	}
-memFree:
-	;
-	// freeing memory:
-	//femVecFree(((&M)))
-	//femVecFree(((&r)))
-	//femVecFree(((&z)))
-	//femVecFree(((&p)))
-	//femVecFree(((&q)))
-	return rv
-}
+// func femEqsCGwJ(a *tMatrix, b *tVector, x *tVector, eps float64, maxIt int) int {
+// 	// Conjugate gradient method with Jacobi preconditioner
+// 	// *  (for symetric matrices only!)
+// 	// *  @param a      matrix
+// 	// *  @param b      "load" vector
+// 	// *  @param x      results (vector - given as first iteration)
+// 	// *  @param eps    error (min.)
+// 	// *  @param maxIt  max. number of iterations
+// 	// *  @return state value
+// 	//
+// 	// Jacobi preconditioner (diag[A] ;-)
+// 	var M tVector
+// 	var r tVector
+// 	var z tVector
+// 	var p tVector
+// 	var q tVector
+// 	var ro float64
+// 	var alpha float64
+// 	var beta float64
+// 	var roro float64
+// 	var n int
+// 	var i int
+// 	var j int
+// 	var rv int
+// 	var converged int
+// 	var normRes float64
+// 	var normX float64
+// 	var normA float64
+// 	var normB float64
+// 	if a.cols != x.rows || x.rows != b.rows {
+// 		return -9
+// 	}
+// 	n = a.rows
+// 	normA = femMatNormBig(a)
+// 	normB = femVecNormBig(b)
+// 	if normB <= 0 {
+// 		femVecSetZero(x) //Big(x)
+// 		fmt.Fprintf(os.Stdout, string("[ ]  %s!\n"), string("solution done without iterations because of zero load"))
+// 		return 0
+// 	}
+// 	// vector initialization
+// 	//femVecNull(((&M)))
+// 	//femVecNull(((&r)))
+// 	//femVecNull(((&z)))
+// 	//femVecNull(((&p)))
+// 	//femVecNull(((&q)))
+// 	if (func() int {
+// 		rv = femVecAlloc((&M), 0, n, n)
+// 		return rv
+// 	}()) != 0 {
+// 		// memory allocation
+// 		goto memFree
+// 	}
+// 	if (func() int {
+// 		rv = femVecAlloc((&r), 0, n, n)
+// 		return rv
+// 	}()) != 0 {
+// 		goto memFree
+// 	}
+// 	if (func() int {
+// 		rv = femVecAlloc((&z), 0, n, n)
+// 		return rv
+// 	}()) != 0 {
+// 		goto memFree
+// 	}
+// 	if (func() int {
+// 		rv = femVecAlloc((&p), 0, n, n)
+// 		return rv
+// 	}()) != 0 {
+// 		goto memFree
+// 	}
+// 	if (func() int {
+// 		rv = femVecAlloc((&q), 0, n, n)
+// 		return rv
+// 	}()) != 0 {
+// 		goto memFree
+// 	}
+// 	{
+// 		// Jacobi preconditioner creation:
+// 		for i = 1; i <= n; i++ {
+// 			M.data[i-1] = femMatGet(a, i, i)
+// 			if math.Abs(M.data[i-1]) < 1e-07 {
+// 				rv = -13
+// 				fmt.Fprintf(os.Stdout, string("[ ]   %s[%d][%d] %s\n"), string("matrix member"), i, i, string("has zero size"))
+// 				goto memFree
+// 			}
+// 		}
+// 	}
+// 	// next two lines mean: r = b - A*x
+// 	femMatVecMultBig(a, x, (&r))
+// 	for i = 0; i < n; i++ {
+// 		r.data[i] = b.data[i] - r.data[i]
+// 	}
+// 	{
+// 		// main loop
+// 		for i = 1; i <= maxIt; i++ {
+// 			fmt.Fprintf(os.Stdout, string("[ ]   %s %d\n"), string("linear step"), i)
+// 			{
+// 				// using preconditioner:
+// 				for j = 0; j < n; j++ {
+// 					z.data[j] = r.data[j] / M.data[j]
+// 				}
+// 			}
+// 			ro = femVecVecMultBig((&r), (&z))
+// 			fmt.Fprintf(os.Stdout, string("ro = %f\n"), ro)
+// 			if i == 1 {
+// 				for j = 0; j < n; j++ {
+// 					p.data[j] = z.data[j]
+// 				}
+// 			} else {
+// 				beta = ro / roro
+// 				fmt.Fprintf(os.Stdout, string("beta = %f\n"), beta)
+// 				for j = 0; j < n; j++ {
+// 					p.data[j] = z.data[j] + beta*p.data[j]
+// 				}
+// 			}
+// 			femMatVecMultBig(a, (&p), (&q))
+// 			alpha = ro / femVecVecMultBig((&p), (&q))
+// 			fmt.Fprintf(os.Stdout, string("alpha = %f\n"), alpha)
+// 			for j = 0; j < n; j++ {
+// 				x.data[j] = x.data[j] + alpha*p.data[j]
+// 				r.data[j] = r.data[j] - alpha*q.data[j]
+// 			}
+// 			// Convergence testing
+// 			normRes = femVecNormBig((&r))
+// 			normX = femVecNormBig(x)
+// 			if normRes <= eps*(normA*normX+normB) {
+// 				// convergence test
+// 				//if (fabs(norm - norm0) < eps )
+// 				converged = 1
+// 				fmt.Fprintf(os.Stdout, string("[ ]  %s %d %s!\n"), string("linear solution done in"), i, string("iterations"))
+// 				break
+// 			}
+// 			fmt.Fprintf(os.Stdout, string("[i] Convergence test %f < %f (step %d from %d)\n"), normRes, eps*(normA*normX+normB), i, maxIt)
+// 			roro = ro
+// 		}
+// 	}
+// 	if converged != 1 {
+// 		// end of main loop
+// 		//fprintf(os.Stdout,"[I] normRes = %f\n",normRes);
+// 		fmt.Fprintf(os.Stdout, string("[E] %s!\n"), string("unconverged solution"))
+// 		rv = -1
+// 	}
+// memFree:
+// 	;
+// 	// freeing memory:
+// 	//femVecFree(((&M)))
+// 	//femVecFree(((&r)))
+// 	//femVecFree(((&z)))
+// 	//femVecFree(((&p)))
+// 	//femVecFree(((&q)))
+// 	return rv
+// }
 
 // femEqsBiCCSwJ - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_eqs.c:262
 // func femEqsBiCCSwJ(a *tMatrix, b *tVector, x *tVector, eps float64, maxIt int) int {
