@@ -484,13 +484,13 @@ type tVector struct { // _struct_at_GOPATH_src_github_com_Konstantin8105_shell_c
 
 // K - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:107
 // SOLUTION DATA
-var K tMatrix
+// var K tMatrix
 
 // u - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:108
 var u tVector
 
 // F - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:109
-var F tVector
+// var F tVector
 
 // Ke - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:111
 // 6x6
@@ -518,7 +518,7 @@ var F tVector
 
 // Fe - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:117
 // 5
-var Fe tVector
+// var Fe tVector
 
 // ue - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:118
 // 6
@@ -849,7 +849,7 @@ func (m Model) alloc_solver_data() int {
 	// 		goto memFree
 	// 	}
 	// 	if
-	femVecAlloc((&Fe), 0, 5, 5)
+	// femVecAlloc((&Fe), 0, 5, 5)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
@@ -892,13 +892,13 @@ func (m Model) alloc_solver_data() int {
 		}
 	}
 	// 	if
-	femMatAlloc((&K), 1, n_n*3, n_n*3, 0, alloc_field)
+	// femMatAlloc((&K), 1, n_n*3, n_n*3, 0, alloc_field)
 	// 	!= 0 {
 	// 		// alloc K, u, F
 	// 		goto memFree
 	// 	}
 	// 	if
-	femVecAlloc((&F), 0, n_n*3, n_n*3)
+	// femVecAlloc((&F), 0, n_n*3, n_n*3)
 	// 	!= 0 {
 	// 		goto memFree
 	// 	}
@@ -933,25 +933,25 @@ func (m Model) get_D_matrix(i int) tMatrix {
 
 	D := tMatrix{}
 
-	femMatAlloc((&D), 0, 5, 5, 0, nil)
+	femMatAlloc((&D),  5, 5 )
 
-// 	var E1 float64
-// 	var E2 float64
-// 	var nu1 float64
-// 	var nu2 float64
-// 	var G float64
-// 	var mult float64
-var (
-	E1 = m.Beams[i].E1
-	E2 = m.Beams[i].E1
-	G = m.Beams[i].G
-	// 	fmt.Println(	"G = ", G)
-	// 	fmt.Println(	"t = ", t)
-	nu1 = m.Beams[i].nu1
-	nu2 = m.Beams[i].nu2
-t = m.Beams[i].T
-	mult = t / (1 - nu1*nu2)
-)
+	// 	var E1 float64
+	// 	var E2 float64
+	// 	var nu1 float64
+	// 	var nu2 float64
+	// 	var G float64
+	// 	var mult float64
+	var (
+		E1 = m.Beams[i].E1
+		E2 = m.Beams[i].E1
+		G  = m.Beams[i].G
+		// 	fmt.Println(	"G = ", G)
+		// 	fmt.Println(	"t = ", t)
+		nu1  = m.Beams[i].nu1
+		nu2  = m.Beams[i].nu2
+		t    = m.Beams[i].T
+		mult = t / (1 - nu1*nu2)
+	)
 	femMatPutAdd(&D, 1, 1, E1*mult, 0)
 	femMatPutAdd(&D, 1, 2, nu2*mult, 0)
 	femMatPutAdd(&D, 2, 1, nu2*mult, 0)
@@ -978,7 +978,7 @@ func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
 	// 	var R float64
 	// 	var dx float64
 	// 	var dy float64
-	femMatAlloc((&B), 0, 5, 6, 0, nil)
+	femMatAlloc((&B),  5, 6)
 	var (
 		// dx = n_x[e_n2[i]] - n_x[e_n1[i]]
 		// dy = n_y[e_n2[i]] - n_y[e_n1[i]]
@@ -1016,7 +1016,7 @@ func (m Model) get_B_matrix(i int) (B tMatrix, L float64, R float64) {
 }
 
 // get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
-func (m Model) get_matrix() int {
+func (m Model) get_matrix() (K tMatrix, F tVector) {
 	// creates stiffness matrix
 	var t float64
 	// 	var L float64
@@ -1028,8 +1028,17 @@ func (m Model) get_matrix() int {
 	var k int
 	var posj int
 	var posk int
+
+	n_n := len(m.Points)
+
+	// var K tMatrix
+	femMatAlloc((&K), n_n*3, n_n*3)
 	femMatSetZero((&K))
+
 	femVecSetZero((&u))
+
+
+	femVecAlloc((&F), 0, n_n*3, n_n*3)
 	femVecSetZero((&F))
 	for i := 0; i < len(m.Beams); i++ {
 		// 		if (func() float64 {
@@ -1043,15 +1052,15 @@ func (m Model) get_matrix() int {
 		// femMatSetZero((&Ke))
 		// femMatSetZero((&B))
 		var Bt tMatrix
-		femMatAlloc((&Bt), 0, 6, 5, 0, nil)
+		femMatAlloc((&Bt),  6, 5)
 		femMatSetZero((&Bt))
 
 		var BtD tMatrix
-		femMatAlloc((&BtD), 0, 6, 5, 0, nil)
+		femMatAlloc((&BtD),  6, 5)
 		femMatSetZero((&BtD))
 		// femMatSetZero((&D))
 		// material stiffness matrix D:
-		D := m.get_D_matrix(i)//, t)
+		D := m.get_D_matrix(i) //, t)
 		// femMatPrn(((&D)),string("D"))
 		// B matrix
 		B, L, R := m.get_B_matrix(i)
@@ -1064,7 +1073,7 @@ func (m Model) get_matrix() int {
 		femMatMatMult((&Bt), (&D), (&BtD))
 		// => Ke  without L*R
 		var Ke tMatrix
-		femMatAlloc((&Ke), 0, 6, 6, 0, nil)
+		femMatAlloc((&Ke), 6, 6)
 		femMatMatMult((&BtD), (&B), (&Ke))
 		// element stifness matrix Ke:
 		femValMatMultSelf(R*L, (&Ke))
@@ -1114,7 +1123,7 @@ func (m Model) get_matrix() int {
 
 	// 	fmt.Printf("K = %#v\n", K)
 	// 	femMatPrn(((&K)), string("K"))
-	return 0
+	return K // 0
 }
 
 // generate_water_load_x - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:809
@@ -1255,7 +1264,7 @@ func (m Model) get_matrix() int {
 // }
 
 // get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
-func (m Model) get_loads_and_supports() int {
+func (m Model) get_loads_and_supports(K tMatrix) int {
 	// applies supports in nodes
 	// 	var i int
 	// 	var j int
@@ -1331,7 +1340,7 @@ func (m Model) get_loads_and_supports() int {
 }
 
 // get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
-func (m Model) get_int_forces(el int) ( N1 , N2 , M1 , M2 , Q float64) {
+func (m Model) get_int_forces(el int) (N1, N2, M1, M2, Q float64) {
 	// computes internal force is nodes
 	// * @param el element number <0..n_e-1>
 	// * @param N1 meridian force
@@ -1349,13 +1358,15 @@ func (m Model) get_int_forces(el int) ( N1 , N2 , M1 , M2 , Q float64) {
 	// femMatSetZero((&D))
 	// femMatSetZero((&B))
 	var DB tMatrix
-	femMatAlloc((&DB), 0, 5, 6, 0, nil)
+	femMatAlloc((&DB),  5, 6)
 	femMatSetZero((&DB))
 
 	var ue tVector
 	femVecAlloc((&ue), 0, 6, 6)
 	femVecSetZero((&ue))
 
+	var Fe tVector
+	femVecAlloc((&Fe), 0, 5, 5)
 	femVecSetZero((&Fe))
 
 	// get local stiffness vector
@@ -1370,7 +1381,7 @@ func (m Model) get_int_forces(el int) ( N1 , N2 , M1 , M2 , Q float64) {
 
 	// get B and D
 	//t := m.Beams[el].T         // e_t[el]
-	D := m.get_D_matrix(el)//, t) // , (&D))
+	D := m.get_D_matrix(el) //, t) // , (&D))
 	B, _, _ := m.get_B_matrix(el)
 	femMatMatMult((&D), (&B), (&DB))
 	// get vector
@@ -1386,19 +1397,19 @@ func (m Model) get_int_forces(el int) ( N1 , N2 , M1 , M2 , Q float64) {
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
 func (m Model) print_result() int { //fw *io.File) int {
 	fw := os.Stdout
-	var i int
-	var j int
-	var count int
-// 	var N1 float64
-// 	var N2 float64
-// 	var Q float64
-// 	var M1 float64
-// 	var M2 float64
-	var sN1 float64
-	var sN2 float64
-	var sQ float64
-	var sM1 float64
-	var sM2 float64
+	// 	var i int
+	// 	var j int
+	// 	var count int
+	// 	var N1 float64
+	// 	var N2 float64
+	// 	var Q float64
+	// 	var M1 float64
+	// 	var M2 float64
+	// 	var sN1 float64
+	// 	var sN2 float64
+	// 	var sQ float64
+	// 	var sM1 float64
+	// 	var sM2 float64
 	// 	N1 = 0
 	// 	N2 = 0
 	// 	M1 = 0
@@ -1410,27 +1421,29 @@ func (m Model) print_result() int { //fw *io.File) int {
 	// 	sM2 = 0
 	// 	sQ = 0
 	//
-	_ = sN1
-	_ = sN2
-	_ = sM1
-	_ = sM2
-	_ = sQ
+	// 	_ = sN1
+	// 	_ = sN2
+	// 	_ = sM1
+	// 	_ = sM2
+	// 	_ = sQ
 
 	n_n := len(m.Points)
 	n_e := len(m.Beams)
 
 	fmt.Fprintf(fw, "#  X     Y        w            u           angle            N1          N2           M1          M2          Q\n")
-	for i = 0; i < n_n; i++ {
-		sN1 = 0
-		sN2 = 0
-		sM1 = 0
-		sM2 = 0
-		sQ = 0
-		count = 0
-		for j = 0; j < n_e; j++ {
+	for i := 0; i < n_n; i++ {
+		var (
+			sN1   = 0.0
+			sN2   = 0.0
+			sM1   = 0.0
+			sM2   = 0.0
+			sQ    = 0.0
+			count = 0
+		)
+		for j := 0; j < n_e; j++ {
 			if m.Beams[j].N[0] == i || m.Beams[j].N[1] == i {
 				// internal forces in centroid
-				N1,N2,M1,M2,Q := m.get_int_forces(j)//, (&N1), (&N2), (&M1), (&M2), (&Q))
+				N1, N2, M1, M2, Q := m.get_int_forces(j) //, (&N1), (&N2), (&M1), (&M2), (&Q))
 				sN1 += N1
 				sN2 += N2
 				sM1 += M1
@@ -1446,7 +1459,7 @@ func (m Model) print_result() int { //fw *io.File) int {
 			sM2 /= float64(count)
 			sQ /= float64(count)
 		}
-		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), m.Points[i][0], m.Points[i][1], femVecGet((&u), 3*i+1), femVecGet((&u), 3*i+2), femVecGet((&u), 3*i+3), sN1, sN2, sM1, sM2, sQ)//Q)
+		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), m.Points[i][0], m.Points[i][1], femVecGet((&u), 3*i+1), femVecGet((&u), 3*i+2), femVecGet((&u), 3*i+3), sN1, sN2, sM1, sM2, sQ) //Q)
 	}
 	//_ = sQ
 	return 0
@@ -2148,7 +2161,7 @@ func (m Model) print_result() int { //fw *io.File) int {
 // }
 
 // femMatAlloc - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_math.c:57
-func femMatAlloc(mat *tMatrix, type_ int, rows int, cols int, bandwidth int, rowdesc []int) int {
+func femMatAlloc(mat *tMatrix,  rows int, cols int) int {
 	// 	var sum int
 	// 	_ = sum
 	// 	var i int

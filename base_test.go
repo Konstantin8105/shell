@@ -148,10 +148,10 @@ func Example() {
 	// 	}
 	// 	if solution_only == 1 {
 	//stat +=
-	model.get_matrix()
+	K:=model.get_matrix()
 	// stat += generate_water_load_x()
 	//stat +=
-	model.get_loads_and_supports()
+	 model.get_loads_and_supports(K)
 	//stat =
 	n_n := len(model.Points)
 	femEqsCGwJ((&K), (&F), (&u), 1e-09, 6*3*n_n)
