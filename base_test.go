@@ -2,6 +2,125 @@ package shell
 
 // main - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1744
 func Example() {
+
+	model := Model{
+		Points: [][2]float64{
+			{10, 0},
+			{10, 5},
+			{10, 10},
+		},
+// 	e_n1[0], e_n2[0], e_mat[0], e_t[0] = 0, 1, 0, 0.2
+// 	e_n1[1], e_n2[1], e_mat[1], e_t[1] = 1, 2, 0, 0.2
+		Beams: []BeamProp{
+			{N: [2]int{0, 1}, Mat:0, T:0.2},
+			{N: [2]int{1, 2}, Mat:0, T:0.2},
+		},
+	}
+
+	_ = model
+
+	var i int
+	n_m = 1
+
+	// 	n_n = 3
+
+// 	n_e = 2
+
+	n_d = 3
+
+	n_f = 1
+
+	m_E1 = make([]float64, n_m)
+
+	m_E2 = make([]float64, n_m)
+
+	m_G = make([]float64, n_m)
+
+	m_nu1 = make([]float64, n_m)
+
+	m_nu2 = make([]float64, n_m)
+
+	m_q = make([]float64, n_m)
+
+	m_vp = make([]float64, n_m)
+
+	m_t = make([]float64, n_m)
+
+	// 	n_x = make([]float64, n_n)
+	//
+	// 	n_y = make([]float64, n_n)
+
+// 	e_n1 = make([]int, n_e)
+// 
+// 	e_n2 = make([]int, n_e)
+// 
+// 	e_mat = make([]int, n_e)
+// 
+// 	e_t = make([]float64, n_e)
+
+	d_n = make([]int, n_d)
+
+	d_dir = make([]int, n_d)
+
+	d_val = make([]float64, n_d)
+
+	f_n = make([]int, n_f)
+
+	f_dir = make([]int, n_f)
+
+	f_val = make([]float64, n_f)
+
+	// en_num = make([]int,n_n)
+
+	//en_frm = make([]int,n_n)
+
+	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
+
+	for i = 0; i < n_m; i++ {
+
+		if m_E1[i] == m_E2[i] || m_E2[i] <= 0 {
+
+			m_E2[i] = m_E1[i]
+			m_nu2[i] = m_nu1[i]
+			if m_G[i] <= 0 {
+				m_G[i] = m_E1[i] / (2 * (1 + m_nu1[i]))
+
+			}
+		}
+	}
+
+
+	d_n[0], d_dir[0], d_val[0] = 0, 0, 0
+	d_n[1], d_dir[1], d_val[1] = 0, 1, 0
+	d_n[2], d_dir[2], d_val[2] = 2, 1, 0
+
+	f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
+
+	// 	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
+
+	model.check_elem_data()
+
+	// 	fail_type = 1
+	//
+	// 	n_fail = 2
+	//
+	// 	fail_data = make([]float64, n_fail)
+	//
+	// 	fail_data[0] = 20e6
+	// 	fail_data[1] = 1e6
+	//
+	// 	n_r_inp = 1
+	//
+	// 	rand_type = make([]int,n_r_inp)
+	//
+	// 	rand_pos = make([]int,n_r_inp)
+	//
+	// 	rand_indx = make([]int,n_r_inp)
+	//
+	// 	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
+
+	// n_r_opt = 0
+
 	// 	argc := int(len(os.Args))
 	// 	argv := []string{}
 	// 	for _, argvSingle := range os.Args {
@@ -12,21 +131,22 @@ func Example() {
 	// var stat int
 	// os.Stdout = noarch.Stdout
 	// 	cmd_param(argc, argv)
-	read_input_data() //noarch.Stdin)
+	// read_input_data() //noarch.Stdin)
 	//stat +=
-	alloc_solver_data()
+	model.alloc_solver_data()
 	// stat += optim_replace_data(opt_data)
 	// 	if write_only == 1 {
-	write_input_data() //noarch.Stdout)
+	// write_input_data() //noarch.Stdout)
 	// 		return
 	// 	}
 	// 	if solution_only == 1 {
 	//stat +=
-	get_matrix()
+	model.get_matrix()
 	// stat += generate_water_load_x()
 	//stat +=
-	get_loads_and_supports()
+	model.get_loads_and_supports()
 	//stat =
+	n_n := len(model.Points)
 	femEqsCGwJ((&K), (&F), (&u), 1e-09, 6*3*n_n)
 	// 	}
 	// 	if n_r_inp > 0 && random_only == 1 {
@@ -37,7 +157,7 @@ func Example() {
 	// 		generate_rand_out_file(noarch.Stdout)
 	// 	} else {
 	// 	if solution_only == 1 {
-	print_result() //noarch.Stdout)
+	model.print_result() //noarch.Stdout)
 	// 	}
 	// 	}
 	// 	if solution_only == 1 {
@@ -55,17 +175,6 @@ func Example() {
 	// return
 
 	// Output:
-	// 1 3 2 3 1
-	//  2.000000e+10 2.000000e+10 8.333333e+09 2.000000e-01 2.000000e-01 2.500000e+04 1.000000e+03 0.000000e+00
-	// 1.000000e+01 0.000000e+00
-	// 1.000000e+01 5.000000e+00
-	// 1.000000e+01 1.000000e+01
-	// 0 1 0 2.000000e-01
-	// 1 2 0 2.000000e-01
-	// 0 0 0.000000e+00
-	// 0 1 0.000000e+00
-	// 2 1 0.000000e+00
-	// 1 1 1.189900e+07
 	// [ ]   linear step 1
 	// ro = 1011.833528
 	// alpha = 1.001683

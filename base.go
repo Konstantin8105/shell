@@ -13,6 +13,71 @@ import (
 	"os"
 )
 
+// Model is structural calculation model
+type Model struct {
+	// Points is slice of point coordinate
+	//
+	//	[0] - X coordinate
+	//	[1] - Y coordinate
+	//
+	Points [][2]float64
+
+	// Beams is slice of point index and beam property
+	Beams []BeamProp
+
+	// Pins is slice of pins for beams in local system coordinate.
+	// Len of support must be same amount of beam.
+	// Or if len is zero, then all DoF(degree of freedom) is rigid.
+	//
+	// first index is point index
+	//
+	//	[0] - X on start point
+	//	[1] - Y on start point
+	//	[2] - M on start point
+	//	[3] - X on end point
+	//	[4] - Y on end point
+	//	[5] - M on end point
+	//
+	// if `true` then free degree of freedom
+	// Pins [][6]bool
+
+	// Supports is slice of fixed supports.
+	// Len of support must be same amount of Points
+	//
+	// first index is point index
+	//
+	//	[0] - X
+	//	[1] - Y
+	//	[2] - M
+	//
+	Supports [][3]bool
+}
+
+// BeamProp is beam property
+type BeamProp struct {
+	// Start and end point index
+	//
+	//	[0] - start of beam
+	//	[1] - end of beam
+	//
+	N [2]int
+
+	Mat int
+	T   float64
+
+	// A cross-section area
+	// Unit : sq. meter.
+	// A float64
+
+	// J is moment inertia
+	// Unit : meter^4
+	// J float64
+
+	// E is modulus of elasticity
+	// Unit : Pa
+	// E float64
+}
+
 // os.Stdout - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:29
 //
 //   File name: fem_mem.c
@@ -228,11 +293,11 @@ var n_m int
 
 // n_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:45
 // number of nodes
-var n_n int
+// var n_n int
 
 // n_e - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:46
 // number of elements
-var n_e int
+// var n_e int
 
 // n_d - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:47
 // number of displacements/supports
@@ -244,7 +309,7 @@ var n_f int
 
 // n_r_inp - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:50
 // number of random input data
-var n_r_inp int
+// var n_r_inp int
 
 // n_r_opt - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:51
 // number of optim input data
@@ -286,28 +351,28 @@ var m_t []float64
 // n_x - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:64
 // nodes
 // x coordinates
-var n_x []float64
+// var n_x []float64
 
 // n_y - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:65
 // y coordinates
-var n_y []float64
+// var n_y []float64
 
 // e_n1 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:68
 //elements
-// first nodes <0, n_n-1>
-var e_n1 []int
-
-// e_n2 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:69
-// second nodes  <0, n_n-1>
-var e_n2 []int
-
-// e_mat - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:70
-// material numbers  <0, n_m-1>
-var e_mat []int
-
-// e_t - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:71
-// element widths (constatnt on element)
-var e_t []float64
+// // first nodes <0, n_n-1>
+// var e_n1 []int
+//
+// // e_n2 - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:69
+// // second nodes  <0, n_n-1>
+// var e_n2 []int
+//
+// // m.Beam.Mat - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:70
+// // material numbers  <0, n_m-1>
+// var m.Beam.Mat []int
+//
+// // e_t - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:71
+// // element widths (constatnt on element)
+// var e_t []float64
 
 // d_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:74
 // displacements
@@ -506,8 +571,8 @@ var ue tVector
 // 	// 	if len(e_n2) != 0 {
 // 	// 		//femIntFree(e_n2)
 // 	// 	}
-// 	// 	if len(e_mat) != 0 {
-// 	// 		//femIntFree(e_mat)
+// 	// 	if len(m.Beam.Mat) != 0 {
+// 	// 		//femIntFree(m.Beam.Mat)
 // 	// 	}
 // 	// 	if len(e_t) != 0 {
 // 	// 		//femDblFree(e_t)
@@ -586,17 +651,23 @@ var ue tVector
 // }
 
 // check_elem_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:205
-func check_elem_data() {
-	// first node must be always under the second - it exchanges them
-	var i int
-	var tmp int
-	for i = 0; i < n_e; i++ {
-		if n_y[e_n1[i]] > n_y[e_n2[i]] {
-			tmp = e_n1[i]
-			e_n1[i] = e_n2[i]
-			e_n2[i] = tmp
+func (m Model) check_elem_data() {
+	for i := range m.Beams {
+		if m.Points[m.Beams[i].N[0]][1] > m.Points[m.Beams[i].N[1]][1] {
+			m.Beams[i].N[0], m.Beams[i].N[1] = m.Beams[i].N[1], m.Beams[i].N[0]
 		}
 	}
+
+	// first node must be always under the second - it exchanges them
+	// 	var i int
+	// 	var tmp int
+	// 	for i = 0; i < n_e; i++ {
+	// 		if n_y[e_n1[i]] > n_y[e_n2[i]] {
+	// 			tmp = e_n1[i]
+	// 			e_n1[i] = e_n2[i]
+	// 			e_n2[i] = tmp
+	// 		}
+	// 	}
 }
 
 // get_enode_fields - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:222
@@ -649,51 +720,51 @@ func check_elem_data() {
 // }
 
 // write_input_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:541
-func write_input_data() int { //fw *io.File) int {
-	fw := os.Stdout
-	// Writes input data to stream ------------------
-	var i int
-	// sizes
-	fmt.Fprintf(fw, string("%d %d %d %d %d\n"), n_m, n_n, n_e, n_d, n_f)
-
-	// materials
-	for i = 0; i < n_m; i++ {
-		fmt.Fprintf(fw, string(" %e %e %e %e %e %e %e %e\n"), m_E1[i], m_E2[i], m_G[i], m_nu1[i], m_nu2[i], m_q[i], m_vp[i], m_t[i])
-	}
-
-	// nodes
-	for i = 0; i < n_n; i++ {
-		fmt.Fprintf(fw, string("%e %e\n"), n_x[i], n_y[i])
-	}
-
-	// elements
-	for i = 0; i < n_e; i++ {
-		fmt.Fprintf(fw, string("%d %d %d %e\n"), e_n1[i], e_n2[i], e_mat[i], e_t[i])
-	}
-
-	// displacements
-	for i = 0; i < n_d; i++ {
-		fmt.Fprintf(fw, string("%d %d %e\n"), d_n[i], d_dir[i], d_val[i])
-	}
-
-	// supports
-	for i = 0; i < n_f; i++ {
-		fmt.Fprintf(fw, string("%d %d %e\n"), f_n[i], f_dir[i], f_val[i])
-	}
-
-	// water pressure data
-	// fmt.Fprintf(fw, string("%e %e %e %d %d\n"), w_top, w_bot, w_val, w_min, w_max)
-	// failure condition data:
-	// 	fmt.Fprintf(fw, string("%d\n"), fail_type)
-	// 	if fail_type > 0 {
-	// 		fmt.Fprintf(fw, string("%d\n"), n_fail)
-	// 		for i = 0; i < n_fail; i++ {
-	// 			fmt.Fprintf(fw, string(" %e"), fail_data[i])
-	// 		}
-	// 		fmt.Fprintf(fw, string("\n"))
-	// 	}
-	return 0
-}
+// func write_input_data() int { //fw *io.File) int {
+// 	fw := os.Stdout
+// 	// Writes input data to stream ------------------
+// 	var i int
+// 	// sizes
+// 	fmt.Fprintf(fw, string("%d %d %d %d %d\n"), n_m, n_n, n_e, n_d, n_f)
+//
+// 	// materials
+// 	for i = 0; i < n_m; i++ {
+// 		fmt.Fprintf(fw, string(" %e %e %e %e %e %e %e %e\n"), m_E1[i], m_E2[i], m_G[i], m_nu1[i], m_nu2[i], m_q[i], m_vp[i], m_t[i])
+// 	}
+//
+// 	// nodes
+// 	for i = 0; i < n_n; i++ {
+// 		fmt.Fprintf(fw, string("%e %e\n"), n_x[i], n_y[i])
+// 	}
+//
+// 	// elements
+// 	for i = 0; i < n_e; i++ {
+// 		fmt.Fprintf(fw, string("%d %d %d %e\n"), e_n1[i], e_n2[i], m.Beam.Mat[i], e_t[i])
+// 	}
+//
+// 	// displacements
+// 	for i = 0; i < n_d; i++ {
+// 		fmt.Fprintf(fw, string("%d %d %e\n"), d_n[i], d_dir[i], d_val[i])
+// 	}
+//
+// 	// supports
+// 	for i = 0; i < n_f; i++ {
+// 		fmt.Fprintf(fw, string("%d %d %e\n"), f_n[i], f_dir[i], f_val[i])
+// 	}
+//
+// 	// water pressure data
+// 	// fmt.Fprintf(fw, string("%e %e %e %d %d\n"), w_top, w_bot, w_val, w_min, w_max)
+// 	// failure condition data:
+// 	// 	fmt.Fprintf(fw, string("%d\n"), fail_type)
+// 	// 	if fail_type > 0 {
+// 	// 		fmt.Fprintf(fw, string("%d\n"), n_fail)
+// 	// 		for i = 0; i < n_fail; i++ {
+// 	// 			fmt.Fprintf(fw, string(" %e"), fail_data[i])
+// 	// 		}
+// 	// 		fmt.Fprintf(fw, string("\n"))
+// 	// 	}
+// 	return 0
+// }
 
 // free_solver_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:582
 // func free_solver_data() {
@@ -712,7 +783,7 @@ func write_input_data() int { //fw *io.File) int {
 // }
 
 // alloc_solver_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:600
-func alloc_solver_data() int {
+func (m Model) alloc_solver_data() int {
 	// Allocates data for f.e. solver (K,u,F)
 	var i int
 	var j int
@@ -770,6 +841,10 @@ func alloc_solver_data() int {
 	// 		goto memFree
 	// 	}
 	// 	if len((func() []int {
+
+	n_n := len(m.Points)
+	n_e := len(m.Beams)
+
 	n_field = make([]int, n_n)
 	// 		return n_field
 	// 	}())) == 0 {
@@ -784,10 +859,10 @@ func alloc_solver_data() int {
 	// 	}
 	for i = 0; i < n_n; i++ {
 		for j = 0; j < n_e; j++ {
-			if e_n1[j] == i {
+			if m.Beams[j].N[0] == i {
 				n_field[i]++
 			}
-			if e_n2[j] == i {
+			if m.Beams[j].N[1] == i {
 				n_field[i]++
 			}
 		}
@@ -831,7 +906,7 @@ func alloc_solver_data() int {
 }
 
 // get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
-func get_D_matrix(i int, t float64, D *tMatrix) {
+func (m Model) get_D_matrix(i int, t float64, D *tMatrix) {
 	// computes material stiffness matrix of elemen
 	// * @param i element nomber <0..n_e-1>
 	// * @param t eleemnt width
@@ -843,13 +918,13 @@ func get_D_matrix(i int, t float64, D *tMatrix) {
 	var nu2 float64
 	var G float64
 	var mult float64
-	E1 = m_E1[e_mat[i]]
-	E2 = m_E2[e_mat[i]]
-	G = m_G[e_mat[i]]
+	E1 = m_E1[m.Beams[i].Mat]
+	E2 = m_E2[m.Beams[i].Mat]
+	G = m_G[m.Beams[i].Mat]
 	// 	fmt.Println(	"G = ", G)
 	// 	fmt.Println(	"t = ", t)
-	nu1 = m_nu1[e_mat[i]]
-	nu2 = m_nu2[e_mat[i]]
+	nu1 = m_nu1[m.Beams[i].Mat]
+	nu2 = m_nu2[m.Beams[i].Mat]
 	mult = t / (1 - nu1*nu2)
 	femMatPutAdd(D, 1, 1, E1*mult, 0)
 	femMatPutAdd(D, 1, 2, nu2*mult, 0)
@@ -863,7 +938,7 @@ func get_D_matrix(i int, t float64, D *tMatrix) {
 }
 
 // get_B_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:704
-func get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
+func (m Model) get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
 	// computes B matrix
 	// * @param i element number
 	// * @param B pointer to allocated (!) B matrix
@@ -877,12 +952,15 @@ func get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
 	// 	var dx float64
 	// 	var dy float64
 	var (
-		dx = n_x[e_n2[i]] - n_x[e_n1[i]]
-		dy = n_y[e_n2[i]] - n_y[e_n1[i]]
+		// dx = n_x[e_n2[i]] - n_x[e_n1[i]]
+		// dy = n_y[e_n2[i]] - n_y[e_n1[i]]
+		dx = m.Points[m.Beams[i].N[1]][0] - m.Points[m.Beams[i].N[0]][0]
+		dy = m.Points[m.Beams[i].N[1]][1] - m.Points[m.Beams[i].N[0]][1]
 		L  = math.Sqrt(math.Pow(dx, 2) + math.Pow(dy, 2))
-		R  = 0.5 * (n_x[e_n1[i]] + n_x[e_n2[i]])
-		S  = -1 * dx / L
-		C  = -1 * dy / L
+		// R  = 0.5 * (n_x[e_n1[i]] + n_x[e_n2[i]])
+		R = 0.5 * (m.Points[m.Beams[i].N[1]][0] + m.Points[m.Beams[i].N[0]][0])
+		S = -1 * dx / L
+		C = -1 * dy / L
 	)
 	// B matrix:
 	femMatPutAdd(B, 1, 1, -1.*C/L, 0)
@@ -906,7 +984,7 @@ func get_B_matrix(i int, B *tMatrix, Lc *float64, Rc *float64) {
 }
 
 // get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
-func get_matrix() int {
+func (m Model) get_matrix() int {
 	// creates stiffness matrix
 	var t float64
 	var L float64
@@ -921,25 +999,25 @@ func get_matrix() int {
 	femMatSetZero((&K))
 	femVecSetZero((&u))
 	femVecSetZero((&F))
-	for i := 0; i < n_e; i++ {
+	for i := 0; i < len(m.Beams); i++ {
 		if (func() float64 {
-			t = m_t[e_mat[i]]
+			t = m_t[m.Beams[i].Mat]
 			return t
 		}()) <= 0 {
 			// if material width is specified then use element width:
-			t = e_t[i]
+			t = m.Beams[i].T // e_t[i]
 		}
-		t = e_t[i]
+		t = m.Beams[i].T // e_t[i]
 		femMatSetZero((&Ke))
 		femMatSetZero((&B))
 		femMatSetZero((&Bt))
 		femMatSetZero((&BtD))
 		femMatSetZero((&D))
 		// material stiffness matrix D:
-		get_D_matrix(i, t, (&D))
+		m.get_D_matrix(i, t, (&D))
 		// femMatPrn(((&D)),string("D"))
 		// B matrix
-		get_B_matrix(i, (&B), (&L), (&R))
+		m.get_B_matrix(i, (&B), (&L), (&R))
 		//femMatPrn(((&B)), string("B"))
 		// transpose of B
 		femMatTran((&B), (&Bt))
@@ -957,28 +1035,28 @@ func get_matrix() int {
 		// localisation to "K":
 		for j = 1; j <= 6; j++ {
 			if j < 4 {
-				posj = e_n1[i]*3 + j
+				posj = m.Beams[i].N[0]*3 + j
 			} else {
-				posj = e_n2[i]*3 + j - 3
+				posj = m.Beams[i].N[1]*3 + j - 3
 			}
 			for k = 1; k <= 6; k++ {
 				if k < 4 {
-					posk = e_n1[i]*3 + k
-				} else {
-					posk = e_n2[i]*3 + k - 3
+					posk = m.Beams[i].N[0]*3 + k
+				} else {                  
+					posk = m.Beams[i].N[1]*3 + k - 3
 				}
 				femMatPutAdd((&K), posj, posk, femMatGet((&Ke), j, k), 1)
 			}
 		}
 
 		if math.Abs((func() float64 {
-			q = m_q[e_mat[i]]
+			q = m_q[m.Beams[i].Mat]
 			return q
 		}())) > 1e-07 {
 			// gravitation
 			F2 = -0.5 * q * t * L
-			femVecPutAdd((&F), 3*e_n1[i]+1, F2, 1)
-			femVecPutAdd((&F), 3*e_n2[i]+1, F2, 1)
+			femVecPutAdd((&F), 3*m.Beams[i].N[0]+1, F2, 1)
+			femVecPutAdd((&F), 3*m.Beams[i].N[1]+1, F2, 1)
 		}
 	}
 	// 	_ = F2
@@ -1138,11 +1216,12 @@ func get_matrix() int {
 // }
 
 // get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
-func get_loads_and_supports() int {
+func (m Model) get_loads_and_supports() int {
 	// applies supports in nodes
 	var i int
 	var j int
 	var pos int
+	n_n := len(m.Points)
 	for i = 0; i < n_f; i++ {
 		femVecPutAdd((&F), f_n[i]*3+f_dir[i]+1, f_val[i], 1)
 	}
@@ -1176,7 +1255,7 @@ func get_loads_and_supports() int {
 }
 
 // get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
-func get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, Q *float64) {
+func(m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, Q *float64) {
 	// computes internal force is nodes
 	// * @param el element number <0..n_e-1>
 	// * @param N1 meridian force
@@ -1200,17 +1279,17 @@ func get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, 
 	// get local stiffness vector
 	for j := 1; j <= 6; j++ {
 		if j < 4 {
-			posj = e_n1[el]*3 + j
+			posj = m.Beams[el].N[0]*3 + j
 		} else {
-			posj = e_n2[el]*3 + j - 3
+			posj = m.Beams[el].N[1]*3 + j - 3
 		}
 		femVecPutAdd((&ue), j, femVecGet((&u), posj), 0)
 	}
 
 	// get B and D
-	t := e_t[el]
-	get_D_matrix(el, t, (&D))
-	get_B_matrix(el, (&B), (&L), (&R))
+	t := m.Beams[el].T // e_t[el]
+	m.get_D_matrix(el, t, (&D))
+	m.get_B_matrix(el, (&B), (&L), (&R))
 	femMatMatMult((&D), (&B), (&DB))
 	// get vector
 	femMatVecMult((&DB), (&ue), (&Fe))
@@ -1222,7 +1301,7 @@ func get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, 
 }
 
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
-func print_result() int { //fw *io.File) int {
+func(m Model) print_result() int { //fw *io.File) int {
 	fw := os.Stdout
 	var i int
 	var j int
@@ -1253,7 +1332,11 @@ func print_result() int { //fw *io.File) int {
 	_ = sM1
 	_ = sM2
 	_ = sQ
-	fmt.Fprintf(fw, string("#  X     Y        w            u           angle            N1          N2           M1          M2          Q\n"))
+
+	n_n := len(m.Points)
+	n_e := len(m.Beams)
+
+	fmt.Fprintf(fw, "#  X     Y        w            u           angle            N1          N2           M1          M2          Q\n")
 	for i = 0; i < n_n; i++ {
 		sN1 = 0
 		sN2 = 0
@@ -1262,9 +1345,9 @@ func print_result() int { //fw *io.File) int {
 		sQ = 0
 		count = 0
 		for j = 0; j < n_e; j++ {
-			if e_n1[j] == i || e_n2[j] == i {
+			if m.Beams[j].N[0]  == i || m.Beams[j].N[1] == i {
 				// internal forces in centroid
-				get_int_forces(j, (&N1), (&N2), (&M1), (&M2), (&Q))
+				m.get_int_forces(j, (&N1), (&N2), (&M1), (&M2), (&Q))
 				sN1 += N1
 				sN2 += N2
 				sM1 += M1
@@ -1280,7 +1363,7 @@ func print_result() int { //fw *io.File) int {
 			sM2 /= float64(count)
 			sQ /= float64(count)
 		}
-		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), n_x[i], n_y[i], femVecGet((&u), 3*i+1), femVecGet((&u), 3*i+2), femVecGet((&u), 3*i+3), sN1, sN2, sM1, sM2, Q)
+		fmt.Fprintf(fw, string("%2.3f %2.3f %e %e %e %e %e %e %e %e\n"), m.Points[i][0], m.Points[i][1], femVecGet((&u), 3*i+1), femVecGet((&u), 3*i+2), femVecGet((&u), 3*i+3), sN1, sN2, sM1, sM2, Q)
 	}
 	_ = sQ
 	return 0
@@ -1561,7 +1644,7 @@ func print_result() int { //fw *io.File) int {
 // 				volume = 3.141592653589793 * dpx * math.Sqrt(dy*dy+dx*dx)
 // 			}
 // 		}
-// 		price += e_t[i] * volume * m_vp[e_mat[i]]
+// 		price += e_t[i] * volume * m_vp[m.Beam.Mat[i]]
 // 	}
 // 	return price
 // }
@@ -4869,115 +4952,3 @@ memFree:
 // end of fem_math.c
 // end of fem_eqs.c
 // end of fem_mem.c
-
-func read_input_data() {
-
-	var i int
-	n_m = 1
-
-	n_n = 3
-
-	n_e = 2
-
-	n_d = 3
-
-	n_f = 1
-
-	m_E1 = make([]float64, n_m)
-
-	m_E2 = make([]float64, n_m)
-
-	m_G = make([]float64, n_m)
-
-	m_nu1 = make([]float64, n_m)
-
-	m_nu2 = make([]float64, n_m)
-
-	m_q = make([]float64, n_m)
-
-	m_vp = make([]float64, n_m)
-
-	m_t = make([]float64, n_m)
-
-	n_x = make([]float64, n_n)
-
-	n_y = make([]float64, n_n)
-
-	e_n1 = make([]int, n_e)
-
-	e_n2 = make([]int, n_e)
-
-	e_mat = make([]int, n_e)
-
-	e_t = make([]float64, n_e)
-
-	d_n = make([]int, n_d)
-
-	d_dir = make([]int, n_d)
-
-	d_val = make([]float64, n_d)
-
-	f_n = make([]int, n_f)
-
-	f_dir = make([]int, n_f)
-
-	f_val = make([]float64, n_f)
-
-	// en_num = make([]int,n_n)
-
-	//en_frm = make([]int,n_n)
-
-	m_E1[0], m_E2[0], m_G[0], m_nu1[0], m_nu2[0], m_q[0], m_vp[0], m_t[0] = 20e9, 0, 0, 0.2, 0, 25000, 1000, 0
-
-	for i = 0; i < n_m; i++ {
-
-		if m_E1[i] == m_E2[i] || m_E2[i] <= 0 {
-
-			m_E2[i] = m_E1[i]
-			m_nu2[i] = m_nu1[i]
-			if m_G[i] <= 0 {
-				m_G[i] = m_E1[i] / (2 * (1 + m_nu1[i]))
-
-			}
-		}
-	}
-
-	n_x[0], n_y[0] = 10, 0
-	n_x[1], n_y[1] = 10, 5
-	n_x[2], n_y[2] = 10, 10
-
-	e_n1[0], e_n2[0], e_mat[0], e_t[0] = 0, 1, 0, 0.2
-	e_n1[1], e_n2[1], e_mat[1], e_t[1] = 1, 2, 0, 0.2
-
-	d_n[0], d_dir[0], d_val[0] = 0, 0, 0
-	d_n[1], d_dir[1], d_val[1] = 0, 1, 0
-	d_n[2], d_dir[2], d_val[2] = 2, 1, 0
-
-	f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
-
-	// 	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
-
-	check_elem_data()
-
-	// 	fail_type = 1
-	//
-	// 	n_fail = 2
-	//
-	// 	fail_data = make([]float64, n_fail)
-	//
-	// 	fail_data[0] = 20e6
-	// 	fail_data[1] = 1e6
-
-	n_r_inp = 1
-
-	// 	rand_type = make([]int,n_r_inp)
-	//
-	// 	rand_pos = make([]int,n_r_inp)
-	//
-	// 	rand_indx = make([]int,n_r_inp)
-	//
-	// 	rand_type[0], rand_pos[0], rand_indx[0] = 4, 0, 0
-
-	// n_r_opt = 0
-
-}
