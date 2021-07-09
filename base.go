@@ -88,20 +88,9 @@ type LoadNode struct {
 	//	[1] - Y , Unit: N. Positive direction from down to top.
 	//	[2] - M , Unit: N*m. Positive direction is counter-clockwise direction.
 	//
-	Forces [3]float64
+	Forces [3]float64 // orientation Fw=0, Fu=1, Mpho=2
 }
 
-//   Axisymetric shell solver. Use: eshell <input >output
-
-// d_dir - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:75
-// orientation w=0, u=1, pho=2, Ez=3, Ex=4, Erot=5
-// var d_dir []int
-
-// f_dir - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:80
-// orientation Fw=0, Fu=1, Mpho=2
-// var f_dir []int
-
-// check_elem_data - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:205
 func (m Model) check_elem_data() {
 	for i := range m.Beams {
 		if m.Points[m.Beams[i].N[0]][1] > m.Points[m.Beams[i].N[1]][1] {
@@ -110,23 +99,17 @@ func (m Model) check_elem_data() {
 	}
 }
 
-// get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
+// computes material stiffness matrix of elemen
 func (m Model) get_D_matrix(i int) (D *mat.Dense) {
-	// computes material stiffness matrix of elemen
-	// * @param i element nomber <0..n_e-1>
-	// * @param t eleemnt width
-	// * @param D pointer to allocated (!) D matrix
-	//
-
 	D = mat.NewDense(5, 5, nil)
 	var (
 		E1   = m.Beams[i].E1
-		E2   = m.Beams[i].E1
+		E2   = m.Beams[i].E2
 		G    = m.Beams[i].G
 		nu1  = m.Beams[i].nu1
 		nu2  = m.Beams[i].nu2
 		t    = m.Beams[i].T
-		mult = t / (1 - nu1*nu2)
+		mult = t / (1.0 - nu1*nu2)
 	)
 	D.Set(0, 0, E1*mult)
 	D.Set(0, 1, nu2*mult)
@@ -142,18 +125,12 @@ func (m Model) get_D_matrix(i int) (D *mat.Dense) {
 
 // get_B_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:704
 func (m Model) get_B_matrix(i int) (B *mat.Dense, L float64, R float64) {
-	// computes B matrix
-	// * @param i element number
-	// * @param B pointer to allocated (!) B matrix
-	// * @param Lc element length (result)
-	// * @param Rc average distance from axis or revolution
 	B = mat.NewDense(5, 6, nil)
 	var (
 		dx = m.Points[m.Beams[i].N[1]][0] - m.Points[m.Beams[i].N[0]][0]
 		dy = m.Points[m.Beams[i].N[1]][1] - m.Points[m.Beams[i].N[0]][1]
 	)
 	L = math.Sqrt(math.Pow(dx, 2) + math.Pow(dy, 2))
-	// R  = 0.5 * (n_x[e_n1[i]] + n_x[e_n2[i]])
 	R = 0.5 * (m.Points[m.Beams[i].N[1]][0] + m.Points[m.Beams[i].N[0]][0])
 
 	var (
@@ -177,28 +154,24 @@ func (m Model) get_B_matrix(i int) (B *mat.Dense, L float64, R float64) {
 	B.Set(4, 3, 1.*S/L)
 	B.Set(4, 4, -1.*C/L)
 	B.Set(4, 5, 1./2.)
-	// 	Lc = L
-	// 	Rc = R
 	return B, L, R
 }
 
-// get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
+// creates stiffness matrix
 func (m Model) get_matrix() (K, F, u *mat.Dense) {
-	// creates stiffness matrix
 	n_n := len(m.Points)
 	K = mat.NewDense(n_n*3, n_n*3, nil)
 	u = mat.NewDense(n_n*3, 1, nil)
 	F = mat.NewDense(n_n*3, 1, nil)
 	for i := 0; i < len(m.Beams); i++ {
 		// material stiffness matrix D:
-		D := m.get_D_matrix(i) //, t)
+		D := m.get_D_matrix(i)
 		// B matrix
 		B, L, R := m.get_B_matrix(i)
 		// transpose of B
 		Bt := B.T()
 
 		// matrix multiplications (Bt*D*B):
-
 		BtD := mat.NewDense(6, 5, nil)
 		BtD.Mul(Bt, D)
 
@@ -246,8 +219,8 @@ func ZeroRow(m *mat.Dense, pos int) {
 	}
 }
 
+// applies supports in nodes
 func (m Model) get_loads_and_supports(K, F, u *mat.Dense) {
-	// applies supports in nodes
 
 	for i := range m.Ln {
 		for g := range m.Ln[i].Forces {
@@ -302,16 +275,14 @@ func (m Model) get_loads_and_supports(K, F, u *mat.Dense) {
 	// 	}
 }
 
-// get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
+// computes internal force is nodes
+//	el element number <0..n_e-1>
+//	N1 meridian force
+//	N2 perpendicular force
+//	M1 meridian moment
+//	M2 perpendicular force
+//	Q tangent force
 func (m Model) get_int_forces(el int, u *mat.Dense) (N1, N2, M1, M2, Q float64) {
-	// computes internal force is nodes
-	// * @param el element number <0..n_e-1>
-	// * @param N1 meridian force
-	// * @param N2 perpendicular force
-	// * @param M1 meridian moment
-	// * @param M2 perpendicular force
-	// * @param Q tangent force
-	// * @return status
 
 	ue := mat.NewDense(6, 1, nil)
 	Fe := mat.NewDense(5, 1, nil)
@@ -344,7 +315,6 @@ func (m Model) get_int_forces(el int, u *mat.Dense) (N1, N2, M1, M2, Q float64) 
 	return
 }
 
-// print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
 func (m Model) print_result(u *mat.Dense) {
 	fw := os.Stdout
 
