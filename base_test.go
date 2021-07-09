@@ -9,11 +9,16 @@ func Example() {
 			{10, 5},
 			{10, 10},
 		},
-// 	e_n1[0], e_n2[0], e_mat[0], e_t[0] = 0, 1, 0, 0.2
-// 	e_n1[1], e_n2[1], e_mat[1], e_t[1] = 1, 2, 0, 0.2
+		// 	e_n1[0], e_n2[0], e_mat[0], e_t[0] = 0, 1, 0, 0.2
+		// 	e_n1[1], e_n2[1], e_mat[1], e_t[1] = 1, 2, 0, 0.2
 		Beams: []BeamProp{
-			{N: [2]int{0, 1}, Mat:0, T:0.2},
-			{N: [2]int{1, 2}, Mat:0, T:0.2},
+			{N: [2]int{0, 1}, Mat: 0, T: 0.2},
+			{N: [2]int{1, 2}, Mat: 0, T: 0.2},
+		},
+
+		// f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
+		Ln: []LoadNode{
+			{N: 1, Forces: [3]float64{0, 11.899e6, 0}},
 		},
 	}
 
@@ -24,11 +29,11 @@ func Example() {
 
 	// 	n_n = 3
 
-// 	n_e = 2
+	// 	n_e = 2
 
 	n_d = 3
 
-	n_f = 1
+	// n_f = 1
 
 	m_E1 = make([]float64, n_m)
 
@@ -50,13 +55,13 @@ func Example() {
 	//
 	// 	n_y = make([]float64, n_n)
 
-// 	e_n1 = make([]int, n_e)
-// 
-// 	e_n2 = make([]int, n_e)
-// 
-// 	e_mat = make([]int, n_e)
-// 
-// 	e_t = make([]float64, n_e)
+	// 	e_n1 = make([]int, n_e)
+	//
+	// 	e_n2 = make([]int, n_e)
+	//
+	// 	e_mat = make([]int, n_e)
+	//
+	// 	e_t = make([]float64, n_e)
 
 	d_n = make([]int, n_d)
 
@@ -64,11 +69,11 @@ func Example() {
 
 	d_val = make([]float64, n_d)
 
-	f_n = make([]int, n_f)
-
-	f_dir = make([]int, n_f)
-
-	f_val = make([]float64, n_f)
+// 	f_n = make([]int, n_f)
+// 
+// 	f_dir = make([]int, n_f)
+// 
+// 	f_val = make([]float64, n_f)
 
 	// en_num = make([]int,n_n)
 
@@ -89,12 +94,9 @@ func Example() {
 		}
 	}
 
-
 	d_n[0], d_dir[0], d_val[0] = 0, 0, 0
 	d_n[1], d_dir[1], d_val[1] = 0, 1, 0
 	d_n[2], d_dir[2], d_val[2] = 2, 1, 0
-
-	f_n[0], f_dir[0], f_val[0] = 1, 1, 11.899e6
 
 	// 	w_top, w_bot, w_val, w_min, w_max = 0, 0, 0, 0, 0
 

@@ -51,6 +51,8 @@ type Model struct {
 	//	[2] - M
 	//
 	Supports [][3]bool
+
+	Ln []LoadNode
 }
 
 // BeamProp is beam property
@@ -76,6 +78,20 @@ type BeamProp struct {
 	// E is modulus of elasticity
 	// Unit : Pa
 	// E float64
+}
+
+// LoadNode is node load on specific point in global system coordinate
+type LoadNode struct {
+	// N is point index
+	N int
+
+	// Forces is node loads on each direction
+	//
+	//	[0] - X , Unit: N. Positive direction from left to right.
+	//	[1] - Y , Unit: N. Positive direction from down to top.
+	//	[2] - M , Unit: N*m. Positive direction is counter-clockwise direction.
+	//
+	Forces [3]float64
 }
 
 // os.Stdout - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/fem_mem.c:29
@@ -305,7 +321,7 @@ var n_d int
 
 // n_f - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:48
 // number of loads
-var n_f int
+// var n_f int
 
 // n_r_inp - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:50
 // number of random input data
@@ -390,15 +406,15 @@ var d_val []float64
 // f_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:79
 // forces in nodes
 // nodes <0, n_n-1>
-var f_n []int
+// var f_n []int
 
 // f_dir - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:80
 // orientation Fw=0, Fu=1, Mpho=2
-var f_dir []int
+// var f_dir []int
 
 // f_val - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:81
 // size of the force
-var f_val []float64
+// var f_val []float64
 
 // w_top - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:84
 // water load:
@@ -1042,7 +1058,7 @@ func (m Model) get_matrix() int {
 			for k = 1; k <= 6; k++ {
 				if k < 4 {
 					posk = m.Beams[i].N[0]*3 + k
-				} else {                  
+				} else {
 					posk = m.Beams[i].N[1]*3 + k - 3
 				}
 				femMatPutAdd((&K), posj, posk, femMatGet((&Ke), j, k), 1)
@@ -1222,9 +1238,15 @@ func (m Model) get_loads_and_supports() int {
 	var j int
 	var pos int
 	n_n := len(m.Points)
-	for i = 0; i < n_f; i++ {
-		femVecPutAdd((&F), f_n[i]*3+f_dir[i]+1, f_val[i], 1)
+
+	for i := range m.Ln {
+		for g := range m.Ln[i].Forces {
+			femVecPutAdd((&F), m.Ln[i].N*3+g+1, m.Ln[i].Forces[g], 1)
+		}
 	}
+	// 	for i = 0; i < n_f; i++ {
+	// 		femVecPutAdd((&F), f_n[i]*3+f_dir[i]+1, f_val[i], 1)
+	// 	}
 	for i = 0; i < n_d; i++ {
 		if d_dir[i] > 2 {
 			// stifnesses
@@ -1255,7 +1277,7 @@ func (m Model) get_loads_and_supports() int {
 }
 
 // get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
-func(m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, Q *float64) {
+func (m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *float64, Q *float64) {
 	// computes internal force is nodes
 	// * @param el element number <0..n_e-1>
 	// * @param N1 meridian force
@@ -1301,7 +1323,7 @@ func(m Model) get_int_forces(el int, N1 *float64, N2 *float64, M1 *float64, M2 *
 }
 
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
-func(m Model) print_result() int { //fw *io.File) int {
+func (m Model) print_result() int { //fw *io.File) int {
 	fw := os.Stdout
 	var i int
 	var j int
@@ -1345,7 +1367,7 @@ func(m Model) print_result() int { //fw *io.File) int {
 		sQ = 0
 		count = 0
 		for j = 0; j < n_e; j++ {
-			if m.Beams[j].N[0]  == i || m.Beams[j].N[1] == i {
+			if m.Beams[j].N[0] == i || m.Beams[j].N[1] == i {
 				// internal forces in centroid
 				m.get_int_forces(j, (&N1), (&N2), (&M1), (&M2), (&Q))
 				sN1 += N1
