@@ -62,7 +62,7 @@ type BeamProp struct {
 	Mat int
 	T   float64
 
-	E1, E2, G, nu1, nu2, q float64
+	E1, E2, G, nu1, nu2 float64
 
 	// A cross-section area
 	// Unit : sq. meter.
@@ -93,23 +93,9 @@ type LoadNode struct {
 
 //   Axisymetric shell solver. Use: eshell <input >output
 
-// d_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:74
-// displacements
-// nodes <0, n_n-1>
-// var d_n []int
-
 // d_dir - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:75
 // orientation w=0, u=1, pho=2, Ez=3, Ex=4, Erot=5
 // var d_dir []int
-
-// d_val - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:76
-// size of displacement or stiffness
-// var d_val []float64
-
-// f_n - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:79
-// forces in nodes
-// nodes <0, n_n-1>
-// var f_n []int
 
 // f_dir - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:80
 // orientation Fw=0, Fu=1, Mpho=2
@@ -122,17 +108,6 @@ func (m Model) check_elem_data() {
 			m.Beams[i].N[0], m.Beams[i].N[1] = m.Beams[i].N[1], m.Beams[i].N[0]
 		}
 	}
-
-	// first node must be always under the second - it exchanges them
-	// 	var i int
-	// 	var tmp int
-	// 	for i = 0; i < n_e; i++ {
-	// 		if n_y[e_n1[i]] > n_y[e_n2[i]] {
-	// 			tmp = e_n1[i]
-	// 			e_n1[i] = e_n2[i]
-	// 			e_n2[i] = tmp
-	// 		}
-	// 	}
 }
 
 // get_D_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:670
@@ -143,23 +118,11 @@ func (m Model) get_D_matrix(i int) (D *mat.Dense) {
 	// * @param D pointer to allocated (!) D matrix
 	//
 
-	// 	D := tMatrix{}
-
 	D = mat.NewDense(5, 5, nil)
-	// 	femMatAlloc((&D), 5, 5)
-
-	// 	var E1 float64
-	// 	var E2 float64
-	// 	var nu1 float64
-	// 	var nu2 float64
-	// 	var G float64
-	// 	var mult float64
 	var (
-		E1 = m.Beams[i].E1
-		E2 = m.Beams[i].E1
-		G  = m.Beams[i].G
-		// 	fmt.Println(	"G = ", G)
-		// 	fmt.Println(	"t = ", t)
+		E1   = m.Beams[i].E1
+		E2   = m.Beams[i].E1
+		G    = m.Beams[i].G
 		nu1  = m.Beams[i].nu1
 		nu2  = m.Beams[i].nu2
 		t    = m.Beams[i].T
@@ -184,20 +147,8 @@ func (m Model) get_B_matrix(i int) (B *mat.Dense, L float64, R float64) {
 	// * @param B pointer to allocated (!) B matrix
 	// * @param Lc element length (result)
 	// * @param Rc average distance from axis or revolution
-	//
-	// 	var L float64
-	// 	var C float64
-	// 	var S float64
-	// 	var R float64
-	// 	var dx float64
-	// 	var dy float64
-
 	B = mat.NewDense(5, 6, nil)
-
-	// femMatAlloc((&B), 5, 6)
 	var (
-		// dx = n_x[e_n2[i]] - n_x[e_n1[i]]
-		// dy = n_y[e_n2[i]] - n_y[e_n1[i]]
 		dx = m.Points[m.Beams[i].N[1]][0] - m.Points[m.Beams[i].N[0]][0]
 		dy = m.Points[m.Beams[i].N[1]][1] - m.Points[m.Beams[i].N[0]][1]
 	)
@@ -234,92 +185,40 @@ func (m Model) get_B_matrix(i int) (B *mat.Dense, L float64, R float64) {
 // get_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:743
 func (m Model) get_matrix() (K, F, u *mat.Dense) {
 	// creates stiffness matrix
-	// var t float64
-	// 	var L float64
-	// 	var R float64
-	// 	var i int
-	var j int
-	var k int
-	var posj int
-	var posk int
-
 	n_n := len(m.Points)
-
-	// var K tMatrix
 	K = mat.NewDense(n_n*3, n_n*3, nil)
-	// 	femMatAlloc((&K), n_n*3, n_n*3)
-	// 	femMatSetZero((&K))
-
 	u = mat.NewDense(n_n*3, 1, nil)
-	// 	femVecAlloc((&u), 0, n_n*3, n_n*3)
-	// 	femVecSetZero((&u))
-
 	F = mat.NewDense(n_n*3, 1, nil)
-	// 	femVecAlloc((&F), 0, n_n*3, n_n*3)
-	// 	femVecSetZero((&F))
 	for i := 0; i < len(m.Beams); i++ {
-		// 		if (func() float64 {
-		// 			t = m_t[m.Beams[i].Mat]
-		// 			return t
-		// 		}()) <= 0 {
-		// 			// if material width is specified then use element width:
-		// 			t = m.Beams[i].T // e_t[i]
-		// 		}
-		t := m.Beams[i].T // e_t[i]
-		// femMatSetZero((&Ke))
-		// femMatSetZero((&B))
-		// 		var Bt tMatrix
-		// 		femMatAlloc((&Bt), 6, 5)
-		// 		femMatSetZero((&Bt))
-
-		// 		var BtD tMatrix
-		// 		femMatAlloc((&BtD), 6, 5)
-		// 		femMatSetZero((&BtD))
-		// femMatSetZero((&D))
 		// material stiffness matrix D:
 		D := m.get_D_matrix(i) //, t)
-		// femMatPrn(((&D)),string("D"))
 		// B matrix
 		B, L, R := m.get_B_matrix(i)
-		//femMatPrn(((&B)), string("B"))
 		// transpose of B
-		// femMatTran((&B), (&Bt))
-
-		// Bt := mat.NewDense(6,5)
 		Bt := B.T()
 
-		//	femMatPrn(((&Bt)), string("Bt"))
 		// matrix multiplications (Bt*D*B):
-		// => BtD
-		// femMatMatMult((&Bt), (&D), (&BtD))
 
 		BtD := mat.NewDense(6, 5, nil)
 		BtD.Mul(Bt, D)
 
 		// => Ke  without L*R
-		// 		var Ke tMatrix
-		// 		femMatAlloc((&Ke), 6, 6)
-		//
-		// 		femMatMatMult((&BtD), (&B), (&Ke))
-
 		Ke := mat.NewDense(6, 6, nil)
 		Ke.Mul(BtD, B)
 
 		// element stifness matrix Ke:
-		// 		femValMatMultSelf(R*L, (&Ke))
-
 		Ke.Scale(R*L, Ke)
 
-		//	femMatPrn(((&Ke)), string("Ke"))
-
 		// localisation to "K":
-		for j = 1; j <= 6; j++ {
+		for j := 1; j <= 6; j++ {
+			var posj int
+			var posk int
 			if j < 4 {
 				posj = m.Beams[i].N[0]*3 + j
 			} else {
 				posj = m.Beams[i].N[1]*3 + j - 3
 			}
-			for k = 1; k <= 6; k++ {
+			for k := 1; k <= 6; k++ {
 				if k < 4 {
 					posk = m.Beams[i].N[0]*3 + k
 				} else {
@@ -329,173 +228,9 @@ func (m Model) get_matrix() (K, F, u *mat.Dense) {
 				K.Set(posj-1, posk-1, K.At(posj-1, posk-1)+Ke.At(j-1, k-1))
 			}
 		}
-
-		if q := m.Beams[i].q; math.Abs(q) > 1e-7 {
-			// gravitation
-			F2 := -0.5 * q * t * L
-			// fmt.Println(	">>", F2, 3*m.Beams[i].N[0], 3*m.Beams[i].N[1])
-			F.Set(3*m.Beams[i].N[0], 0, F2+F.At(3*m.Beams[i].N[0], 0))
-			// femVecPutAdd((&F), 3*m.Beams[i].N[0]+1, F2, 1)
-			F.Set(3*m.Beams[i].N[1], 0, F2+F.At(3*m.Beams[i].N[1], 0))
-			// femVecPutAdd((&F), 3*m.Beams[i].N[1]+1, F2, 1)
-		}
 	}
-	// 	_ = F2
-	// TODO : KI strange calcualation F
-
-	// 	 fmt.Println(	">F ", F)
-	// 	F = mat.NewDense(3*n_n, 1, nil)
-
-	F.Set(0, 0, +0.000000e+00)
-	F.Set(1, 0, +0.000000e+00)
-	F.Set(2, 0, -2.500000e+04)
-	F.Set(3, 0, +0.000000e+00)
-	F.Set(4, 0, +0.000000e+00)
-	F.Set(5, 0, -1.250000e+04)
-	F.Set(6, 0, +0.000000e+00)
-	F.Set(7, 0, +0.000000e+00)
-	F.Set(8, 0, +0.000000e+00)
-	// 	 fmt.Println(	">F ", F)
-
 	return
 }
-
-// generate_water_load_x - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:809
-// func generate_water_load_x() int {
-// 	// generates water pressure load
-// 	// it goes through elements and decides if they are under the
-// 	//   * water level (or over the bottom) then it computes horizontal
-// 	//   * pressure on the element nodes
-// 	//
-// 	var i int
-// 	var y1 float64
-// 	var y2 float64
-// 	var dx float64
-// 	var L float64
-// 	var val1 float64
-// 	var val2 float64
-// 	var from int
-// 	var to int
-// 	var down int = 1
-// 	// don't ignore this node
-// 	var use_1 int = 1
-// 	// don't ignore this node
-// 	var use_2 int = 1
-// 	var pos1 int
-// 	var pos2 int
-// 	// real limits of water position
-// 	var y_max float64
-// 	var y_min float64
-// 	// hydrostatic pressures on element - top, bot
-// 	var a float64
-// 	var b float64
-// 	if math.Abs(w_val) > 100*1e-07 {
-// 		if w_max-w_min == 0 {
-// 			// limits for element testing (probably unused):
-// 			from = 0
-// 			to = n_e
-// 		} else {
-// 			if w_min < 0 || w_min >= n_e {
-// 				from = 0
-// 			} else {
-// 				from = w_min
-// 			}
-// 			if w_max < 0 || w_max > n_e {
-// 				to = n_e
-// 			} else {
-// 				to = w_max
-// 			}
-// 		}
-// 		// setting of unreachable limits for water
-// 		y_min = n_y[e_n1[from]]
-// 		y_max = y_min
-// 		for i = from; i < to; i++ {
-// 			if y_min > n_y[e_n1[i]] {
-// 				y_min = n_y[e_n1[i]]
-// 			}
-// 			if y_min > n_y[e_n2[i]] {
-// 				y_min = n_y[e_n2[i]]
-// 			}
-// 			if y_max < n_y[e_n1[i]] {
-// 				y_max = n_y[e_n1[i]]
-// 			}
-// 			if y_max < n_y[e_n2[i]] {
-// 				y_max = n_y[e_n2[i]]
-// 			}
-// 		}
-// 		if w_top < y_max {
-// 			// adjusting limits:
-// 			y_max = w_top
-// 		}
-// 		if w_bot > y_min {
-// 			y_min = w_bot
-// 		}
-// 		for i = from; i < to; i++ {
-// 			y1 = n_y[e_n1[i]]
-// 			y2 = n_y[e_n2[i]]
-// 			if y1 > y_max || y1 < y_min {
-// 				// geometric features:
-// 				use_1 = 0
-// 			}
-// 			if y2 > y_max || y2 < y_min {
-// 				use_2 = 0
-// 			}
-// 			if use_1 == 0 && use_2 == 0 {
-// 				continue
-// 			}
-// 			if y1 > y2 {
-// 				down = 2
-// 				val1 = y1
-// 				y1 = y2
-// 				y2 = val1
-// 			}
-// 			if y1 < y_min {
-// 				y1 = y_min
-// 			}
-// 			if y2 > y_max {
-// 				y2 = y_max
-// 			}
-// 			dx = math.Abs(n_x[e_n2[i]] - n_x[e_n1[i]])
-// 			L = math.Sqrt(dx*dx + math.Pow(y2-y1, 2))
-// 			if math.Pow(y2-y1, 2) < 1e-07 {
-// 				// nothing to do
-// 				continue
-// 			}
-// 			// TODO: compute limit values
-// 			b = (y_max - y1) * w_val
-// 			a = (y_max - y2) * w_val
-// 			fmt.Fprintf(os.Stdout, string("Y: %e %e, a=%e b=%e\n"), y1, y2, a, b)
-// 			if use_1 == 0 {
-// 				// set values in nodes:
-// 				val2 = (a + 0.5*(b-a)) * L
-// 				val1 = 0
-// 			} else {
-// 				if use_2 == 0 {
-// 					val1 = (a + 0.5*(b-a)) * L
-// 					val2 = 0
-// 				} else {
-// 					val1 = 0.5*a*L + 0.25*(b-a)*L + 0.125*(b-a)*L
-// 					val2 = 0.5*a*L + 0.125*(b-a)*L
-// 				}
-// 			}
-// 			if down == 1 {
-// 				// positions of loads
-// 				// val1 (lower) is at n1
-// 				pos1 = e_n1[i]*3 + 1
-// 				pos2 = e_n2[i]*3 + 1
-// 			} else {
-// 				// val1 is at n2
-// 				pos1 = e_n2[i]*3 + 1
-// 				pos2 = e_n1[i]*3 + 1
-// 			}
-// 			// adding of loads:
-// 			femVecPutAdd(((&F)), pos1, val1, 1)
-// 			femVecPutAdd(((&F)), pos2, val2, 1)
-// 			fmt.Fprintf(os.Stdout, string("ADDED: e[%d] f%d(%d)<- %e, f%d(%d)<- %e, L=%e dx=%e\n"), i, pos1, e_n1[i], val1, pos2, e_n2[i], val2, L, dx)
-// 		}
-// 	}
-// 	return 0
-// }
 
 func ZeroCol(m *mat.Dense, pos int) {
 	v, _ := m.Caps()
@@ -511,24 +246,15 @@ func ZeroRow(m *mat.Dense, pos int) {
 	}
 }
 
-// get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
-func (m Model) get_loads_and_supports(K, F, u *mat.Dense) int {
+func (m Model) get_loads_and_supports(K, F, u *mat.Dense) {
 	// applies supports in nodes
-	// 	var i int
-	// 	var j int
-	var pos int
-	// 	n_n := len(m.Points)
 
 	for i := range m.Ln {
 		for g := range m.Ln[i].Forces {
 			w := m.Ln[i].N*3 + g
 			F.Set(w, 0, F.At(w, 0)+m.Ln[i].Forces[g])
-			// femVecPutAdd((&F), m.Ln[i].N*3+g+1, m.Ln[i].Forces[g], 1)
 		}
 	}
-	// 	for i = 0; i < n_f; i++ {
-	// 		femVecPutAdd((&F), f_n[i]*3+f_dir[i]+1, f_val[i], 1)
-	// 	}
 
 	for n := range m.Supports {
 		for d := range m.Supports[n] {
@@ -539,27 +265,12 @@ func (m Model) get_loads_and_supports(K, F, u *mat.Dense) int {
 			d_n := n
 			d_dir := d
 
-			// pos = d_n[i]*3 + d_dir[i] + 1
-			pos = d_n*3 + d_dir
-			// 			if math.Abs(d_val[i]) <= 1e-07 {
+			pos := d_n*3 + d_dir
 			ZeroCol(K, pos)
 			ZeroRow(K, pos)
 			u.Set(pos, 0, 0)
-			// femVecPutAdd((&u), pos, 0, 0)
-			// yes, it deletes force in support
 			F.Set(pos, 0, 0)
 			K.Set(pos, pos, 1)
-			// 			femVecPutAdd((&F), pos, 0, 0)
-			// 			femMatPutAdd((&K), pos, pos, 1, 0)
-			// 			} else {
-			// 				for j = 1; j <= n_n*3; j++ {
-			// 					femVecPutAdd((&F), j, -1*femMatGet((&K), j, pos)*d_val[i], 1)
-			// 				}
-			// 				femMatSetZeroCol((&K), pos)
-			// 				femMatSetZeroRow((&K), pos)
-			// 				femVecPutAdd((&u), pos, d_val[i], 0)
-			// 				femMatPutAdd((&K), pos, pos, femVecGet((&F), pos)/d_val[i], 0)
-			// 			}
 		}
 	}
 
@@ -589,7 +300,6 @@ func (m Model) get_loads_and_supports(K, F, u *mat.Dense) int {
 	// 		}
 	// 		// 	}
 	// 	}
-	return 0
 }
 
 // get_int_forces - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:994
@@ -602,31 +312,13 @@ func (m Model) get_int_forces(el int, u *mat.Dense) (N1, N2, M1, M2, Q float64) 
 	// * @param M2 perpendicular force
 	// * @param Q tangent force
 	// * @return status
-	//
-	//var t float64
-	// 	var L float64
-	// 	var R float64
-	// 	var j int
-	var posj int
-	// femMatSetZero((&D))
-	// femMatSetZero((&B))
-	// 	var DB tMatrix
-	// 	femMatAlloc((&DB), 5, 6)
-	// 	femMatSetZero((&DB))
 
 	ue := mat.NewDense(6, 1, nil)
-	//
-	// 	var ue tVector
-	// 	femVecAlloc((&ue), 0, 6, 6)
-	// 	femVecSetZero((&ue))
-
 	Fe := mat.NewDense(5, 1, nil)
-	// 	var Fe tVector
-	// 	femVecAlloc((&Fe), 0, 5, 5)
-	// 	femVecSetZero((&Fe))
 
 	// get local stiffness vector
 	for j := 1; j <= 6; j++ {
+		var posj int
 		if j < 4 {
 			posj = m.Beams[el].N[0]*3 + j
 		} else {
@@ -637,19 +329,12 @@ func (m Model) get_int_forces(el int, u *mat.Dense) (N1, N2, M1, M2, Q float64) 
 	}
 
 	// get B and D
-	//t := m.Beams[el].T         // e_t[el]
-	D := m.get_D_matrix(el) //, t) // , (&D))
+	D := m.get_D_matrix(el)
 	B, _, _ := m.get_B_matrix(el)
 
 	DB := mat.NewDense(5, 6, nil)
 	DB.Mul(D, B)
-	//
-	// 	femMatMatMult((&D), (&B), (&DB))
-	// get VECTOR
-
 	Fe.Mul(DB, ue)
-	//
-	// 	femMatVecMult((&DB), (&ue), (&Fe))
 
 	N1 = Fe.At(0, 0)
 	N2 = Fe.At(1, 0)
@@ -660,7 +345,7 @@ func (m Model) get_int_forces(el int, u *mat.Dense) (N1, N2, M1, M2, Q float64) 
 }
 
 // print_result - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:1036
-func (m Model) print_result(u *mat.Dense) int {
+func (m Model) print_result(u *mat.Dense) {
 	fw := os.Stdout
 
 	n_n := len(m.Points)
@@ -679,7 +364,7 @@ func (m Model) print_result(u *mat.Dense) int {
 		for j := 0; j < n_e; j++ {
 			if m.Beams[j].N[0] == i || m.Beams[j].N[1] == i {
 				// internal forces in centroid
-				N1, N2, M1, M2, Q := m.get_int_forces(j, u) //, (&N1), (&N2), (&M1), (&M2), (&Q))
+				N1, N2, M1, M2, Q := m.get_int_forces(j, u)
 				sN1 += N1
 				sN2 += N2
 				sM1 += M1
@@ -699,8 +384,6 @@ func (m Model) print_result(u *mat.Dense) int {
 			u.At(3*i+1-1, 0),
 			u.At(3*i+2-1, 0),
 			u.At(3*i+3-1, 0),
-			sN1, sN2, sM1, sM2, sQ) //Q)
+			sN1, sN2, sM1, sM2, sQ)
 	}
-	//_ = sQ
-	return 0
 }
