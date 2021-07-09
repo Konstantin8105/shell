@@ -1123,7 +1123,7 @@ func (m Model) get_matrix() (K tMatrix, F tVector) {
 
 	// 	fmt.Printf("K = %#v\n", K)
 	// 	femMatPrn(((&K)), string("K"))
-	return K // 0
+	return  // 0
 }
 
 // generate_water_load_x - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:809
@@ -1264,7 +1264,7 @@ func (m Model) get_matrix() (K tMatrix, F tVector) {
 // }
 
 // get_loads_and_supports - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:939
-func (m Model) get_loads_and_supports(K tMatrix) int {
+func (m Model) get_loads_and_supports(K tMatrix, F tVector) int {
 	// applies supports in nodes
 	// 	var i int
 	// 	var j int
