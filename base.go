@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 
+	"github.com/Konstantin8105/pow"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -108,15 +109,16 @@ func (m Model) get_D_matrix(i int) (D *mat.Dense) {
 		t    = m.Beams[i].T
 		mult = t / (1.0 - nu*nu)
 	)
-	D.Set(0, 0, E*mult)
-	D.Set(0, 1, nu*mult)
-	D.Set(1, 0, nu*mult)
-	D.Set(1, 1, E*mult)
-	D.Set(2, 2, E*t*t/12.*mult)
-	D.Set(3, 3, E*t*t/12.*mult)
-	D.Set(2, 3, nu*(E*t*t)/12.*mult)
-	D.Set(3, 2, nu*(E*t*t)/12.*mult)
-	D.Set(4, 4, 5.0/6.0*G/t)
+	_ = mult
+	D.Set(0, 0, E*t/(1-nu*nu))                 // E*mult)
+	D.Set(0, 1, E*t/(1-nu*nu)*nu)              // nu*mult)
+	D.Set(1, 0, E*t/(1-nu*nu)*nu)              // nu*mult)
+	D.Set(1, 1, E*t/(1-nu*nu))                 // E*mult)
+	D.Set(2, 2, E*pow.E3(t)/(1-nu*nu)/12.0)    // E*t*t/12.*mult)
+	D.Set(3, 3, E*pow.E3(t)/(1-nu*nu)/12.0*nu) // E*t*t/12.*mult)
+	D.Set(2, 3, E*pow.E3(t)/(1-nu*nu)/12.0*nu) // nu*(E*t*t)/12.*mult)
+	D.Set(3, 2, E*pow.E3(t)/(1-nu*nu)/12.0)    // nu*(E*t*t)/12.*mult)
+	D.Set(4, 4, 5.0/6.0*G*t)                   // 5.0/6.0*G/t)
 	return D
 }
 
@@ -169,7 +171,7 @@ func (m Model) get_matrix() (K, F, u *mat.Dense) {
 		Bt := B.T()
 
 		// matrix multiplications (Bt*D*B):
-		BtD := mat.NewDense(6, 5, nil)
+		// BtD := mat.NewDense(6, 5, nil)
 		BtD.Mul(Bt, D)
 
 		// => Ke  without L*R
