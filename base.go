@@ -59,10 +59,9 @@ type BeamProp struct {
 	//
 	N [2]int
 
-	Mat int
-	T   float64
+	T float64
 
-	E1, E2, G, nu1, nu2 float64
+	E, nu float64
 
 	// A cross-section area
 	// Unit : sq. meter.
@@ -103,22 +102,20 @@ func (m Model) check_elem_data() {
 func (m Model) get_D_matrix(i int) (D *mat.Dense) {
 	D = mat.NewDense(5, 5, nil)
 	var (
-		E1   = m.Beams[i].E1
-		E2   = m.Beams[i].E2
-		G    = m.Beams[i].G
-		nu1  = m.Beams[i].nu1
-		nu2  = m.Beams[i].nu2
+		E    = m.Beams[i].E
+		nu   = m.Beams[i].nu
+		G    = E / (2 * (1 + nu))
 		t    = m.Beams[i].T
-		mult = t / (1.0 - nu1*nu2)
+		mult = t / (1.0 - nu*nu)
 	)
-	D.Set(0, 0, E1*mult)
-	D.Set(0, 1, nu2*mult)
-	D.Set(1, 0, nu2*mult)
-	D.Set(1, 1, E2*mult)
-	D.Set(2, 2, E1*t*t/12.*mult)
-	D.Set(3, 3, E2*t*t/12.*mult)
-	D.Set(2, 3, nu2*(E1*t*t)/12.*mult)
-	D.Set(3, 2, nu2*(E1*t*t)/12.*mult)
+	D.Set(0, 0, E*mult)
+	D.Set(0, 1, nu*mult)
+	D.Set(1, 0, nu*mult)
+	D.Set(1, 1, E*mult)
+	D.Set(2, 2, E*t*t/12.*mult)
+	D.Set(3, 3, E*t*t/12.*mult)
+	D.Set(2, 3, nu*(E*t*t)/12.*mult)
+	D.Set(3, 2, nu*(E*t*t)/12.*mult)
 	D.Set(4, 4, 5.0/6.0*G/t)
 	return D
 }
