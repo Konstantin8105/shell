@@ -122,7 +122,6 @@ func (m Model) get_D_matrix(i int) (D *mat.Dense) {
 	return D
 }
 
-// get_B_matrix - transpiled function from  GOPATH/src/github.com/Konstantin8105/shell/c-src/shell/eshell.c:704
 func (m Model) get_B_matrix(i int) (B *mat.Dense, L float64, R float64) {
 	B = mat.NewDense(5, 6, nil)
 	var (
@@ -171,8 +170,9 @@ func (m Model) get_matrix() (K, F, u *mat.Dense) {
 		Bt := B.T()
 
 		// matrix multiplications (Bt*D*B):
-		// BtD := mat.NewDense(6, 5, nil)
-		BtD.Mul(Bt, D)
+		BtD := mat.NewDense(6, 5, nil)
+		BtD.Mul(Bt,D)
+		// BtD.Mul(Bt, D)
 
 		// => Ke  without L*R
 		Ke := mat.NewDense(6, 6, nil)
